@@ -1,6 +1,7 @@
 import json
+import gen_ir
 
-filter = [
+metal_filter = [
     'MTLPrimitiveType',
     'MTLIndexType',
     'MTLCullMode',
@@ -92,16 +93,6 @@ def print_interface_or_protocol_decl(decl):
         print("")
 
 #--- main ----------------------------------------------------------------------
-with open("ast.json", "r") as f:
-    ast = json.load(f)
 
-for decl in ast['inner']:
-    if 'inner' in decl and 'name' in decl and decl['name'] in filter:
-        kind = decl['kind']
-        if kind == 'EnumDecl':
-            print_enum_decl(decl)
-        elif kind == 'ObjCInterfaceDecl' or kind == 'ObjCProtocolDecl':
-            print_interface_or_protocol_decl(decl)
-        elif kind != 'TypedefDecl':
-            print(f"??? {decl['kind']} {decl['name']}\n")
-                
+ir = gen_ir.gen('metal.m', metal_filter)
+print(json.dumps(ir, indent=4))
