@@ -7,6 +7,13 @@
 
 import json, subprocess, sys
 
+def parse_type(decl):
+    outp = {}
+    outp['type'] = decl['qualType']
+    if 'desugaredQualType' in decl:
+        outp['desugared'] = decl['desugaredQualType']
+    return outp
+
 def parse_expr(decl):
     outp = {}
     kind = decl['kind']
@@ -19,7 +26,7 @@ def parse_expr(decl):
     elif kind == 'ImplicitCastExpr':
         outp['kind'] = 'cast'
         outp['cast_kind'] = decl['castKind']
-        outp['cast_type'] = decl['type']['qualType']
+        outp['cast_type'] = parse_type(decl['type'])
         outp['inner'] = parse_expr(decl['inner'][0])
     elif kind == 'BinaryOperator':
         outp['kind'] = 'binary_operator'
@@ -40,7 +47,7 @@ def parse_enum(decl):
     outp = {}
     outp['kind'] = 'enum'
     outp['name'] = decl['name']
-    outp['type'] = decl['fixedUnderlyingType']['qualType']
+    outp['type'] = parse_type(decl['fixedUnderlyingType'])
     outp['items'] = []
     for item_decl in decl['inner']:
         if item_decl['kind'] == 'EnumConstantDecl':
@@ -55,6 +62,51 @@ def parse_enum(decl):
         return outp
     else:
         return None
+    
+def parse_objc_methods_and_properties(decls):
+    outp = []
+    for decl in decls:
+        outp_item = {}
+        kind = decl['kind']
+        if kind == 'ObjCMethodDecl':
+            outp_item['name'] = decl['name']
+            outp_item['kind'] = 'objc_method'
+            outp_item['return_type'] = parse_type(decl['returnType'])
+            outp_item['args'] = []
+            if 'inner' in decl:
+                for arg in decl['inner']:
+                    if arg['kind'] == 'ParmVarDecl':
+                        outp_arg = {}
+                        outp_arg['name'] = arg['name']
+                        outp_arg['type'] = parse_type(arg['type'])
+                        outp_item['args'].append(outp_arg)
+            outp.append(outp_item)
+        elif kind == 'ObjCPropertyDecl':
+            outp_item['name'] = decl['name']
+            outp_item['kind'] = 'objc_property'
+            outp_item['type'] = parse_type(decl['type'])
+            outp.append(outp_item)
+    return outp
+
+def parse_objc_interface(decl):
+    outp = {}
+    outp['kind'] = 'objc_interface'
+    outp['name'] = decl['name']
+    if 'inner' in decl:
+        outp['items'] = parse_objc_methods_and_properties(decl['inner'])
+        if len(outp['items']) > 0:
+            return outp
+    return None
+
+def parse_objc_protocol(decl):
+    outp = {}
+    outp['kind'] = 'objc_protocol'
+    outp['name'] = decl['name']
+    if 'inner' in decl:
+        outp['items'] = parse_objc_methods_and_properties(decl['inner'])
+        if len(outp['items']) > 0:
+            return outp
+    return None
 
 def parse_decl(decl, filter):
     if 'name' not in decl:
@@ -75,8 +127,9 @@ def parse_decl(decl, filter):
     elif kind == 'EnumDecl':
         return parse_enum(decl)
     elif kind == 'ObjCInterfaceDecl':
-        return None
+        return parse_objc_interface(decl)
     elif kind == 'ObjCProtocolDecl':
+        # return parse_objc_protocol(decl)
         return None
 
 def clang(csrc_path):

@@ -49,26 +49,6 @@ metal_filter = [
     'MTLSamplerDescriptor',
 ]
 
-def extract_items(decl):
-    items = []
-    for item in decl['inner']:
-        if 'name' in item:
-            items.append(item)
-    return items
-
-def print_enum_decl(decl):
-    items = extract_items(decl)
-    if items:
-        print(f"ENUM {decl['name']}")
-        for item in items:
-            item_kind = item['kind']
-            item_name = item['name']
-            if item_kind == 'EnumConstantDecl':
-                print(f"  {item_name}")
-            else:
-                print(f"  ??? {item_name}")
-        print("")
-
 def print_interface_or_protocol_decl(decl):
     items = extract_items(decl)
     if items:
