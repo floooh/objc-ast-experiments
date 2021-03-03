@@ -40,6 +40,7 @@ def parse_enum(decl):
     outp = {}
     outp['kind'] = 'enum'
     outp['name'] = decl['name']
+    outp['type'] = decl['fixedUnderlyingType']['qualType']
     outp['items'] = []
     for item_decl in decl['inner']:
         if item_decl['kind'] == 'EnumConstantDecl':
@@ -49,7 +50,11 @@ def parse_enum(decl):
                 expr = item_decl['inner'][0]
                 item['expr'] = parse_expr(expr)
             outp['items'].append(item)
-    return outp            
+    # don't return forward declarations
+    if len(outp['items']) > 0:
+        return outp
+    else:
+        return None
 
 def parse_decl(decl, filter):
     if 'name' not in decl:
@@ -68,7 +73,6 @@ def parse_decl(decl, filter):
         # FIXME: a C typedef
         return None
     elif kind == 'EnumDecl':
-        # FIXME: a C enum
         return parse_enum(decl)
     elif kind == 'ObjCInterfaceDecl':
         return None
