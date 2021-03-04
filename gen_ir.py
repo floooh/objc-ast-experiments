@@ -7,6 +7,14 @@
 
 import json, subprocess, sys
 
+def filter_item(item_name, item_filter):
+    if len(item_filter) == 0:
+        return False
+    elif item_filter[0] == 'ALL':
+        return True
+    else:
+        return item_name in item_filter
+
 def parse_type(decl):
     outp = {}
     outp['type'] = decl['qualType']
@@ -43,70 +51,82 @@ def parse_expr(decl):
         sys.exit(f"unknown expression kind: {kind}")
     return outp
 
-def parse_enum(decl):
+def parse_enum(decl, item_filter):
     outp = {}
     outp['kind'] = 'enum'
     outp['name'] = decl['name']
     outp['type'] = parse_type(decl['fixedUnderlyingType'])
     outp['items'] = []
+    has_items = False
     for item_decl in decl['inner']:
         if item_decl['kind'] == 'EnumConstantDecl':
-            item = {}
-            item['name'] = item_decl['name']
-            if 'inner' in item_decl:
-                expr = item_decl['inner'][0]
-                item['expr'] = parse_expr(expr)
-            outp['items'].append(item)
+            has_items = True
+            if filter_item(item_decl['name'], item_filter):
+                item = {}
+                item['name'] = item_decl['name']
+                if 'inner' in item_decl:
+                    expr = item_decl['inner'][0]
+                    item['expr'] = parse_expr(expr)
+                outp['items'].append(item)
     # don't return forward declarations
-    if len(outp['items']) > 0:
+    if has_items:
         return outp
     else:
         return None
     
-def parse_objc_methods_and_properties(decls):
+def parse_objc_methods_and_properties(decls, item_filter):
     outp = []
+    has_items = False
     for decl in decls:
         outp_item = {}
         kind = decl['kind']
         if kind == 'ObjCMethodDecl':
-            outp_item['name'] = decl['name']
-            outp_item['kind'] = 'objc_method'
-            outp_item['return_type'] = parse_type(decl['returnType'])
-            outp_item['args'] = []
-            if 'inner' in decl:
-                for arg in decl['inner']:
-                    if arg['kind'] == 'ParmVarDecl':
-                        outp_arg = {}
-                        outp_arg['name'] = arg['name']
-                        outp_arg['type'] = parse_type(arg['type'])
-                        outp_item['args'].append(outp_arg)
-            outp.append(outp_item)
+            has_items = True
+            if filter_item(decl['name'], item_filter):
+                outp_item['name'] = decl['name']
+                outp_item['kind'] = 'objc_method'
+                outp_item['return_type'] = parse_type(decl['returnType'])
+                outp_item['args'] = []
+                if 'inner' in decl:
+                    for arg in decl['inner']:
+                        if arg['kind'] == 'ParmVarDecl':
+                            outp_arg = {}
+                            outp_arg['name'] = arg['name']
+                            outp_arg['type'] = parse_type(arg['type'])
+                            outp_item['args'].append(outp_arg)
+                outp.append(outp_item)
         elif kind == 'ObjCPropertyDecl':
-            outp_item['name'] = decl['name']
-            outp_item['kind'] = 'objc_property'
-            outp_item['type'] = parse_type(decl['type'])
-            outp.append(outp_item)
-    return outp
+            has_items = True
+            if filter_item(decl['name'], item_filter):
+                outp_item['name'] = decl['name']
+                outp_item['kind'] = 'objc_property'
+                outp_item['type'] = parse_type(decl['type'])
+                outp.append(outp_item)
+    return has_items, outp
 
-def parse_objc_interface(decl):
+def parse_objc_interface(decl, item_filter):
     outp = {}
     outp['kind'] = 'objc_interface'
     outp['name'] = decl['name']
+    has_items = False
     if 'inner' in decl:
-        outp['items'] = parse_objc_methods_and_properties(decl['inner'])
-        if len(outp['items']) > 0:
-            return outp
-    return None
+        has_items, outp['items'] = parse_objc_methods_and_properties(decl['inner'], item_filter)
+    if has_items:
+        return outp
+    else:
+        return None
 
-def parse_objc_protocol(decl):
+def parse_objc_protocol(decl, item_filter):
     outp = {}
     outp['kind'] = 'objc_protocol'
     outp['name'] = decl['name']
+    has_items = False
     if 'inner' in decl:
-        outp['items'] = parse_objc_methods_and_properties(decl['inner'])
-        if len(outp['items']) > 0:
-            return outp
-    return None
+        has_items, outp['items'] = parse_objc_methods_and_properties(decl['inner'], item_filter)
+    if has_items:
+        return outp
+    else:
+        return None
 
 def parse_decl(decl, filter):
     if 'name' not in decl:
@@ -114,6 +134,7 @@ def parse_decl(decl, filter):
         return None 
     if decl['name'] not in filter:
         return None
+    item_filter = filter[decl['name']]
     kind = decl['kind']
     if kind == 'RecordDecl':
         # FIXME: a C struct
@@ -125,11 +146,11 @@ def parse_decl(decl, filter):
         # FIXME: a C typedef
         return None
     elif kind == 'EnumDecl':
-        return parse_enum(decl)
+        return parse_enum(decl, item_filter)
     elif kind == 'ObjCInterfaceDecl':
-        return parse_objc_interface(decl)
+        return parse_objc_interface(decl, item_filter)
     elif kind == 'ObjCProtocolDecl':
-        # return parse_objc_protocol(decl)
+        return parse_objc_protocol(decl, item_filter)
         return None
 
 def clang(csrc_path):
