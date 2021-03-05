@@ -9,21 +9,36 @@ type_map = {
     'NSInteger':  'int64_t',
 }
 
+api_types = {}
 out_lines = ''
-
-def map_type(type):
-    if type in type_map:
-        return type_map[type]
-    else:
-        return type
 
 def reset_globals():
     global out_lines
+    global api_types
     out_lines = ''
+    api_types = {}
+
+def extract_api_types(ir):
+    global api_types
+    for decl in ir['decls']:
+        api_types[decl['name']] = decl['kind']
 
 def l(s):
     global out_lines
     out_lines += s + '\n'
+
+def c_type(c_prefix, type):
+    if type in type_map:
+        type = type_map[type]
+    type = type.replace('_Nullable', '')
+    type = type.replace('_Nonnull', '')
+    type = type.strip()
+    if type.startswith('id<'):
+        type = type[3:-1]
+        type = type + ' *'
+    if type.strip('* ') in api_types:
+        type = c_prefix + type
+    return type
 
 def write_header():
     l('#include <stdint.h>')
@@ -56,17 +71,46 @@ def write_enums(ir, c_prefix):
     for decl in ir['decls']:
         if decl['kind'] == 'enum':
             # FIXME: uses a clang extension to specific enum underlying type
-            l(f"typedef enum: {map_type(decl['type']['type'])} {{")
+            l(f"typedef enum {c_type(c_prefix, decl['name'])}: {c_type(c_prefix, decl['type']['type'])} {{")
             for item in decl['items']:
                 l(f"    {item['name']} = {expr_str(item['expr'])},")
-            l(f"}} {c_prefix}{decl['name']};")
+            l(f"}} {c_type(c_prefix, decl['name'])};")
             l('')
 
+def c_func_name(c_prefix, objc_class_name, objc_method_name):
+    name = f"{c_prefix}{objc_class_name}_{objc_method_name}"
+    name = name.replace(':', '_').rstrip('_')
+    return name
+
+def args_str(c_prefix, self_type, args_decl):
+    args = []
+    if self_type is not None:
+        args.append(f"{c_type(c_prefix, self_type)} * self")
+    for arg_decl in args_decl:
+        args.append(f"{c_type(c_prefix, arg_decl['type']['type'])} {arg_decl['name']}")
+    return ', '.join(args)
+
 def write_funcs(ir, c_prefix):
-    l('// FIXME: functions')
+    for class_decl in ir['decls']:
+        if class_decl['kind'] in ['objc_interface', 'objc_protocol']:
+            class_name = class_decl['name']
+            for method_decl in class_decl['items']:
+                if method_decl['kind'] == 'objc_method':
+                    func_name = c_func_name(c_prefix, class_name, method_decl['name'])
+                    return_type = c_type(c_prefix, method_decl['return_type']['type'])
+                    # special case 'instancetype'
+                    if return_type == 'instancetype':
+                        return_type = f"{c_prefix}{class_name}*"
+                    if method_decl['is_instance_method']:
+                        self_type = class_name
+                    else:
+                        self_type = None
+                    l(f"static {return_type} {func_name}({args_str(c_prefix, self_type, method_decl['args'])}) {{")
+                    l("}")
 
 def gen(ir, c_prefix, output_path):
     reset_globals()
+    extract_api_types(ir)
     write_header()
     write_typedefs(ir, c_prefix)
     write_enums(ir, c_prefix)

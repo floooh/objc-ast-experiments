@@ -3,6 +3,10 @@ import gen_ir, gen_c
 
 # FIXME: those API filter definitions should go into separate JSON files
 metal_filter = {
+    'NSString': [ ],
+    'NSStringExtensionMethods': [
+        'stringWithUTF8String:'
+    ],
     'MTLRegion': [ 'ALL' ],
     'MTLDevice': [
         'newSamplerStateWithDescriptor:',
@@ -140,6 +144,7 @@ metal_filter = {
         'MTLVertexFormatUShort4Normalized',
         'MTLVertexFormatUInt1010102Normalized',
     ],
+    'MTLTextureUsage': [ 'ALL' ],
     'MTLPrimitiveType': [ 'ALL' ],
     'MTLPixelFormat': [ 'ALL' ],
     'MTLColorWriteMask': [ 'ALL' ],
@@ -155,7 +160,20 @@ metal_filter = {
     'MTLSamplerBorderColor': [ 'ALL' ],
     'MTLSamplerMinMagFilter': [ 'ALL' ],
     'MTLSamplerMinFilter': [ 'ALL' ],
+    'MTLMultisampleDepthResolveFilter': [ 'ALL' ],
+    'MTLMultisampleStencilResolveFilter': [ 'ALL' ],
     'MTLSamplerDescriptor': [ 'ALL' ],
+    'MTLRenderPassColorAttachmentDescriptorArray': [ 'ALL' ],
+    'MTLRenderPassDepthAttachmentDescriptor': [ 'ALL' ],
+    'MTLRenderPassStencilAttachmentDescriptor': [ 'ALL' ],
+    'MTLRenderPipelineColorAttachmentDescriptorArray': [ 'ALL' ],
+    'MTLVertexBufferLayoutDescriptorArray': [ 'ALL' ],
+    'MTLVertexAttributeDescriptorArray': [ 'ALL' ],
+    'MTLSamplerMipFilter': [ 'ALL' ],
+    'MTLRenderPipelineColorAttachmentDescriptor': [ 'ALL' ],
+    'MTLVertexBufferLayoutDescriptor': [ 'ALL' ],
+    'MTLVertexAttributeDescriptor': [ 'ALL' ],
+    'MTLRenderPassColorAttachmentDescriptor': [ 'ALL' ],
 }
 
 #--- main ----------------------------------------------------------------------

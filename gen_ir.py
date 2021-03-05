@@ -85,6 +85,7 @@ def parse_objc_methods_and_properties(decls, item_filter):
             if filter_item(decl['name'], item_filter):
                 outp_item['name'] = decl['name']
                 outp_item['kind'] = 'objc_method'
+                outp_item['is_instance_method'] = decl['mangledName'].startswith('-[')
                 outp_item['return_type'] = parse_type(decl['returnType'])
                 outp_item['args'] = []
                 if 'inner' in decl:
@@ -128,6 +129,18 @@ def parse_objc_protocol(decl, item_filter):
     else:
         return None
 
+def parse_objc_category(decl, item_filter):
+    outp = {}
+    outp['kind'] = 'objc_category'
+    outp['name'] = decl['name']
+    outp['interface'] = decl['interface']['name']
+    if 'inner' in decl:
+        has_items, outp['items'] = parse_objc_methods_and_properties(decl['inner'], item_filter)
+    if has_items:
+        return outp
+    else:
+        return None
+
 def parse_decl(decl, filter):
     if 'name' not in decl:
         # FIXME: do we need to support anonymous enums?
@@ -151,7 +164,27 @@ def parse_decl(decl, filter):
         return parse_objc_interface(decl, item_filter)
     elif kind == 'ObjCProtocolDecl':
         return parse_objc_protocol(decl, item_filter)
-        return None
+    elif kind == 'ObjCCategoryDecl':
+        return parse_objc_category(decl, item_filter)
+
+def integrate_category(decls, category_decl):
+    interface_name = category_decl['interface']
+    for decl in decls:
+        if decl['name'] == interface_name:
+            decl['items'].extend(category_decl['items'])
+            break
+
+def parse_decls(decls, filter):
+    outp = []
+    for decl in decls:
+        outp_decl = parse_decl(decl, filter)
+        if outp_decl is not None:
+            if outp_decl['kind'] != 'objc_category':
+                outp.append(outp_decl)
+            else:
+                # categories must be integrated with existing interfaces
+                integrate_category(outp, outp_decl)
+    return outp
 
 def clang(csrc_path):
     cmd = ['clang', '-Xclang', '-ast-dump=json', '-c']
@@ -164,9 +197,5 @@ def gen(csrc_path, filter):
     json_ast = json.loads(clang_ast)
     outp = {}
     outp['csrc'] = csrc_path
-    outp['decls'] = []
-    for decl in json_ast['inner']:
-        outp_decl = parse_decl(decl, filter)
-        if outp_decl is not None:
-            outp['decls'].append(outp_decl)
+    outp['decls'] = parse_decls(json_ast['inner'], filter)
     return outp
