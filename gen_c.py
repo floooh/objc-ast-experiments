@@ -3,6 +3,8 @@
 #
 #   Take the output of gen_ir.py and generate a C API.
 #-------------------------------------------------------------------------------
+import sys, json
+
 type_map = {
     'NSUInteger': 'uint64_t',
     'NSInteger':  'int64_t',
@@ -173,3 +175,15 @@ def gen(ir, c_prefix, output_path):
     write_funcs(ir, c_prefix)
     with open(output_path, 'w', newline='\n') as f_outp:
         f_outp.write(out_lines)
+
+#-- main -----------------------------------------------------------------------
+if len(sys.argv) != 3:
+    sys.exit(f"expected args: [ir.json] [output.h], where:\n\n  ir.json: result of gen_ir.py\n  output.h: name of generated C header file\n")
+ir_path = sys.argv[1]
+output_path = sys.argv[2]
+if ir_path == output_path:
+    sys.exit("input and output filename are identical")
+
+with open(ir_path, "r") as fp:
+    ir_json = json.load(fp)
+gen(ir_json, ir_json['c_prefix'], output_path)

@@ -1,11 +1,11 @@
 #-------------------------------------------------------------------------------
-#   gen_ir.py
+#   gen_ir.py [export_def.json] [output.json]
 #
 #   Generate a high-level intermediate representation of ObjC and C types
 #   by parsing the output of 'clang -ast-dump=json'
 #-------------------------------------------------------------------------------
 
-import json, subprocess, sys
+import json, subprocess, sys, tempfile
 
 def filter_item(item_name, item_filter):
     if len(item_filter) == 0:
@@ -191,11 +191,34 @@ def clang(csrc_path):
     cmd.append(csrc_path)
     return subprocess.check_output(cmd)
 
-#-------------------------------------------------------------------------------
 def gen(csrc_path, filter):
     clang_ast = clang(csrc_path)
     json_ast = json.loads(clang_ast)
     outp = {}
-    outp['csrc'] = csrc_path
     outp['decls'] = parse_decls(json_ast['inner'], filter)
     return outp
+
+#-- main -----------------------------------------------------------------------
+if len(sys.argv) != 3:
+    sys.exit(f"expected args: [exports.json] [output.json], where:\n\n  export.json: input json file with requested API exports\n  output.json: output json file with intermediate representation\n")
+exports_path = sys.argv[1]
+output_path = sys.argv[2]
+if exports_path == output_path:
+    sys.exit("input and output filename are identical")
+
+with open(exports_path, "r") as fp:
+    exports_json = json.load(fp)
+
+# generate ObjC source file with header includes
+with tempfile.NamedTemporaryFile(mode="w", suffix='.m', delete=False) as fp:
+    for header in exports_json['headers']['imports']:
+        fp.write(f"#import <{header}>\n")
+    for header in exports_json['headers']['includes']:
+        fp.write(f"#include <{header}>\n")
+    tempfile_name = fp.name
+
+output_json = gen(csrc_path = tempfile_name, filter = exports_json['exports'])
+output_json['c_prefix'] = exports_json['c_prefix']
+with open(output_path, 'w') as fp:
+    json.dump(obj = output_json, fp=fp, indent=4)
+

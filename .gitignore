@@ -1,4 +1,5 @@
-*.json
+*_ir.json
 *.h
 *.pyc
 __pycache__/
+.vscode/

@@ -1,0 +1,20 @@
+{
+    "c_prefix": "",
+    "headers": {
+        "imports": [
+            "Metal/MetalKit.h",
+            "Metal/Metal.h"
+        ],
+        "includes": [ ]
+    },
+    "exports": {
+        "NSApplicationActivationPolicy": [ "ALL" ],
+        "NSEventMask": [ "ALL" ],
+        "NSApplication": [ "ALL" ],
+        "NSEvent": [ "ALL" ],
+        "NSNotification": [ ],
+        "NSWindow": [ ],
+        "NSView": [ ],
+        "MTKView": [ ]
+    }
+}
