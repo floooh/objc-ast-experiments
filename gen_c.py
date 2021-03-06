@@ -93,7 +93,10 @@ def write_enums(ir, c_prefix):
             # FIXME: uses a clang extension to specific enum underlying type
             l(f"typedef enum {c_type(c_prefix, decl['name'])}: {c_type(c_prefix, decl['type']['type'])} {{")
             for item in decl['items']:
-                l(f"    {item['name']} = {expr_as_string(item['expr'])},")
+                if 'expr' in item:
+                    l(f"    {item['name']} = {expr_as_string(item['expr'])},")
+                else:
+                    l(f"    {item['name']},")
             l(f"}} {c_type(c_prefix, decl['name'])};")
             l('')
 

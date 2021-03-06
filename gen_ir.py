@@ -22,34 +22,46 @@ def parse_type(decl):
         outp['desugared'] = decl['desugaredQualType']
     return outp
 
-def parse_expr(decl):
+def parse_expr(decls):
     outp = {}
-    kind = decl['kind']
-    if kind == 'ConstantExpr':
-        outp['kind'] = 'constexpr'
-        outp['inner'] = parse_expr(decl['inner'][0])
-    elif kind == 'ParenExpr':
-        outp['kind'] = 'parens'
-        outp['inner'] = parse_expr(decl['inner'][0])
-    elif kind == 'ImplicitCastExpr':
-        outp['kind'] = 'cast'
-        outp['cast_kind'] = decl['castKind']
-        outp['cast_type'] = parse_type(decl['type'])
-        outp['inner'] = parse_expr(decl['inner'][0])
-    elif kind == 'BinaryOperator':
-        outp['kind'] = 'binary_operator'
-        outp['opcode'] = decl['opcode']
-        outp['left'] = parse_expr(decl['inner'][0])
-        outp['right'] = parse_expr(decl['inner'][1])
-    elif kind == 'IntegerLiteral':
-        outp['kind'] = 'integer_literal'
-        outp['value'] = decl['value']
-    elif kind == 'DeclRefExpr':
-        outp['kind'] = 'declref'
-        outp['declref'] = decl['referencedDecl']['name']
+    for decl in decls:
+        kind = decl['kind']
+        if kind in ['AvailabilityAttr']:
+            continue
+        elif kind == 'ConstantExpr':
+            outp['kind'] = 'constexpr'
+            outp['inner'] = parse_expr(decl['inner'])
+            break
+        elif kind == 'ParenExpr':
+            outp['kind'] = 'parens'
+            outp['inner'] = parse_expr(decl['inner'])
+            break
+        elif kind == 'ImplicitCastExpr':
+            outp['kind'] = 'cast'
+            outp['cast_kind'] = decl['castKind']
+            outp['cast_type'] = parse_type(decl['type'])
+            outp['inner'] = parse_expr(decl['inner'])
+            break
+        elif kind == 'BinaryOperator':
+            outp['kind'] = 'binary_operator'
+            outp['opcode'] = decl['opcode']
+            outp['left'] = parse_expr([decl['inner'][0]])
+            outp['right'] = parse_expr([decl['inner'][1]])
+            break
+        elif kind == 'IntegerLiteral':
+            outp['kind'] = 'integer_literal'
+            outp['value'] = decl['value']
+            break
+        elif kind == 'DeclRefExpr':
+            outp['kind'] = 'declref'
+            outp['declref'] = decl['referencedDecl']['name']
+            break
+        else:
+            sys.exit(f"unknown expression kind: {kind}")
+    if len(outp) > 0:
+        return outp
     else:
-        sys.exit(f"unknown expression kind: {kind}")
-    return outp
+        return None
 
 def parse_enum(decl, item_filter):
     outp = {}
@@ -65,8 +77,9 @@ def parse_enum(decl, item_filter):
                 item = {}
                 item['name'] = item_decl['name']
                 if 'inner' in item_decl:
-                    expr = item_decl['inner'][0]
-                    item['expr'] = parse_expr(expr)
+                    expr = parse_expr(item_decl['inner'])
+                    if expr is not None:
+                        item['expr'] = parse_expr(item_decl['inner'])
                 outp['items'].append(item)
     # don't return forward declarations
     if has_items:

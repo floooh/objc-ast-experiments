@@ -2,7 +2,7 @@
     "c_prefix": "",
     "headers": {
         "imports": [
-            "Metal/MetalKit.h",
+            "MetalKit/MetalKit.h",
             "Metal/Metal.h"
         ],
         "includes": [ ]
@@ -13,8 +13,8 @@
         "NSApplication": [ "ALL" ],
         "NSEvent": [ "ALL" ],
         "NSNotification": [ ],
-        "NSWindow": [ ],
-        "NSView": [ ],
-        "MTKView": [ ]
+        "NSWindow": [ "ALL" ],
+        "NSView": [ "ALL" ],
+        "MTKView": [ "ALL" ]
     }
 }
