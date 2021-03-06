@@ -8,10 +8,14 @@
     },
     "exports": {
         "NSString": [ ],
+        "NSRange": [ ],
+        "MTLOrigin": [ ],
+        "MTLSize": [ ],
+        "MTLRegion": [ ],
+        "MTLClearColor": [ ],
         "NSStringExtensionMethods": [
             "stringWithUTF8String:"
         ],
-        "MTLRegion": [ "ALL" ],
         "MTLDevice": [
             "newSamplerStateWithDescriptor:",
             "newCommandQueue",

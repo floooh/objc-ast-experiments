@@ -15,6 +15,12 @@ def filter_item(item_name, item_filter):
     else:
         return item_name in item_filter
 
+def find_decl_by_id(decl_id, all_decls):
+    for decl in all_decls:
+        if decl['id'] == decl_id:
+            return decl
+    return None
+
 def parse_type(decl):
     outp = {}
     outp['type'] = decl['qualType']
@@ -57,7 +63,7 @@ def parse_expr(decls):
             outp['declref'] = decl['referencedDecl']['name']
             break
         else:
-            sys.exit(f"unknown expression kind: {kind}")
+            sys.exit(f"ERROR: unknown expression kind: {kind}")
     if len(outp) > 0:
         return outp
     else:
@@ -86,6 +92,37 @@ def parse_enum(decl, item_filter):
         return outp
     else:
         return None
+
+def parse_struct(decl):
+    outp = {}
+    outp['kind'] = 'struct'
+    # might be an anonymous struct
+    if 'name' in decl:
+        outp['name'] = decl['name']
+    outp['items'] = []
+    for item_decl in decl['inner']:
+        if item_decl['kind'] != 'FieldDecl':
+            sys.exit(f"ERROR: struct declarations must only contain simple field (in {decl['name']})")
+        item = {}
+        item['name'] = item_decl['name']
+        item['type'] = parse_type(item_decl['type'])
+        outp['items'].append(item)
+    return outp
+
+# this parses typedef'ed anonymous structs lile:
+#   typedef stryct {
+#       ....
+#   } bla_t
+def parse_typedef_struct(decl, all_decls):
+    # only consider typedef'ed structs
+    if decl['inner'][0]['ownedTagDecl']['kind'] != 'RecordDecl':
+        return None
+    outp = {}
+    struct_id = decl['inner'][0]['ownedTagDecl']['id']
+    struct_decl = find_decl_by_id(struct_id, all_decls)
+    outp = parse_struct(struct_decl)
+    outp['name'] = decl['name']
+    return outp
     
 def parse_objc_methods_and_properties(decls, item_filter):
     outp = []
@@ -154,7 +191,7 @@ def parse_objc_category(decl, item_filter):
     else:
         return None
 
-def parse_decl(decl, filter):
+def parse_decl(decl, filter, all_decls):
     if 'name' not in decl:
         # FIXME: do we need to support anonymous enums?
         return None 
@@ -163,14 +200,12 @@ def parse_decl(decl, filter):
     item_filter = filter[decl['name']]
     kind = decl['kind']
     if kind == 'RecordDecl':
-        # FIXME: a C struct
-        return None
+        return parse_struct(decl)
     elif kind == 'FunctionDecl':
         # FIXME: a C function
         return None
     elif kind == 'TypedefDecl':
-        # FIXME: a C typedef
-        return None
+        return parse_typedef_struct(decl, all_decls)
     elif kind == 'EnumDecl':
         return parse_enum(decl, item_filter)
     elif kind == 'ObjCInterfaceDecl':
@@ -190,7 +225,7 @@ def integrate_category(decls, category_decl):
 def parse_decls(decls, filter):
     outp = []
     for decl in decls:
-        outp_decl = parse_decl(decl, filter)
+        outp_decl = parse_decl(decl, filter, decls)
         if outp_decl is not None:
             if outp_decl['kind'] != 'objc_category':
                 outp.append(outp_decl)

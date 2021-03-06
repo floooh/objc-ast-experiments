@@ -100,6 +100,16 @@ def write_enums(ir, c_prefix):
             l(f"}} {c_type(c_prefix, decl['name'])};")
             l('')
 
+def write_structs(ir, c_prefix):
+    for decl in ir['decls']:
+        if decl['kind'] == 'struct':
+            struct_type = c_type(c_prefix, decl['name'])
+            l(f"typedef struct {struct_type} {{")
+            for item in decl['items']:
+                l(f"    {c_type(c_prefix, item['type']['type'])} {item['name']};")
+            l(f"}} {struct_type};")
+            l('')
+
 def c_func_name(c_prefix, objc_class_name, objc_method_name):
     name = f"{c_prefix}{objc_class_name}_{objc_method_name}"
     name = name.replace(':', '_').rstrip('_')
@@ -175,6 +185,7 @@ def gen(ir, c_prefix, output_path):
     write_header()
     write_typedefs(ir, c_prefix)
     write_enums(ir, c_prefix)
+    write_structs(ir, c_prefix)
     write_funcs(ir, c_prefix)
     with open(output_path, 'w', newline='\n') as f_outp:
         f_outp.write(out_lines)
