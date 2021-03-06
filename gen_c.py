@@ -3,10 +3,10 @@
 #
 #   Take the output of gen_ir.py and generate a C API.
 #-------------------------------------------------------------------------------
-
 type_map = {
     'NSUInteger': 'uint64_t',
     'NSInteger':  'int64_t',
+    'BOOL':       'bool',
 }
 
 api_types = {}
@@ -40,8 +40,26 @@ def c_type(c_prefix, type):
         type = c_prefix + type
     return type
 
+def classify_return_type(type):
+    if type in api_types:
+        api_type = api_types[type]
+        if api_type == 'enum':
+            return 'simple'
+        elif api_type == 'struct':
+            return 'struct'
+    elif type.endswith('*'):
+        return 'simple'
+    elif type in [ 'void', 'bool', 'int8_t', 'int16_t', 'int32_t', 'int64_t', 'uint8_t', 'uint16_t', 'uint32_t', 'uint64_t']:
+        return 'simple'
+    elif type in [ 'float', 'double' ]:
+        return 'float'
+    else:
+        print(f"don't know how to classify result type '{type}")
+        return None
+
 def write_header():
     l('#include <stdint.h>')
+    l("#include <objc/objc-runtime.h>")
     l('')
 
 def write_typedefs(ir, c_prefix):
@@ -50,18 +68,18 @@ def write_typedefs(ir, c_prefix):
             l(f"typedef void* {c_prefix}{decl['name']};")
     l('')
 
-def expr_str(expr):
+def expr_as_string(expr):
     kind = expr['kind']
     if kind in ['cast', 'constexpr']:
         # 'skip' casts and constexpr
-        return expr_str(expr['inner'])
+        return expr_as_string(expr['inner'])
     elif kind == 'integer_literal':
         return f"{expr['value']}"
     elif kind == 'binary_operator':
         left = expr['left']
         op = expr['opcode']
         right = expr['right']
-        return f"{expr_str(left)}{op}{expr_str(right)}"
+        return f"{expr_as_string(left)}{op}{expr_as_string(right)}"
     elif kind == 'declref':
         return f"{expr['declref']}"
     else:
@@ -73,7 +91,7 @@ def write_enums(ir, c_prefix):
             # FIXME: uses a clang extension to specific enum underlying type
             l(f"typedef enum {c_type(c_prefix, decl['name'])}: {c_type(c_prefix, decl['type']['type'])} {{")
             for item in decl['items']:
-                l(f"    {item['name']} = {expr_str(item['expr'])},")
+                l(f"    {item['name']} = {expr_as_string(item['expr'])},")
             l(f"}} {c_type(c_prefix, decl['name'])};")
             l('')
 
@@ -82,13 +100,38 @@ def c_func_name(c_prefix, objc_class_name, objc_method_name):
     name = name.replace(':', '_').rstrip('_')
     return name
 
-def args_str(c_prefix, self_type, args_decl):
+def cfunc_args_as_string(c_prefix, self_type, args_decl):
     args = []
     if self_type is not None:
         args.append(f"{c_type(c_prefix, self_type)} * self")
     for arg_decl in args_decl:
         args.append(f"{c_type(c_prefix, arg_decl['type']['type'])} {arg_decl['name']}")
     return ', '.join(args)
+
+def objcfunc_args_as_string(c_prefix, self_type, class_name, method_name, args_decl):
+    args = []
+    if self_type is not None:
+        args.append("(void*)self")
+    else:
+        # FIXME: use cached class 
+        args.append(f'(void*)objc_getClass("{class_name}")')
+    # FIXME: use a cached selector
+    args.append(f'(void*)sel_getUid("{method_name}")')
+    for arg_decl in args_decl:
+        args.append(arg_decl['name'])
+    return ', '.join(args)
+
+def objcfunc_prototype_as_string(c_prefix, self_type, args_decl, return_type):
+    args = [ 'void*', 'void*' ] # id, SEL
+    #if self_type is not None:
+    #    args.append("(void*")
+    #else:
+    #    args.append("(void*)object_getClass((void*)self)")
+    for arg_decl in args_decl:
+        args.append(f"{c_type(c_prefix, arg_decl['type']['type'])}")
+    args_str = ','.join(args)
+    proto_str = f"({return_type}(*)({args_str}))"
+    return proto_str
 
 def write_funcs(ir, c_prefix):
     for class_decl in ir['decls']:
@@ -105,7 +148,20 @@ def write_funcs(ir, c_prefix):
                         self_type = class_name
                     else:
                         self_type = None
-                    l(f"static {return_type} {func_name}({args_str(c_prefix, self_type, method_decl['args'])}) {{")
+                    return_type_class = classify_return_type(return_type)
+                    if return_type_class == 'simple':
+                        msgsend_func = 'objc_msgSend'
+                    elif return_type_class == 'float':
+                        msgsend_func = 'objc_msgSend_fpret'
+                    elif return_type_class == 'struct':
+                        msgsend_func = 'objc_msgSend_stret'
+                    else:
+                        msgsend_func = 'FIXME'
+                    c_args_str = cfunc_args_as_string(c_prefix, self_type, method_decl['args'])
+                    objc_proto_str = objcfunc_prototype_as_string(c_prefix, self_type, method_decl['args'], return_type)
+                    objc_args_str = objcfunc_args_as_string(c_prefix, self_type, class_name, method_decl['name'], method_decl['args'])
+                    l(f"static {return_type} {func_name}({c_args_str}) {{")
+                    l(f"    return ({objc_proto_str}{msgsend_func})({objc_args_str});")
                     l("}")
 
 def gen(ir, c_prefix, output_path):
