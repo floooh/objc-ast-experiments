@@ -1,0 +1,27 @@
+{
+    "c_prefix": "",
+    "headers": {
+        "imports": [ "Cocoa/Cocoa.h" ],
+        "includes": []
+    },
+    "exports": {
+        "CGPoint": [ ],
+        "CGSize": [ ],
+        "NSRect": [ ],
+        "NSApplicationActivationPolicy": [  ],
+        "NSNotification": [ ],
+        "NSApplicationDelegate": [ ],
+        "NSApplication": [
+            "sharedApplication",
+            "setActivationPolicy:",
+            "activateIgnoringOtherApps:",
+            "setDelegate:",
+            "run"
+        ],
+        "NSWindowStyleMask": [ ],
+        "NSBackingStore": [ ],
+        "NSWindow": [
+            "initWithContentRect:styleMask:backing:defer:"
+        ]
+    }
+}

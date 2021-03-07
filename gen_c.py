@@ -6,6 +6,7 @@
 import sys, json
 
 type_map = {
+    'CGFloat':    'double',
     'NSUInteger': 'uint64_t',
     'NSInteger':  'int64_t',
     'BOOL':       'bool',
@@ -34,6 +35,7 @@ def c_type(c_prefix, type):
         type = type_map[type]
     type = type.replace('_Nullable', '')
     type = type.replace('_Nonnull', '')
+    type = type.replace('__kindof', '')
     type = type.strip()
     if type.startswith('id<'):
         type = type[3:-1]
@@ -67,7 +69,8 @@ def write_header():
 def write_typedefs(ir, c_prefix):
     for decl in ir['decls']:
         if decl['kind'] in ['objc_interface', 'objc_protocol']:
-            l(f"typedef void* {c_prefix}{decl['name']};")
+            typename = f"{c_prefix}{decl['name']}"
+            l(f"typedef struct {typename} {{ }} {typename};")
     l('')
 
 def expr_as_string(expr):

@@ -7,6 +7,9 @@
 
 import json, subprocess, sys, tempfile
 
+# prevent double inclusion of types (for instance because of typedefs)
+added_types = {}
+
 def filter_item(item_name, item_filter):
     if len(item_filter) == 0:
         return False
@@ -20,6 +23,24 @@ def find_decl_by_id(decl_id, all_decls):
         if decl['id'] == decl_id:
             return decl
     return None
+
+# recursively resolve a typedef'ed struct
+def find_bottom_struct(decl, all_decls):
+    # top-level decl is of kind 'TypedefDecl'
+    decl = decl['inner'][0]
+    # fist dig into the TypedefType child nodes...
+    while decl['kind'] == "TypedefType":
+        decl = decl['inner'][0]
+    # there should be an ElaboratedType here
+    if not decl['kind'] == "ElaboratedType":
+        return None
+    # below that there should be a 'RecordType'
+    decl = decl['inner'][0]
+    if not decl['kind'] == "RecordType":
+        return None
+    struct_id = decl['decl']['id']
+    struct_decl = find_decl_by_id(struct_id, all_decls)
+    return struct_decl
 
 def parse_type(decl):
     outp = {}
@@ -93,6 +114,8 @@ def parse_enum(decl, item_filter):
         return None
 
 def parse_struct(decl):
+    if 'inner' not in decl:
+        return None
     outp = {}
     outp['kind'] = 'struct'
     # might be an anonymous struct
@@ -100,27 +123,34 @@ def parse_struct(decl):
         outp['name'] = decl['name']
     outp['items'] = []
     for item_decl in decl['inner']:
-        if item_decl['kind'] != 'FieldDecl':
-            sys.exit(f"ERROR: struct declarations must only contain simple field (in {decl['name']})")
+        kind = item_decl['kind']
+        # ignore certain node types
+        if kind in ['ObjCBoxableAttr']:
+            continue
+        # ...anything else is a hard error
+        if kind != 'FieldDecl':
+            sys.exit(f"ERROR: struct declarations must only contain simple fields (in {decl['name']}: kind {kind})")
         item = {}
         item['name'] = item_decl['name']
         item['type'] = parse_type(item_decl['type'])
         outp['items'].append(item)
     return outp
 
-# this parses typedef'ed anonymous structs lile:
+# this parses typedef'ed anonymous structs liKe:
 #   typedef stryct {
 #       ....
 #   } bla_t
 def parse_typedef_struct(decl, all_decls):
-    # only consider typedef'ed structs
-    if decl['inner'][0]['ownedTagDecl']['kind'] != 'RecordDecl':
-        return None
     outp = {}
-    struct_id = decl['inner'][0]['ownedTagDecl']['id']
-    struct_decl = find_decl_by_id(struct_id, all_decls)
-    outp = parse_struct(struct_decl)
-    outp['name'] = decl['name']
+    name = decl['name']
+    decl = find_bottom_struct(decl, all_decls)
+    if decl is None:
+        # not a struct typedef
+        return None
+    outp = parse_struct(decl)
+    if outp is None:
+        return None
+    outp['name'] = name
     return outp
     
 def parse_objc_methods_and_properties(decls, item_filter):
@@ -226,6 +256,11 @@ def parse_decls(decls, filter):
     for decl in decls:
         outp_decl = parse_decl(decl, filter, decls)
         if outp_decl is not None:
+            # don't add duplicates
+            if outp_decl['name'] in added_types:
+                continue
+            else:
+                added_types[outp_decl['name']] = 1
             if outp_decl['kind'] != 'objc_category':
                 outp.append(outp_decl)
             else:
