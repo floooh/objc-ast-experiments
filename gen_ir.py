@@ -79,14 +79,13 @@ def parse_enum(decl, item_filter):
     for item_decl in decl['inner']:
         if item_decl['kind'] == 'EnumConstantDecl':
             has_items = True
-            if filter_item(item_decl['name'], item_filter):
-                item = {}
-                item['name'] = item_decl['name']
-                if 'inner' in item_decl:
-                    expr = parse_expr(item_decl['inner'])
-                    if expr is not None:
-                        item['expr'] = parse_expr(item_decl['inner'])
-                outp['items'].append(item)
+            item = {}
+            item['name'] = item_decl['name']
+            if 'inner' in item_decl:
+                expr = parse_expr(item_decl['inner'])
+                if expr is not None:
+                    item['expr'] = parse_expr(item_decl['inner'])
+            outp['items'].append(item)
     # don't return forward declarations
     if has_items:
         return outp
