@@ -1,6 +1,6 @@
-#include "hello_macos.h"
 #include <stdio.h>
 #include <assert.h>
+#include "hello_macos.h"
 
 Class app_delegate_class;
 id app_delegate;
@@ -14,7 +14,19 @@ id oc_alloc_init(Class cls) {
 }
 
 void didFinishLaunching(id obj, SEL sel, NSNotification* notification) {
-    printf("didFinishLaunching called!\n");
+    NSWindow* win = (NSWindow*) oc_alloc(objc_lookUpClass("NSWindow"));
+    uint64_t style_mask = 
+        NSWindowStyleMaskTitled |
+        NSWindowStyleMaskClosable |
+        NSWindowStyleMaskMiniaturizable |
+        NSWindowStyleMaskResizable;
+    NSWindow_initWithContentRect_styleMask_backing_defer(
+        win,
+        (NSRect){ .origin = { 50, 50 }, .size = { 300, 300 } },
+        style_mask,
+        NSBackingStoreBuffered,
+        false);
+    NSWindow_makeKeyAndOrderFront(win, 0);
 }
 
 void init_delegate(void) {
@@ -24,7 +36,7 @@ void init_delegate(void) {
     class_addMethod(app_delegate_class, sel_getUid("applicationDidFinishLaunching:"), (IMP)didFinishLaunching, "v@@");
     objc_registerClassPair(app_delegate_class); 
     app_delegate = oc_alloc_init(app_delegate_class);
-    printf("app delegate: %p", app_delegate);
+    printf("app delegate: %p\n", app_delegate);
 }
 
 int main() {

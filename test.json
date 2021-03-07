@@ -19,9 +19,10 @@
             "run"
         ],
         "NSWindowStyleMask": [ ],
-        "NSBackingStore": [ ],
+        "NSBackingStoreType": [ ],
         "NSWindow": [
-            "initWithContentRect:styleMask:backing:defer:"
+            "initWithContentRect:styleMask:backing:defer:",
+            "makeKeyAndOrderFront:"
         ]
     }
 }
