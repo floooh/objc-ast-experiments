@@ -33,7 +33,7 @@ void init_delegate(void) {
     // create and register a new app-delegate class
     app_delegate_class = objc_allocateClassPair(objc_lookUpClass("NSObject"), "HelloAppDelegate", 0);
     assert(app_delegate_class);
-    class_addMethod(app_delegate_class, sel_getUid("applicationDidFinishLaunching:"), (IMP)didFinishLaunching, "v@@");
+    class_addMethod(app_delegate_class, sel_getUid("applicationDidFinishLaunching:"), (IMP)didFinishLaunching, "v@:@");
     objc_registerClassPair(app_delegate_class); 
     app_delegate = oc_alloc_init(app_delegate_class);
     printf("app delegate: %p\n", app_delegate);
