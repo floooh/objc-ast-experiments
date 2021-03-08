@@ -3,4 +3,5 @@
 *.pyc
 __pycache__/
 .vscode/
-hello
+hello_c
+hello_objc

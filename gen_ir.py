@@ -3,6 +3,10 @@
 #
 #   Generate a high-level intermediate representation of ObjC and C types
 #   by parsing the output of 'clang -ast-dump=json'
+#
+#   TODO:
+#   -   Extract property setter/getter methods (for properties that don't
+#       have an associated method setter/getter pair).
 #-------------------------------------------------------------------------------
 
 import json, subprocess, sys, tempfile
@@ -215,19 +219,22 @@ def parse_objc_category(decl, item_filter):
     outp['interface'] = decl['interface']['name']
     if 'inner' in decl:
         has_items, outp['items'] = parse_objc_methods_and_properties(decl['inner'], item_filter)
-    if has_items:
-        return outp
-    else:
-        return None
+        if has_items:
+            return outp
+    return None
 
 def parse_decl(decl, filter, all_decls):
     if 'name' not in decl:
-        # FIXME: do we need to support anonymous enums?
         return None 
-    if decl['name'] not in filter:
-        return None
-    item_filter = filter[decl['name']]
     kind = decl['kind']
+    # ObjCCatgories are class-extensions
+    if kind == 'ObjCCategoryDecl':
+        decl_name = decl['interface']['name']
+    else:
+        decl_name = decl['name']
+    if decl_name not in filter:
+        return None
+    item_filter = filter[decl_name]
     if kind == 'RecordDecl':
         return parse_struct(decl)
     elif kind == 'FunctionDecl':

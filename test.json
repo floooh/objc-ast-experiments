@@ -8,6 +8,9 @@
         "CGPoint": [ ],
         "CGSize": [ ],
         "NSRect": [ ],
+        "NSString": [
+            "stringWithUTF8String:"
+        ],
         "NSApplicationActivationPolicy": [  ],
         "NSNotification": [ ],
         "NSApplicationDelegate": [ ],
@@ -22,7 +25,13 @@
         "NSBackingStoreType": [ ],
         "NSWindow": [
             "initWithContentRect:styleMask:backing:defer:",
-            "makeKeyAndOrderFront:"
-        ]
+            "makeKeyAndOrderFront:",
+            "setTitle:",
+            "setAcceptsMouseMovedEvents:",
+            "acceptsMouseMovedEvents",
+            "center",
+            "setDelegate:"
+        ],
+        "NSWindowDelegate": [ ]
     }
 }
