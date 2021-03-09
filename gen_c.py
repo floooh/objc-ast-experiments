@@ -141,10 +141,6 @@ def objcfunc_args_as_string(c_prefix, self_type, class_name, method_name, args_d
 
 def objcfunc_prototype_as_string(c_prefix, self_type, args_decl, return_type):
     args = [ 'void*', 'void*' ] # id, SEL
-    #if self_type is not None:
-    #    args.append("(void*")
-    #else:
-    #    args.append("(void*)object_getClass((void*)self)")
     for arg_decl in args_decl:
         args.append(f"{c_type(c_prefix, arg_decl['type']['type'])}")
     args_str = ','.join(args)

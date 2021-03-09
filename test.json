@@ -27,10 +27,10 @@
             "initWithContentRect:styleMask:backing:defer:",
             "makeKeyAndOrderFront:",
             "setTitle:",
-            "setAcceptsMouseMovedEvents:",
-            "acceptsMouseMovedEvents",
             "center",
-            "setDelegate:"
+            "setDelegate:",
+            "restorable",
+            "acceptsMouseMovedEvents"
         ],
         "NSWindowDelegate": [ ]
     }

@@ -20,7 +20,8 @@
         backing:NSBackingStoreBuffered
         defer:NO];
     [win setTitle:[NSString stringWithUTF8String:"Hello from ObjC"]];
-    // FIXME [window setAcceptsMouseMovedEvents:YES];
+    [win setAcceptsMouseMovedEvents:YES];
+    [win setRestorable:YES];
     [win center];
     [win setDelegate:[[HelloWindowDelegate alloc] init]];
     [win makeKeyAndOrderFront:nil];

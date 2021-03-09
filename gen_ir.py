@@ -3,10 +3,6 @@
 #
 #   Generate a high-level intermediate representation of ObjC and C types
 #   by parsing the output of 'clang -ast-dump=json'
-#
-#   TODO:
-#   -   Extract property setter/getter methods (for properties that don't
-#       have an associated method setter/getter pair).
 #-------------------------------------------------------------------------------
 
 import json, subprocess, sys, tempfile
@@ -156,19 +152,36 @@ def parse_typedef_struct(decl, all_decls):
         return None
     outp['name'] = name
     return outp
+
+def append_unique_named_item(new_item, items):
+    for item in items:
+        if item['name'] == new_item['name']:
+            return
+    items.append(new_item)
+
+def property_has_getter(decl):
+    if 'readonly' in decl and decl['readonly']:
+        return True
+    elif 'readwrite' in decl and decl['readwrite']:
+        return True
+    else:
+        return False
+
+def property_has_setter(decl):
+    return 'readwrite' in decl and decl['readwrite']
     
 def parse_objc_methods_and_properties(decls, item_filter):
     outp = []
     has_items = False
     for decl in decls:
-        outp_item = {}
         kind = decl['kind']
         if kind == 'ObjCMethodDecl':
+            outp_item = {}
             has_items = True
             if filter_item(decl['name'], item_filter):
                 outp_item['name'] = decl['name']
                 outp_item['kind'] = 'objc_method'
-                outp_item['is_instance_method'] = decl['mangledName'].startswith('-[')
+                outp_item['is_instance_method'] = decl['instance']
                 outp_item['return_type'] = parse_type(decl['returnType'])
                 outp_item['args'] = []
                 if 'inner' in decl:
@@ -178,14 +191,38 @@ def parse_objc_methods_and_properties(decls, item_filter):
                             outp_arg['name'] = arg['name']
                             outp_arg['type'] = parse_type(arg['type'])
                             outp_item['args'].append(outp_arg)
-                outp.append(outp_item)
+                # 'explicit' methods may overlap with generated property methods
+                append_unique_named_item(outp_item, outp)
         elif kind == 'ObjCPropertyDecl':
-            has_items = True
             if filter_item(decl['name'], item_filter):
-                outp_item['name'] = decl['name']
-                outp_item['kind'] = 'objc_property'
-                outp_item['type'] = parse_type(decl['type'])
-                outp.append(outp_item)
+                if property_has_setter(decl):
+                    has_items = True
+                    setter_item = {
+                        'name': 'set' + decl['name'][:1].upper() + decl['name'][1:] + ':',
+                        'kind': 'objc_method',
+                        'is_instance_method': not ('class' in decl and decl['class']),
+                        'return_type': {
+                            'type': 'void'
+                        },
+                        'args': [
+                            { 'name': 'val', 'type': parse_type(decl['type']) }
+                        ]
+                    }
+                    append_unique_named_item(setter_item, outp)
+
+                if property_has_getter(decl):
+                    has_items = True
+                    getter_item = {
+                        'name': decl['name'],
+                        'kind': 'objc_method',
+                        'is_instance_method': not ('class' in decl and decl['class']),
+                        'return_type': parse_type(decl['type']),
+                        'args': [ ]
+                    }
+                    # the getter name may be overriden
+                    if 'getter' in decl:
+                        getter_item['name'] = decl['getter']['name']
+                    append_unique_named_item(getter_item, outp)
     return has_items, outp
 
 def parse_objc_interface(decl, item_filter):
@@ -251,11 +288,12 @@ def parse_decl(decl, filter, all_decls):
     elif kind == 'ObjCCategoryDecl':
         return parse_objc_category(decl, item_filter)
 
-def integrate_category(decls, category_decl):
+def integrate_category(all_decls, category_decl):
     interface_name = category_decl['interface']
-    for decl in decls:
+    for decl in all_decls:
         if decl['name'] == interface_name:
-            decl['items'].extend(category_decl['items'])
+            for category_item in category_decl['items']:
+                append_unique_named_item(category_item, decl['items'])
             break
 
 def parse_decls(decls, filter):
@@ -263,12 +301,12 @@ def parse_decls(decls, filter):
     for decl in decls:
         outp_decl = parse_decl(decl, filter, decls)
         if outp_decl is not None:
-            # don't add duplicates
-            if outp_decl['name'] in added_types:
-                continue
-            else:
-                added_types[outp_decl['name']] = 1
             if outp_decl['kind'] != 'objc_category':
+                # don't add duplicates
+                if outp_decl['name'] in added_types:
+                    continue
+                else:
+                    added_types[outp_decl['name']] = 1
                 outp.append(outp_decl)
             else:
                 # categories must be integrated with existing interfaces

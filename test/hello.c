@@ -26,7 +26,9 @@ void app_didFinishLaunching(id obj, SEL sel, NSNotification* notification) {
         NSBackingStoreBuffered,
         false);
     NSWindow_setTitle(win, NSString_stringWithUTF8String("Hello from C"));
+    NSWindow_setAcceptsMouseMovedEvents(win, true);
     NSWindow_center(win);
+    NSWindow_setRestorable(win, true);
     NSWindow_setDelegate(win, (NSWindowDelegate*)win_delegate);
     NSWindow_makeKeyAndOrderFront(win, 0);
 }
