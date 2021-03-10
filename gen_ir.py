@@ -136,6 +136,21 @@ def parse_struct(decl):
         outp['items'].append(item)
     return outp
 
+def parse_function(decl):
+    outp = {}
+    outp['kind'] = 'func'
+    outp['name'] = decl['name']
+    outp['return_type'] = parse_type(decl['type'])
+    outp['args'] = []
+    if 'inner' in decl:
+        for arg in decl['inner']:
+            if arg['kind'] == 'ParmVarDecl':
+                outp_arg = {}
+                outp_arg['name'] = arg['name']
+                outp_arg['type'] = parse_type(arg['type'])
+                outp_item['args'].append(outp_arg)
+    return outp
+
 # this parses typedef'ed anonymous structs liKe:
 #   typedef stryct {
 #       ....
@@ -275,8 +290,7 @@ def parse_decl(decl, filter, all_decls):
     if kind == 'RecordDecl':
         return parse_struct(decl)
     elif kind == 'FunctionDecl':
-        # FIXME: a C function
-        return None
+        return parse_function(decl)
     elif kind == 'TypedefDecl':
         return parse_typedef_struct(decl, all_decls)
     elif kind == 'EnumDecl':

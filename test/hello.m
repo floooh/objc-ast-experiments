@@ -1,6 +1,7 @@
 // same as hello.c, but in ObjC to compare behaviour
 //
 #import <Cocoa/Cocoa.h>
+#import <Metal/Metal.h>
 
 @interface HelloAppDelegate : NSObject<NSApplicationDelegate>
 @end
@@ -24,6 +25,10 @@
     [win setRestorable:YES];
     [win center];
     [win setDelegate:[[HelloWindowDelegate alloc] init]];
+
+    id<MTLDevice> mtl_device= MTLCreateSystemDefaultDevice();
+    __builtin_printf("MTLDevice: %p\n", mtl_device);
+
     [win makeKeyAndOrderFront:nil];
 }
 

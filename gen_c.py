@@ -31,15 +31,15 @@ def l(s):
     out_lines += s + '\n'
 
 def c_type(c_prefix, type):
+    # strip any attributes we encountered
+    for attr in ['_Nullable', '_Nonnull', '__kindof', 'NS_RETURNS_RETAINED', '(void)']:
+        type = type.replace(attr, '')
+    type = type.strip()
     if type in type_map:
         type = type_map[type]
-    type = type.replace('_Nullable', '')
-    type = type.replace('_Nonnull', '')
-    type = type.replace('__kindof', '')
-    type = type.strip()
     if type.startswith('id<'):
         type = type[3:-1]
-        type = type + ' *'
+        type = type + '* '
     if type.strip('* ') in api_types:
         type = c_prefix + type
     return type
@@ -113,7 +113,7 @@ def write_structs(ir, c_prefix):
             l(f"}} {struct_type};")
             l('')
 
-def c_func_name(c_prefix, objc_class_name, objc_method_name):
+def objcmethod_func_name(c_prefix, objc_class_name, objc_method_name):
     name = f"{c_prefix}{objc_class_name}_{objc_method_name}"
     name = name.replace(':', '_').rstrip('_')
     return name
@@ -124,7 +124,10 @@ def cfunc_args_as_string(c_prefix, self_type, args_decl):
         args.append(f"{c_type(c_prefix, self_type)} * self")
     for arg_decl in args_decl:
         args.append(f"{c_type(c_prefix, arg_decl['type']['type'])} {arg_decl['name']}")
-    return ', '.join(args)
+    if len(args) == 0:
+        return 'void'
+    else:
+        return ', '.join(args)
 
 def objcfunc_args_as_string(c_prefix, self_type, class_name, method_name, args_decl):
     args = []
@@ -147,13 +150,13 @@ def objcfunc_prototype_as_string(c_prefix, self_type, args_decl, return_type):
     proto_str = f"({return_type}(*)({args_str}))"
     return proto_str
 
-def write_funcs(ir, c_prefix):
+def write_objcmethod_funcs(ir, c_prefix):
     for class_decl in ir['decls']:
         if class_decl['kind'] in ['objc_interface', 'objc_protocol']:
             class_name = class_decl['name']
             for method_decl in class_decl['items']:
                 if method_decl['kind'] == 'objc_method':
-                    func_name = c_func_name(c_prefix, class_name, method_decl['name'])
+                    func_name = objcmethod_func_name(c_prefix, class_name, method_decl['name'])
                     return_type = c_type(c_prefix, method_decl['return_type']['type'])
                     # special case 'instancetype'
                     if return_type == 'instancetype':
@@ -178,6 +181,14 @@ def write_funcs(ir, c_prefix):
                     l(f"    return ({objc_proto_str}{msgsend_func})({objc_args_str});")
                     l("}")
 
+def write_extern_cfuncs(ir, c_prefix):
+    for func_decl in ir['decls']:
+        if func_decl['kind'] == 'func':
+            func_name = func_decl['name']
+            return_type = c_type(c_prefix, func_decl['return_type']['type'])
+            args_str = cfunc_args_as_string(c_prefix, None, func_decl['args'])
+            l(f"extern {return_type}{func_name}({args_str});")
+
 def gen(ir, c_prefix, output_path):
     reset_globals()
     extract_api_types(ir)
@@ -185,7 +196,8 @@ def gen(ir, c_prefix, output_path):
     write_typedefs(ir, c_prefix)
     write_enums(ir, c_prefix)
     write_structs(ir, c_prefix)
-    write_funcs(ir, c_prefix)
+    write_extern_cfuncs(ir, c_prefix)
+    write_objcmethod_funcs(ir, c_prefix)
     with open(output_path, 'w', newline='\n') as f_outp:
         f_outp.write(out_lines)
 

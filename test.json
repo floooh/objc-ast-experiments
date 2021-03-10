@@ -1,7 +1,7 @@
 {
     "c_prefix": "",
     "headers": {
-        "imports": [ "Cocoa/Cocoa.h" ],
+        "imports": [ "Cocoa/Cocoa.h", "Metal/Metal.h" ],
         "includes": []
     },
     "exports": {
@@ -32,6 +32,8 @@
             "restorable",
             "acceptsMouseMovedEvents"
         ],
-        "NSWindowDelegate": [ ]
+        "NSWindowDelegate": [ ],
+        "MTLCreateSystemDefaultDevice": [ ],
+        "MTLDevice": [ ]
     }
 }

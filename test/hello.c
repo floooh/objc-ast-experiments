@@ -30,6 +30,10 @@ void app_didFinishLaunching(id obj, SEL sel, NSNotification* notification) {
     NSWindow_center(win);
     NSWindow_setRestorable(win, true);
     NSWindow_setDelegate(win, (NSWindowDelegate*)win_delegate);
+
+    MTLDevice* mtl_device = MTLCreateSystemDefaultDevice();
+    __builtin_printf("MTLDevice: %p\n", mtl_device);
+
     NSWindow_makeKeyAndOrderFront(win, 0);
 }
 
