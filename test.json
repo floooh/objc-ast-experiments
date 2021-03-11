@@ -1,7 +1,7 @@
 {
     "c_prefix": "",
     "headers": {
-        "imports": [ "Cocoa/Cocoa.h", "Metal/Metal.h" ],
+        "imports": [ "Cocoa/Cocoa.h", "Metal/Metal.h", "MetalKit/MetalKit.h" ],
         "includes": []
     },
     "exports": {
@@ -30,10 +30,23 @@
             "center",
             "setDelegate:",
             "restorable",
-            "acceptsMouseMovedEvents"
+            "acceptsMouseMovedEvents",
+            "makeFirstResponder:",
+            "contentView"
         ],
         "NSWindowDelegate": [ ],
+        "NSResponder": [ ],
+        "NSView": [ ],
+        "MTLDevice": [ ],
         "MTLCreateSystemDefaultDevice": [ ],
-        "MTLDevice": [ ]
+        "MTLPixelFormat": [ ],
+        "MTKView": [
+            "preferredFramesPerSecond",
+            "device",
+            "colorPixelFormat",
+            "depthStencilPixelFormat",
+            "sampleCount",
+            "autoResizeDrawable"
+        ]
     }
 }

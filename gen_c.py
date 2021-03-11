@@ -39,7 +39,7 @@ def c_type(c_prefix, type):
         type = type_map[type]
     if type.startswith('id<'):
         type = type[3:-1]
-        type = type + '* '
+        type = type + '*'
     if type.strip('* ') in api_types:
         type = c_prefix + type
     return type
@@ -58,7 +58,7 @@ def classify_return_type(type):
     elif type in [ 'float', 'double' ]:
         return 'float'
     else:
-        print(f"don't know how to classify result type '{type}")
+        print(f"don't know how to classify result type '{type}'")
         return None
 
 def write_header():
@@ -187,7 +187,7 @@ def write_extern_cfuncs(ir, c_prefix):
             func_name = func_decl['name']
             return_type = c_type(c_prefix, func_decl['return_type']['type'])
             args_str = cfunc_args_as_string(c_prefix, None, func_decl['args'])
-            l(f"extern {return_type}{func_name}({args_str});")
+            l(f"extern {return_type} {func_name}({args_str});")
 
 def gen(ir, c_prefix, output_path):
     reset_globals()
