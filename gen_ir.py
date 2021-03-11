@@ -148,7 +148,7 @@ def parse_function(decl):
                 outp_arg = {}
                 outp_arg['name'] = arg['name']
                 outp_arg['type'] = parse_type(arg['type'])
-                outp_item['args'].append(outp_arg)
+                outp['args'].append(outp_arg)
     return outp
 
 # this parses typedef'ed anonymous structs liKe:
