@@ -32,7 +32,18 @@ def l(s):
 
 def c_type(c_prefix, type):
     # strip any attributes we encountered
-    for attr in ['_Nullable', '_Nonnull', '__kindof', 'NS_RETURNS_RETAINED', '(void)']:
+    attrs = [
+        '_Nullable',
+        '_Nonnull',
+        '__kindof',
+        'NS_RETURNS_RETAINED',
+        'DISPATCH_RETURNS_RETAINED'
+    ]
+    start_paren = type.find('(')
+    end_paren = type.find(')')
+    if start_paren != -1 and end_paren != -1:
+        type = type[0:start_paren] + type[end_paren+1:]
+    for attr in attrs:
         type = type.replace(attr, '')
     type = type.strip()
     if type in type_map:
@@ -68,9 +79,13 @@ def write_header():
 
 def write_typedefs(ir, c_prefix):
     for decl in ir['decls']:
-        if decl['kind'] in ['objc_interface', 'objc_protocol']:
+        kind = decl['kind']
+        if kind in ['objc_interface', 'objc_protocol']:
             typename = f"{c_prefix}{decl['name']}"
             l(f"typedef struct {typename} {{ }} {typename};")
+        elif kind == 'typedef':
+            typename = f"{c_prefix}{decl['name']}"
+            l(f"typedef {decl['type']['type']} {typename};")
     l('')
 
 def expr_as_string(expr):

@@ -25,18 +25,20 @@ def find_decl_by_id(decl_id, all_decls):
     return None
 
 # recursively resolve a typedef'ed struct
-def find_bottom_struct(decl, all_decls):
+def find_bottom_type_decl(decl, all_decls):
     # top-level decl is of kind 'TypedefDecl'
     decl = decl['inner'][0]
     # fist dig into the TypedefType child nodes...
     while decl['kind'] == "TypedefType":
         decl = decl['inner'][0]
-    # there should be an ElaboratedType here
-    if not decl['kind'] == "ElaboratedType":
+    # is it a simple builtin type?
+    if decl['kind'] == 'BuiltinType':
+        return decl
+    # otherwise there should be an ElaboratedType here
+    if not decl['kind'] == 'ElaboratedType':
         return None
-    # below that there should be a 'RecordType'
     decl = decl['inner'][0]
-    if not decl['kind'] == "RecordType":
+    if not decl['kind'] == 'RecordType':
         return None
     struct_id = decl['decl']['id']
     struct_decl = find_decl_by_id(struct_id, all_decls)
@@ -151,21 +153,31 @@ def parse_function(decl):
                 outp['args'].append(outp_arg)
     return outp
 
-# this parses typedef'ed anonymous structs liKe:
-#   typedef stryct {
-#       ....
-#   } bla_t
-def parse_typedef_struct(decl, all_decls):
+def parse_typedef(decl, all_decls):
     outp = {}
     name = decl['name']
-    decl = find_bottom_struct(decl, all_decls)
-    if decl is None:
-        # not a struct typedef
-        return None
-    outp = parse_struct(decl)
-    if outp is None:
-        return None
-    outp['name'] = name
+
+    # shortcut if this is a "ObjCObjectPointerType", just create a void* typedef
+    if decl['inner'][0]['kind'] == 'ObjCObjectPointerType':
+        outp['name'] = name
+        outp['kind'] = 'typedef'
+        outp['type'] = { 'type': 'void*' }
+    else:
+        # otherwise try to resolve the typedef "properly"
+        decl = find_bottom_type_decl(decl, all_decls)
+        if decl is None:
+            return None
+        elif decl['kind'] == 'BuiltinType':
+            # a typedef'ed builtin type
+            outp['name'] = name
+            outp['kind'] = 'typedef'
+            outp['type'] = parse_type(decl['type'])
+        elif decl['kind'] == 'RecordDecl':
+            # a typedef'ed struct
+            outp = parse_struct(decl)
+            if outp is None:
+                return None
+            outp['name'] = name
     return outp
 
 def append_unique_named_item(new_item, items):
@@ -292,7 +304,7 @@ def parse_decl(decl, filter, all_decls):
     elif kind == 'FunctionDecl':
         return parse_function(decl)
     elif kind == 'TypedefDecl':
-        return parse_typedef_struct(decl, all_decls)
+        return parse_typedef(decl, all_decls)
     elif kind == 'EnumDecl':
         return parse_enum(decl, item_filter)
     elif kind == 'ObjCInterfaceDecl':
