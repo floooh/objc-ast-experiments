@@ -5,6 +5,11 @@
         "includes": []
     },
     "exports": {
+        "dispatch_semaphore_t": [ ],
+        "dispatch_time_t": [ ],
+        "dispatch_semaphore_create": [ ],
+        "dispatch_semaphore_wait": [ ],
+        "dispatch_semaphore_signal": [ ],
         "CGPoint": [ ],
         "CGSize": [ ],
         "NSRect": [ ],
