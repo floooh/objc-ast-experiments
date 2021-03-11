@@ -39,6 +39,7 @@ def c_type(c_prefix, type):
         'NS_RETURNS_RETAINED',
         'DISPATCH_RETURNS_RETAINED'
     ]
+    # sometimes return type annoations have types inside parens, remove this stuff
     start_paren = type.find('(')
     end_paren = type.find(')')
     if start_paren != -1 and end_paren != -1:
