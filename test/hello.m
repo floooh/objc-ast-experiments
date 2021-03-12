@@ -13,7 +13,9 @@
 @end
 
 static id<MTLDevice> mtl_device;
+static id<MTLCommandQueue> mtl_queue;
 static MTKView* mtk_view;
+dispatch_semaphore_t sem;
 
 @implementation HelloAppDelegate
 - (void)applicationDidFinishLaunching:(NSNotification*)aNotification {
@@ -47,6 +49,12 @@ static MTKView* mtk_view;
     win.contentView = mtk_view;
     [win makeFirstResponder:mtk_view];
     [win makeKeyAndOrderFront:nil];
+
+    mtl_queue = [mtl_device newCommandQueue];
+    printf("mtl_queue: %p\n", mtl_queue);
+
+    sem = dispatch_semaphore_create(2);
+    printf("sem: %p\n", sem);
 }
 
 - (BOOL)applicationShouldTerminateAfterLastWindowClosed:(NSApplication*)sender {
@@ -58,29 +66,6 @@ static MTKView* mtk_view;
 @implementation HelloWindowDelegate
 - (BOOL)windowShouldClose:(id)sender {
     return YES;
-}
-- (void)windowDidResize:(NSNotification*)notification {
-    printf("windowDidResize called!\n");
-}
-
-- (void)windowDidMove:(NSNotification*)notification {
-    printf("windowDidMove called!\n");
-}
-
-- (void)windowDidMiniaturize:(NSNotification*)notification {
-    printf("windowDidMiniaturize called!\n");
-}
-
-- (void)windowDidDeminiaturize:(NSNotification*)notification {
-    printf("windowDidDeminiaturize called!\n");
-}
-
-- (void)windowDidBecomeKey:(NSNotification*)notification {
-    printf("windowDidBecomeKey called!\n");
-}
-
-- (void)windowDidResignKey:(NSNotification*)notification {
-    printf("windowDidResignKey called!\n");
 }
 @end
 
@@ -98,7 +83,32 @@ static MTKView* mtk_view;
     return YES;
 }
 - (void)drawRect:(NSRect)dirtyRect {
-    printf("drawRect called: %.1f,%.1f,%.1f,%.1f!\n", dirtyRect.origin.x, dirtyRect.origin.y, dirtyRect.size.width, dirtyRect.size.height);
+    static double green = 0.0f;
+    green += 0.01;
+    if (green > 1.0f) {
+        green = 0.0f;
+    }
+
+    // begin pass
+    dispatch_semaphore_wait(sem, DISPATCH_TIME_FOREVER);
+    MTLRenderPassDescriptor* pass_desc = [mtk_view currentRenderPassDescriptor];
+    pass_desc.colorAttachments[0].loadAction = MTLLoadActionClear;
+    pass_desc.colorAttachments[0].clearColor = MTLClearColorMake(1.0, green, 0.0, 1.0);
+    pass_desc.depthAttachment.loadAction = MTLLoadActionClear;
+    pass_desc.depthAttachment.clearDepth = 1.0;
+
+    id<MTLCommandBuffer> cmd_buf = [mtl_queue commandBuffer];
+    id<MTLRenderCommandEncoder> cmd_enc = [cmd_buf renderCommandEncoderWithDescriptor:pass_desc];
+
+    // end pass
+    [cmd_enc endEncoding];
+
+    // commit
+    [cmd_buf presentDrawable:[mtk_view currentDrawable]];
+    [cmd_buf addCompletedHandler:^(id<MTLCommandBuffer> cmd_buf) {
+        dispatch_semaphore_signal(sem);
+    }];
+    [cmd_buf commit];
 }
 @end
 

@@ -1,10 +1,16 @@
 #include <assert.h>
 #include <stdio.h>
+
+// FIXME
+#define DISPATCH_TIME_FOREVER (~0ull)
+typedef void(^MTLCommandBufferHandler)(void*);
 #include "hello_macos.h"
 
 id app_delegate;
 id win_delegate;
 MTKView* mtk_view;
+MTLCommandQueue* mtl_queue;
+dispatch_semaphore_t sem;
 
 id oc_alloc(Class cls) {
     return ((id(*)(id,SEL))objc_msgSend)((id)cls, sel_getUid("alloc"));
@@ -45,6 +51,12 @@ void app_didFinishLaunching(id obj, SEL sel, NSNotification* notification) {
     NSWindow_setContentView(win, (NSView*)mtk_view);
     NSWindow_makeFirstResponder(win, (NSResponder*)mtk_view);
     NSWindow_makeKeyAndOrderFront(win, 0);
+
+    mtl_queue = MTLDevice_newCommandQueue(mtl_device);
+    printf("mtl_queue: %p\n", mtl_queue);
+
+    sem = dispatch_semaphore_create(2);
+    printf("sem: %p\n", sem);
 }
 
 bool app_applicationShouldTerminateAfterLastWindowClosed(id obj, SEL sel, NSApplication* sender) {
@@ -54,30 +66,6 @@ bool app_applicationShouldTerminateAfterLastWindowClosed(id obj, SEL sel, NSAppl
 bool win_windowShouldClose(id obj, SEL sel, id sender) {
     printf("windowShouldClose() called\n");
     return true;
-}
-
-void win_windowDidResize(id obj, SEL sel, NSNotification* notification) {
-    printf("windowDidResize() called!\n");
-}
-
-void win_windowDidMove(id obj, SEL sel, NSNotification* notification) {
-    printf("windowDidMove() called!\n");
-}
-
-void win_windowDidMiniaturize(id obj, SEL sel, NSNotification* notification) {
-    printf("windowDidMiniaturize() called!\n");
-}
-
-void win_windowDidDeminiaturize(id obj, SEL sel, NSNotification* notification) {
-    printf("windowDidDeminiaturize() called!\n");
-}
-
-void win_windowDidBecomeKey(id obj, SEL sel, NSNotification* notification) {
-    printf("windowDidBecomeKey() called\n");
-}
-
-void win_windowDidResignKey(id obj, SEL sel, NSNotification* notification) {
-    printf("windowDidResignKey() called!\n");
 }
 
 bool view_isOpaque(id obj, SEL sel) {
@@ -96,7 +84,37 @@ bool view_acceptsFirstResponder(id obj, SEL sel) {
 }
 
 void view_drawRect(id obj, SEL sel, NSRect dirtyRect) {
-    printf("drawRect called: %.1f,%.1f,%.1f,%.1f!\n", dirtyRect.origin.x, dirtyRect.origin.y, dirtyRect.size.width, dirtyRect.size.height);
+    static double green = 0.0f;
+    green += 0.01;
+    if (green > 1.0f) {
+        green = 0.0f;
+    }
+
+    // begin pass
+    dispatch_semaphore_wait(sem, DISPATCH_TIME_FOREVER);
+
+    MTLRenderPassDescriptor* pass_desc = MTKView_currentRenderPassDescriptor(mtk_view);
+    MTLRenderPassColorAttachmentDescriptorArray* rpcad_array = MTLRenderPassDescriptor_colorAttachments(pass_desc);
+    MTLRenderPassColorAttachmentDescriptor* color_desc = MTLRenderPassColorAttachmentDescriptorArray_objectAtIndexedSubscript(rpcad_array, 0);
+    MTLRenderPassDepthAttachmentDescriptor* depth_desc = MTLRenderPassDescriptor_depthAttachment(pass_desc);
+    MTLRenderPassAttachmentDescriptor_setLoadAction((MTLRenderPassAttachmentDescriptor*)color_desc, MTLLoadActionClear);
+    MTLRenderPassColorAttachmentDescriptor_setClearColor(color_desc, (MTLClearColor){ 1.0, green, 0.0, 1.0 });
+    MTLRenderPassAttachmentDescriptor_setLoadAction((MTLRenderPassAttachmentDescriptor*)depth_desc, MTLLoadActionClear);
+    MTLRenderPassDepthAttachmentDescriptor_setClearDepth(depth_desc, 1.0);
+
+    MTLCommandBuffer* cmd_buf = MTLCommandQueue_commandBuffer(mtl_queue);
+    MTLRenderCommandEncoder* cmd_enc = MTLCommandBuffer_renderCommandEncoderWithDescriptor(cmd_buf, pass_desc);
+
+    // end pass
+    MTLCommandEncoder_endEncoding((MTLCommandEncoder*)cmd_enc);
+
+    // commit
+    MTLDrawable* drawable = (MTLDrawable*) MTKView_currentDrawable(mtk_view);
+    MTLCommandBuffer_presentDrawable(cmd_buf, drawable);
+    MTLCommandBuffer_addCompletedHandler(cmd_buf, ^(void* cmd_buf) {
+        dispatch_semaphore_signal(sem);
+    });
+    MTLCommandBuffer_commit(cmd_buf);
 }
 
 void init_runtime(void) {
@@ -114,12 +132,6 @@ void init_runtime(void) {
     Class win_delegate_class = objc_allocateClassPair(objc_lookUpClass("NSObject"), "HelloWinDelegate", 0);
     assert(win_delegate_class);
     class_addMethod(win_delegate_class, sel_getUid("windowShouldClose:"), (IMP)win_windowShouldClose, "B@:@");
-    class_addMethod(win_delegate_class, sel_getUid("windowDidResize:"), (IMP)win_windowDidResize, "v@:@");
-    class_addMethod(win_delegate_class, sel_getUid("windowDidMove:"), (IMP)win_windowDidMove, "v@:@");
-    class_addMethod(win_delegate_class, sel_getUid("windowDidMiniaturize:"), (IMP)win_windowDidMiniaturize, "v@:@");
-    class_addMethod(win_delegate_class, sel_getUid("windowDidDeminiaturize:"), (IMP)win_windowDidDeminiaturize, "v@:@");
-    class_addMethod(win_delegate_class, sel_getUid("windowDidBecomeKey:"), (IMP)win_windowDidBecomeKey, "v@:@");
-    class_addMethod(win_delegate_class, sel_getUid("windowDidResignKey:"), (IMP)win_windowDidResignKey, "v@:@");
     win_delegate = oc_alloc_init(win_delegate_class);
     assert(win_delegate);
     printf("win_delegate: %p\n", win_delegate);

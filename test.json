@@ -42,16 +42,51 @@
         "NSWindowDelegate": [ ],
         "NSResponder": [ ],
         "NSView": [ ],
-        "MTLDevice": [ ],
         "MTLCreateSystemDefaultDevice": [ ],
+        "MTLClearColor": [ ],
+        "MTLLoadAction": [ ],
         "MTLPixelFormat": [ ],
+        "MTLDevice": [
+            "newCommandQueue"
+        ],
+        "MTLDrawable": [ ],
+        "CAMetalDrawable": [ ],
         "MTKView": [
             "preferredFramesPerSecond",
             "device",
             "colorPixelFormat",
             "depthStencilPixelFormat",
             "sampleCount",
-            "autoResizeDrawable"
+            "autoResizeDrawable",
+            "currentRenderPassDescriptor",
+            "currentDrawable"
+        ],
+        "MTLCommandBuffer": [
+            "renderCommandEncoderWithDescriptor:",
+            "presentDrawable:",
+            "addCompletedHandler:",
+            "commit"
+        ],
+        "MTLCommandQueue": [
+            "commandBuffer"
+        ],
+        "MTLCommandEncoder": [
+            "endEncoding"
+        ],
+        "MTLRenderCommandEncoder": [ ],
+        "MTLRenderPassDescriptor": [
+            "colorAttachments",
+            "depthAttachment"
+        ],
+        "MTLRenderPassColorAttachmentDescriptorArray": [ "ALL" ],
+        "MTLRenderPassAttachmentDescriptor": [
+            "loadAction"
+        ],
+        "MTLRenderPassColorAttachmentDescriptor": [
+            "clearColor"
+        ],
+        "MTLRenderPassDepthAttachmentDescriptor": [
+            "clearDepth"
         ]
     }
 }

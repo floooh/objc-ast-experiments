@@ -35,6 +35,7 @@ def c_type(c_prefix, type):
     attrs = [
         '_Nullable',
         '_Nonnull',
+        '_Null_unspecified',
         '__kindof',
         'NS_RETURNS_RETAINED',
         'DISPATCH_RETURNS_RETAINED'
