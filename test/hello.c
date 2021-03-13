@@ -3,8 +3,37 @@
 
 // FIXME
 #define DISPATCH_TIME_FOREVER (~0ull)
-typedef void(^MTLCommandBufferHandler)(void*);
 #include "hello_macos.h"
+
+static void completed_handler(void* block_literal, void* cmd_buf);
+
+// clang blocks 'emulation' (see: https://clang.llvm.org/docs/Block-ABI-Apple.html)
+extern void _NSConcreteGlobalBlock;
+struct Block_literal_1 {
+    void* isa;
+    int flags;
+    int reserved;
+    void (*invoke)(void*, void*);
+    struct Block_descriptor_1 {
+        unsigned long int reserved;
+        unsigned long int size;
+        const char* signature;
+    } *descriptor;
+};
+
+static struct Block_descriptor_1 block_desc = {
+    .reserved = 0,
+    .size = sizeof(struct Block_literal_1),
+    .signature = "v16@?0^v8"
+};
+
+static struct Block_literal_1 block = {
+    .isa = &_NSConcreteGlobalBlock,
+    .flags = (1<<28) | (1<<30),     // BLOCK_IS_GLOBAL|BLOCK_HAS_SIGNATURE
+    .reserved = 0,
+    .invoke = completed_handler,
+    .descriptor = &block_desc,
+};
 
 id app_delegate;
 id win_delegate;
@@ -83,6 +112,10 @@ bool view_acceptsFirstResponder(id obj, SEL sel) {
     return true;
 }
 
+void completed_handler(void* block, void* cmd_buffer) {
+    dispatch_semaphore_signal(sem);
+}
+
 void view_drawRect(id obj, SEL sel, NSRect dirtyRect) {
     static double green = 0.0f;
     green += 0.01;
@@ -111,9 +144,7 @@ void view_drawRect(id obj, SEL sel, NSRect dirtyRect) {
     // commit
     MTLDrawable* drawable = (MTLDrawable*) MTKView_currentDrawable(mtk_view);
     MTLCommandBuffer_presentDrawable(cmd_buf, drawable);
-    MTLCommandBuffer_addCompletedHandler(cmd_buf, ^(void* cmd_buf) {
-        dispatch_semaphore_signal(sem);
-    });
+    MTLCommandBuffer_addCompletedHandler(cmd_buf, &block);
     MTLCommandBuffer_commit(cmd_buf);
 }
 

@@ -326,8 +326,8 @@ static void MTLCommandBuffer_commit(MTLCommandBuffer * self) {
 static void MTLCommandBuffer_presentDrawable(MTLCommandBuffer * self, MTLDrawable* drawable) {
     return ((void(*)(void*,void*,MTLDrawable*))objc_msgSend)((void*)self, (void*)sel_getUid("presentDrawable:"), drawable);
 }
-static void MTLCommandBuffer_addCompletedHandler(MTLCommandBuffer * self, MTLCommandBufferHandler block) {
-    return ((void(*)(void*,void*,MTLCommandBufferHandler))objc_msgSend)((void*)self, (void*)sel_getUid("addCompletedHandler:"), block);
+static void MTLCommandBuffer_addCompletedHandler(MTLCommandBuffer * self, void* block) {
+    return ((void(*)(void*,void*,void*))objc_msgSend)((void*)self, (void*)sel_getUid("addCompletedHandler:"), block);
 }
 static MTLRenderCommandEncoder* MTLCommandBuffer_renderCommandEncoderWithDescriptor(MTLCommandBuffer * self, MTLRenderPassDescriptor * renderPassDescriptor) {
     return ((MTLRenderCommandEncoder*(*)(void*,void*,MTLRenderPassDescriptor *))objc_msgSend)((void*)self, (void*)sel_getUid("renderCommandEncoderWithDescriptor:"), renderPassDescriptor);
