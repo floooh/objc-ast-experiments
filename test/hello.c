@@ -207,10 +207,10 @@ void completed_handler(void* block, void* cmd_buffer) {
 }
 
 void view_drawRect(id obj, SEL sel, NSRect dirtyRect) {
-    static double green = 0.0f;
+    static double green = 0.0;
     green += 0.01;
-    if (green > 1.0f) {
-        green = 0.0f;
+    if (green > 1.0) {
+        green = 0.0;
     }
 
     // begin pass
