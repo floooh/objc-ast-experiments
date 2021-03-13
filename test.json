@@ -1,5 +1,12 @@
 {
     "c_prefix": "",
+    "c_typemap": {
+        "CGFloat":      "double",
+        "NSUInteger":   "uint64_t",
+        "NSInteger":    "int64_t",
+        "BOOL":         "bool",
+        "MTLCommandBufferHandler": "void*"
+    },
     "headers": {
         "imports": [ "Cocoa/Cocoa.h", "Metal/Metal.h", "MetalKit/MetalKit.h" ],
         "includes": []

@@ -5,13 +5,7 @@
 #-------------------------------------------------------------------------------
 import sys, json
 
-type_map = {
-    'CGFloat':    'double',
-    'NSUInteger': 'uint64_t',
-    'NSInteger':  'int64_t',
-    'BOOL':       'bool',
-}
-
+type_map = { }
 api_types = {}
 out_lines = ''
 
@@ -30,7 +24,7 @@ def l(s):
     global out_lines
     out_lines += s + '\n'
 
-def c_type(c_prefix, type):
+def c_type(c_prefix, typename):
     # strip any attributes we encountered
     attrs = [
         '_Nullable',
@@ -41,21 +35,21 @@ def c_type(c_prefix, type):
         'DISPATCH_RETURNS_RETAINED'
     ]
     # sometimes return type annoations have types inside parens, remove this stuff
-    start_paren = type.find('(')
-    end_paren = type.find(')')
+    start_paren = typename.find('(')
+    end_paren = typename.find(')')
     if start_paren != -1 and end_paren != -1:
-        type = type[0:start_paren] + type[end_paren+1:]
+        typename = typename[0:start_paren] + typename[end_paren+1:]
     for attr in attrs:
-        type = type.replace(attr, '')
-    type = type.strip()
-    if type in type_map:
-        type = type_map[type]
-    if type.startswith('id<'):
-        type = type[3:-1]
-        type = type + '*'
-    if type.strip('* ') in api_types:
-        type = c_prefix + type
-    return type
+        typename = typename.replace(attr, '')
+    typename = typename.strip()
+    if typename in type_map:
+        typename = type_map[typename]
+    if typename.startswith('id<'):
+        typename = typename[3:-1]
+        typename = typename + '*'
+    if typename.strip('* ') in api_types:
+        typename = c_prefix + typename
+    return typename
 
 def classify_return_type(type):
     if type in api_types:
@@ -206,8 +200,12 @@ def write_extern_cfuncs(ir, c_prefix):
             args_str = cfunc_args_as_string(c_prefix, None, func_decl['args'])
             l(f"extern {return_type} {func_name}({args_str});")
 
-def gen(ir, c_prefix, output_path):
+def gen(ir, output_path):
+    global c_prefix
+    global type_map
     reset_globals()
+    c_prefix = ir['c_prefix']
+    type_map = ir['c_typemap']
     extract_api_types(ir)
     write_header()
     write_typedefs(ir, c_prefix)
@@ -228,4 +226,4 @@ if ir_path == output_path:
 
 with open(ir_path, "r") as fp:
     ir_json = json.load(fp)
-gen(ir_json, ir_json['c_prefix'], output_path)
+gen(ir_json, output_path)
