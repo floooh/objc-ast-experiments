@@ -24,6 +24,8 @@ struct Block_literal_1 {
 static struct Block_descriptor_1 block_desc = {
     .reserved = 0,
     .size = sizeof(struct Block_literal_1),
+    // taken from godbolt disassembly, this looks different than what's described
+    // here: https://developer.apple.com/library/archive/documentation/Cocoa/Conceptual/ObjCRuntimeGuide/Articles/ocrtTypeEncodings.html
     .signature = "v16@?0^v8"
 };
 
@@ -40,6 +42,9 @@ id win_delegate;
 MTKView* mtk_view;
 MTLCommandQueue* mtl_queue;
 dispatch_semaphore_t sem;
+MTLBuffer* mtl_buf;
+MTLRenderPipelineState* mtl_rps;
+MTLDepthStencilState* mtl_dss;
 
 id oc_alloc(Class cls) {
     return ((id(*)(id,SEL))objc_msgSend)((id)cls, sel_getUid("alloc"));
@@ -47,6 +52,10 @@ id oc_alloc(Class cls) {
 
 id oc_alloc_init(Class cls) {
     return ((id(*)(id,SEL))objc_msgSend)(oc_alloc(cls), sel_getUid("init"));
+}
+
+void oc_release(id obj) {
+    ((void(*)(id,SEL))objc_msgSend)(obj, sel_getUid("release"));
 }
 
 void app_didFinishLaunching(id obj, SEL sel, NSNotification* notification) {
@@ -62,7 +71,7 @@ void app_didFinishLaunching(id obj, SEL sel, NSNotification* notification) {
         style_mask,
         NSBackingStoreBuffered,
         false);
-    NSWindow_setTitle(win, NSString_stringWithUTF8String("Hello from C"));
+    NSWindow_setTitle(win, NSString_stringWithUTF8String("Hello Metal from C"));
     NSWindow_setAcceptsMouseMovedEvents(win, true);
     NSWindow_center(win);
     NSWindow_setRestorable(win, true);
@@ -86,6 +95,87 @@ void app_didFinishLaunching(id obj, SEL sel, NSNotification* notification) {
 
     sem = dispatch_semaphore_create(2);
     printf("sem: %p\n", sem);
+
+    // create Metal resource objects
+    float vertices[] = {
+         0.0f, 0.5f, 0.5f,  1.0f, 0.0f, 0.0f, 1.0f,
+         0.5f, -0.5f, 0.5f, 0.0f, 1.0f, 0.0f, 1.0f,
+        -0.5f, -0.5f, 0.5f, 0.0f, 0.0f, 1.0f, 1.0f
+    };
+    mtl_buf = MTLDevice_newBufferWithBytes_length_options(mtl_device, vertices, sizeof(vertices), MTLResourceStorageModeShared);
+    printf("mtl_buf: %p\n", mtl_buf);
+
+    const char* src = 
+        "#include <metal_stdlib>\n"
+        "using namespace metal;\n"
+        "struct vs_in {\n"
+        "  float4 position [[attribute(0)]];\n"
+        "  float4 color [[attribute(1)]];\n"
+        "};\n"
+        "struct vs_out {\n"
+        "  float4 position [[position]];\n"
+        "  float4 color;\n"
+        "};\n"
+        "vertex vs_out vs_main(vs_in inp [[stage_in]]) {\n"
+        "  vs_out outp;\n"
+        "  outp.position = inp.position;\n"
+        "  outp.color = inp.color;\n"
+        "  return outp;\n"
+        "}\n"
+        "fragment float4 fs_main(float4 color [[stage_in]]) {\n"
+        "  return color;\n"
+        "};\n";
+    NSError* err = 0;
+    MTLLibrary* lib = MTLDevice_newLibraryWithSource_options_error(mtl_device, NSString_stringWithUTF8String(src), 0, &err);
+    printf("lib: %p\n", lib);
+    MTLFunction* vs_func = MTLLibrary_newFunctionWithName(lib, NSString_stringWithUTF8String("vs_main"));
+    MTLFunction* fs_func = MTLLibrary_newFunctionWithName(lib, NSString_stringWithUTF8String("fs_main"));
+    printf("vs_func: %p\n", vs_func);
+    printf("fs_func: %p\n", fs_func);
+
+    MTLVertexDescriptor* vtx_desc = MTLVertexDescriptor_vertexDescriptor();
+    MTLVertexAttributeDescriptorArray* attr_arr = MTLVertexDescriptor_attributes(vtx_desc);
+    MTLVertexAttributeDescriptor* attr0 = MTLVertexAttributeDescriptorArray_objectAtIndexedSubscript(attr_arr, 0);
+    MTLVertexAttributeDescriptor* attr1 = MTLVertexAttributeDescriptorArray_objectAtIndexedSubscript(attr_arr, 1);
+    MTLVertexAttributeDescriptor_setFormat(attr0, MTLVertexFormatFloat3);
+    MTLVertexAttributeDescriptor_setOffset(attr0, 0);
+    MTLVertexAttributeDescriptor_setBufferIndex(attr0, 0);
+    MTLVertexAttributeDescriptor_setFormat(attr1, MTLVertexFormatFloat4);
+    MTLVertexAttributeDescriptor_setOffset(attr1, 3 * sizeof(float));
+    MTLVertexAttributeDescriptor_setBufferIndex(attr1, 0);
+    MTLVertexBufferLayoutDescriptorArray* layout_arr = MTLVertexDescriptor_layouts(vtx_desc);
+    MTLVertexBufferLayoutDescriptor* layout0 = MTLVertexBufferLayoutDescriptorArray_objectAtIndexedSubscript(layout_arr, 0);
+    MTLVertexBufferLayoutDescriptor_setStride(layout0, 7*sizeof(float));
+    MTLVertexBufferLayoutDescriptor_setStepFunction(layout0, MTLVertexStepFunctionPerVertex);
+    MTLVertexBufferLayoutDescriptor_setStepRate(layout0, 1);
+
+    MTLRenderPipelineDescriptor* rp_desc = (MTLRenderPipelineDescriptor*) oc_alloc_init(objc_lookUpClass("MTLRenderPipelineDescriptor"));
+    MTLRenderPipelineDescriptor_setVertexDescriptor(rp_desc, vtx_desc);
+    MTLRenderPipelineDescriptor_setVertexFunction(rp_desc, vs_func);
+    MTLRenderPipelineDescriptor_setFragmentFunction(rp_desc, fs_func);
+    MTLRenderPipelineDescriptor_setSampleCount(rp_desc, 1);
+    MTLRenderPipelineDescriptor_setAlphaToCoverageEnabled(rp_desc, false);
+    MTLRenderPipelineDescriptor_setAlphaToOneEnabled(rp_desc, false);
+    MTLRenderPipelineDescriptor_setRasterizationEnabled(rp_desc, true);
+    MTLRenderPipelineDescriptor_setDepthAttachmentPixelFormat(rp_desc, MTLPixelFormatDepth32Float_Stencil8);
+    MTLRenderPipelineColorAttachmentDescriptorArray* catt_arr = MTLRenderPipelineDescriptor_colorAttachments(rp_desc);
+    MTLRenderPipelineColorAttachmentDescriptor* catt0 = MTLRenderPipelineColorAttachmentDescriptorArray_objectAtIndexedSubscript(catt_arr, 0);
+    MTLRenderPipelineColorAttachmentDescriptor_setPixelFormat(catt0, MTLPixelFormatBGRA8Unorm);
+    MTLRenderPipelineColorAttachmentDescriptor_setWriteMask(catt0, MTLColorWriteMaskAll);
+    MTLRenderPipelineColorAttachmentDescriptor_setBlendingEnabled(catt0, false);
+    mtl_rps = MTLDevice_newRenderPipelineStateWithDescriptor_error(mtl_device, rp_desc, &err);
+    oc_release((id)rp_desc);
+    oc_release((id)vs_func);
+    oc_release((id)fs_func);
+    oc_release((id)lib);
+    printf("mtl_rps: %p\n", mtl_rps);
+
+    MTLDepthStencilDescriptor* ds_desc = (MTLDepthStencilDescriptor*) oc_alloc_init(objc_lookUpClass("MTLDepthStencilDescriptor"));
+    MTLDepthStencilDescriptor_setDepthCompareFunction(ds_desc, MTLCompareFunctionAlways);
+    MTLDepthStencilDescriptor_setDepthWriteEnabled(ds_desc, false);
+    mtl_dss = MTLDevice_newDepthStencilStateWithDescriptor(mtl_device, ds_desc);
+    oc_release((id)ds_desc);
+    printf("mtl_dss: %p\n", mtl_dss);
 }
 
 bool app_applicationShouldTerminateAfterLastWindowClosed(id obj, SEL sel, NSApplication* sender) {
@@ -108,7 +198,7 @@ bool view_canBecomeKeyView(id obj, SEL sel) {
 }
 
 bool view_acceptsFirstResponder(id obj, SEL sel) {
-    printf("acceptsFirstResponser() called\n");
+    printf("acceptsFirstResponder() called\n");
     return true;
 }
 
@@ -137,6 +227,17 @@ void view_drawRect(id obj, SEL sel, NSRect dirtyRect) {
 
     MTLCommandBuffer* cmd_buf = MTLCommandQueue_commandBuffer(mtl_queue);
     MTLRenderCommandEncoder* cmd_enc = MTLCommandBuffer_renderCommandEncoderWithDescriptor(cmd_buf, pass_desc);
+
+    // apply pipeline
+    MTLRenderCommandEncoder_setCullMode(cmd_enc, MTLCullModeNone);
+    MTLRenderCommandEncoder_setRenderPipelineState(cmd_enc, mtl_rps);
+    MTLRenderCommandEncoder_setDepthStencilState(cmd_enc, mtl_dss);
+
+    // apply bindings
+    MTLRenderCommandEncoder_setVertexBuffer_offset_atIndex(cmd_enc, mtl_buf, 0, 0);
+
+    // draw
+    MTLRenderCommandEncoder_drawPrimitives_vertexStart_vertexCount(cmd_enc, MTLPrimitiveTypeTriangle, 0, 3);
 
     // end pass
     MTLCommandEncoder_endEncoding((MTLCommandEncoder*)cmd_enc);

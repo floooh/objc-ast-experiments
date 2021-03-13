@@ -5,6 +5,7 @@ typedef unsigned long long dispatch_time_t;
 typedef void* dispatch_semaphore_t;
 typedef struct NSString { } NSString;
 typedef struct NSNotification { } NSNotification;
+typedef struct NSError { } NSError;
 typedef struct NSResponder { } NSResponder;
 typedef struct NSView { } NSView;
 typedef struct NSApplication { } NSApplication;
@@ -12,6 +13,10 @@ typedef struct NSApplicationDelegate { } NSApplicationDelegate;
 typedef struct NSWindow { } NSWindow;
 typedef struct NSWindowDelegate { } NSWindowDelegate;
 typedef struct MTLCommandEncoder { } MTLCommandEncoder;
+typedef struct MTLBuffer { } MTLBuffer;
+typedef struct MTLFunction { } MTLFunction;
+typedef struct MTLCompileOptions { } MTLCompileOptions;
+typedef struct MTLLibrary { } MTLLibrary;
 typedef struct MTLDevice { } MTLDevice;
 typedef struct MTLRenderPassAttachmentDescriptor { } MTLRenderPassAttachmentDescriptor;
 typedef struct MTLRenderPassColorAttachmentDescriptor { } MTLRenderPassColorAttachmentDescriptor;
@@ -20,8 +25,19 @@ typedef struct MTLRenderPassColorAttachmentDescriptorArray { } MTLRenderPassColo
 typedef struct MTLRenderPassDescriptor { } MTLRenderPassDescriptor;
 typedef struct MTLCommandBuffer { } MTLCommandBuffer;
 typedef struct MTLCommandQueue { } MTLCommandQueue;
+typedef struct MTLDepthStencilDescriptor { } MTLDepthStencilDescriptor;
+typedef struct MTLDepthStencilState { } MTLDepthStencilState;
 typedef struct MTLDrawable { } MTLDrawable;
 typedef struct MTLRenderCommandEncoder { } MTLRenderCommandEncoder;
+typedef struct MTLRenderPipelineColorAttachmentDescriptor { } MTLRenderPipelineColorAttachmentDescriptor;
+typedef struct MTLRenderPipelineDescriptor { } MTLRenderPipelineDescriptor;
+typedef struct MTLRenderPipelineState { } MTLRenderPipelineState;
+typedef struct MTLRenderPipelineColorAttachmentDescriptorArray { } MTLRenderPipelineColorAttachmentDescriptorArray;
+typedef struct MTLVertexBufferLayoutDescriptor { } MTLVertexBufferLayoutDescriptor;
+typedef struct MTLVertexBufferLayoutDescriptorArray { } MTLVertexBufferLayoutDescriptorArray;
+typedef struct MTLVertexAttributeDescriptor { } MTLVertexAttributeDescriptor;
+typedef struct MTLVertexAttributeDescriptorArray { } MTLVertexAttributeDescriptorArray;
+typedef struct MTLVertexDescriptor { } MTLVertexDescriptor;
 typedef struct CAMetalDrawable { } CAMetalDrawable;
 typedef struct MTKView { } MTKView;
 
@@ -195,11 +211,140 @@ typedef enum MTLPixelFormat: uint64_t {
     MTLPixelFormatX24_Stencil8 = 262,
 } MTLPixelFormat;
 
+typedef enum MTLCPUCacheMode: uint64_t {
+    MTLCPUCacheModeDefaultCache = 0,
+    MTLCPUCacheModeWriteCombined = 1,
+} MTLCPUCacheMode;
+
+typedef enum MTLStorageMode: uint64_t {
+    MTLStorageModeShared = 0,
+    MTLStorageModeManaged = 1,
+    MTLStorageModePrivate = 2,
+    MTLStorageModeMemoryless = 3,
+} MTLStorageMode;
+
+typedef enum MTLHazardTrackingMode: uint64_t {
+    MTLHazardTrackingModeDefault = 0,
+    MTLHazardTrackingModeUntracked = 1,
+    MTLHazardTrackingModeTracked = 2,
+} MTLHazardTrackingMode;
+
+typedef enum MTLResourceOptions: uint64_t {
+    MTLResourceCPUCacheModeDefaultCache = MTLCPUCacheModeDefaultCache<<0,
+    MTLResourceCPUCacheModeWriteCombined = MTLCPUCacheModeWriteCombined<<0,
+    MTLResourceStorageModeShared = MTLStorageModeShared<<4,
+    MTLResourceStorageModeManaged = MTLStorageModeManaged<<4,
+    MTLResourceStorageModePrivate = MTLStorageModePrivate<<4,
+    MTLResourceStorageModeMemoryless = MTLStorageModeMemoryless<<4,
+    MTLResourceHazardTrackingModeDefault = MTLHazardTrackingModeDefault<<8,
+    MTLResourceHazardTrackingModeUntracked = MTLHazardTrackingModeUntracked<<8,
+    MTLResourceHazardTrackingModeTracked = MTLHazardTrackingModeTracked<<8,
+    MTLResourceOptionCPUCacheModeDefault = MTLResourceCPUCacheModeDefaultCache,
+    MTLResourceOptionCPUCacheModeWriteCombined = MTLResourceCPUCacheModeWriteCombined,
+} MTLResourceOptions;
+
 typedef enum MTLLoadAction: uint64_t {
     MTLLoadActionDontCare = 0,
     MTLLoadActionLoad = 1,
     MTLLoadActionClear = 2,
 } MTLLoadAction;
+
+typedef enum MTLCompareFunction: uint64_t {
+    MTLCompareFunctionNever = 0,
+    MTLCompareFunctionLess = 1,
+    MTLCompareFunctionEqual = 2,
+    MTLCompareFunctionLessEqual = 3,
+    MTLCompareFunctionGreater = 4,
+    MTLCompareFunctionNotEqual = 5,
+    MTLCompareFunctionGreaterEqual = 6,
+    MTLCompareFunctionAlways = 7,
+} MTLCompareFunction;
+
+typedef enum MTLPrimitiveType: uint64_t {
+    MTLPrimitiveTypePoint = 0,
+    MTLPrimitiveTypeLine = 1,
+    MTLPrimitiveTypeLineStrip = 2,
+    MTLPrimitiveTypeTriangle = 3,
+    MTLPrimitiveTypeTriangleStrip = 4,
+} MTLPrimitiveType;
+
+typedef enum MTLCullMode: uint64_t {
+    MTLCullModeNone = 0,
+    MTLCullModeFront = 1,
+    MTLCullModeBack = 2,
+} MTLCullMode;
+
+typedef enum MTLColorWriteMask: uint64_t {
+    MTLColorWriteMaskNone = 0,
+    MTLColorWriteMaskRed = 1<<3,
+    MTLColorWriteMaskGreen = 1<<2,
+    MTLColorWriteMaskBlue = 1<<1,
+    MTLColorWriteMaskAlpha = 1<<0,
+    MTLColorWriteMaskAll = 15,
+} MTLColorWriteMask;
+
+typedef enum MTLVertexFormat: uint64_t {
+    MTLVertexFormatInvalid = 0,
+    MTLVertexFormatUChar2 = 1,
+    MTLVertexFormatUChar3 = 2,
+    MTLVertexFormatUChar4 = 3,
+    MTLVertexFormatChar2 = 4,
+    MTLVertexFormatChar3 = 5,
+    MTLVertexFormatChar4 = 6,
+    MTLVertexFormatUChar2Normalized = 7,
+    MTLVertexFormatUChar3Normalized = 8,
+    MTLVertexFormatUChar4Normalized = 9,
+    MTLVertexFormatChar2Normalized = 10,
+    MTLVertexFormatChar3Normalized = 11,
+    MTLVertexFormatChar4Normalized = 12,
+    MTLVertexFormatUShort2 = 13,
+    MTLVertexFormatUShort3 = 14,
+    MTLVertexFormatUShort4 = 15,
+    MTLVertexFormatShort2 = 16,
+    MTLVertexFormatShort3 = 17,
+    MTLVertexFormatShort4 = 18,
+    MTLVertexFormatUShort2Normalized = 19,
+    MTLVertexFormatUShort3Normalized = 20,
+    MTLVertexFormatUShort4Normalized = 21,
+    MTLVertexFormatShort2Normalized = 22,
+    MTLVertexFormatShort3Normalized = 23,
+    MTLVertexFormatShort4Normalized = 24,
+    MTLVertexFormatHalf2 = 25,
+    MTLVertexFormatHalf3 = 26,
+    MTLVertexFormatHalf4 = 27,
+    MTLVertexFormatFloat = 28,
+    MTLVertexFormatFloat2 = 29,
+    MTLVertexFormatFloat3 = 30,
+    MTLVertexFormatFloat4 = 31,
+    MTLVertexFormatInt = 32,
+    MTLVertexFormatInt2 = 33,
+    MTLVertexFormatInt3 = 34,
+    MTLVertexFormatInt4 = 35,
+    MTLVertexFormatUInt = 36,
+    MTLVertexFormatUInt2 = 37,
+    MTLVertexFormatUInt3 = 38,
+    MTLVertexFormatUInt4 = 39,
+    MTLVertexFormatInt1010102Normalized = 40,
+    MTLVertexFormatUInt1010102Normalized = 41,
+    MTLVertexFormatUChar4Normalized_BGRA = 42,
+    MTLVertexFormatUChar = 45,
+    MTLVertexFormatChar = 46,
+    MTLVertexFormatUCharNormalized = 47,
+    MTLVertexFormatCharNormalized = 48,
+    MTLVertexFormatUShort = 49,
+    MTLVertexFormatShort = 50,
+    MTLVertexFormatUShortNormalized = 51,
+    MTLVertexFormatShortNormalized = 52,
+    MTLVertexFormatHalf = 53,
+} MTLVertexFormat;
+
+typedef enum MTLVertexStepFunction: uint64_t {
+    MTLVertexStepFunctionConstant = 0,
+    MTLVertexStepFunctionPerVertex = 1,
+    MTLVertexStepFunctionPerInstance = 2,
+    MTLVertexStepFunctionPerPatch = 3,
+    MTLVertexStepFunctionPerPatchControlPoint = 4,
+} MTLVertexStepFunction;
 
 typedef struct CGPoint {
     double x;
@@ -284,8 +429,23 @@ static bool NSWindow_isRestorable(NSWindow * self) {
 static void MTLCommandEncoder_endEncoding(MTLCommandEncoder * self) {
     return ((void(*)(void*,void*))objc_msgSend)((void*)self, (void*)sel_getUid("endEncoding"));
 }
+static MTLFunction* MTLLibrary_newFunctionWithName(MTLLibrary * self, NSString * functionName) {
+    return ((MTLFunction*(*)(void*,void*,NSString *))objc_msgSend)((void*)self, (void*)sel_getUid("newFunctionWithName:"), functionName);
+}
 static MTLCommandQueue* MTLDevice_newCommandQueue(MTLDevice * self) {
     return ((MTLCommandQueue*(*)(void*,void*))objc_msgSend)((void*)self, (void*)sel_getUid("newCommandQueue"));
+}
+static MTLBuffer* MTLDevice_newBufferWithBytes_length_options(MTLDevice * self, const void * pointer, uint64_t length, MTLResourceOptions options) {
+    return ((MTLBuffer*(*)(void*,void*,const void *,uint64_t,MTLResourceOptions))objc_msgSend)((void*)self, (void*)sel_getUid("newBufferWithBytes:length:options:"), pointer, length, options);
+}
+static MTLDepthStencilState* MTLDevice_newDepthStencilStateWithDescriptor(MTLDevice * self, MTLDepthStencilDescriptor * descriptor) {
+    return ((MTLDepthStencilState*(*)(void*,void*,MTLDepthStencilDescriptor *))objc_msgSend)((void*)self, (void*)sel_getUid("newDepthStencilStateWithDescriptor:"), descriptor);
+}
+static MTLLibrary* MTLDevice_newLibraryWithSource_options_error(MTLDevice * self, NSString * source, MTLCompileOptions * options, NSError *  * error) {
+    return ((MTLLibrary*(*)(void*,void*,NSString *,MTLCompileOptions *,NSError *  *))objc_msgSend)((void*)self, (void*)sel_getUid("newLibraryWithSource:options:error:"), source, options, error);
+}
+static MTLRenderPipelineState* MTLDevice_newRenderPipelineStateWithDescriptor_error(MTLDevice * self, MTLRenderPipelineDescriptor * descriptor, NSError *  * error) {
+    return ((MTLRenderPipelineState*(*)(void*,void*,MTLRenderPipelineDescriptor *,NSError *  *))objc_msgSend)((void*)self, (void*)sel_getUid("newRenderPipelineStateWithDescriptor:error:"), descriptor, error);
 }
 static void MTLRenderPassAttachmentDescriptor_setLoadAction(MTLRenderPassAttachmentDescriptor * self, MTLLoadAction val) {
     return ((void(*)(void*,void*,MTLLoadAction))objc_msgSend)((void*)self, (void*)sel_getUid("setLoadAction:"), val);
@@ -334,6 +494,165 @@ static MTLRenderCommandEncoder* MTLCommandBuffer_renderCommandEncoderWithDescrip
 }
 static MTLCommandBuffer* MTLCommandQueue_commandBuffer(MTLCommandQueue * self) {
     return ((MTLCommandBuffer*(*)(void*,void*))objc_msgSend)((void*)self, (void*)sel_getUid("commandBuffer"));
+}
+static void MTLDepthStencilDescriptor_setDepthCompareFunction(MTLDepthStencilDescriptor * self, MTLCompareFunction val) {
+    return ((void(*)(void*,void*,MTLCompareFunction))objc_msgSend)((void*)self, (void*)sel_getUid("setDepthCompareFunction:"), val);
+}
+static MTLCompareFunction MTLDepthStencilDescriptor_depthCompareFunction(MTLDepthStencilDescriptor * self) {
+    return ((MTLCompareFunction(*)(void*,void*))objc_msgSend)((void*)self, (void*)sel_getUid("depthCompareFunction"));
+}
+static void MTLDepthStencilDescriptor_setDepthWriteEnabled(MTLDepthStencilDescriptor * self, bool val) {
+    return ((void(*)(void*,void*,bool))objc_msgSend)((void*)self, (void*)sel_getUid("setDepthWriteEnabled:"), val);
+}
+static bool MTLDepthStencilDescriptor_isDepthWriteEnabled(MTLDepthStencilDescriptor * self) {
+    return ((bool(*)(void*,void*))objc_msgSend)((void*)self, (void*)sel_getUid("isDepthWriteEnabled"));
+}
+static void MTLRenderCommandEncoder_setRenderPipelineState(MTLRenderCommandEncoder * self, MTLRenderPipelineState* pipelineState) {
+    return ((void(*)(void*,void*,MTLRenderPipelineState*))objc_msgSend)((void*)self, (void*)sel_getUid("setRenderPipelineState:"), pipelineState);
+}
+static void MTLRenderCommandEncoder_setVertexBuffer_offset_atIndex(MTLRenderCommandEncoder * self, MTLBuffer* buffer, uint64_t offset, uint64_t index) {
+    return ((void(*)(void*,void*,MTLBuffer*,uint64_t,uint64_t))objc_msgSend)((void*)self, (void*)sel_getUid("setVertexBuffer:offset:atIndex:"), buffer, offset, index);
+}
+static void MTLRenderCommandEncoder_setCullMode(MTLRenderCommandEncoder * self, MTLCullMode cullMode) {
+    return ((void(*)(void*,void*,MTLCullMode))objc_msgSend)((void*)self, (void*)sel_getUid("setCullMode:"), cullMode);
+}
+static void MTLRenderCommandEncoder_setDepthStencilState(MTLRenderCommandEncoder * self, MTLDepthStencilState* depthStencilState) {
+    return ((void(*)(void*,void*,MTLDepthStencilState*))objc_msgSend)((void*)self, (void*)sel_getUid("setDepthStencilState:"), depthStencilState);
+}
+static void MTLRenderCommandEncoder_drawPrimitives_vertexStart_vertexCount(MTLRenderCommandEncoder * self, MTLPrimitiveType primitiveType, uint64_t vertexStart, uint64_t vertexCount) {
+    return ((void(*)(void*,void*,MTLPrimitiveType,uint64_t,uint64_t))objc_msgSend)((void*)self, (void*)sel_getUid("drawPrimitives:vertexStart:vertexCount:"), primitiveType, vertexStart, vertexCount);
+}
+static void MTLRenderPipelineColorAttachmentDescriptor_setPixelFormat(MTLRenderPipelineColorAttachmentDescriptor * self, MTLPixelFormat val) {
+    return ((void(*)(void*,void*,MTLPixelFormat))objc_msgSend)((void*)self, (void*)sel_getUid("setPixelFormat:"), val);
+}
+static MTLPixelFormat MTLRenderPipelineColorAttachmentDescriptor_pixelFormat(MTLRenderPipelineColorAttachmentDescriptor * self) {
+    return ((MTLPixelFormat(*)(void*,void*))objc_msgSend)((void*)self, (void*)sel_getUid("pixelFormat"));
+}
+static void MTLRenderPipelineColorAttachmentDescriptor_setBlendingEnabled(MTLRenderPipelineColorAttachmentDescriptor * self, bool val) {
+    return ((void(*)(void*,void*,bool))objc_msgSend)((void*)self, (void*)sel_getUid("setBlendingEnabled:"), val);
+}
+static bool MTLRenderPipelineColorAttachmentDescriptor_isBlendingEnabled(MTLRenderPipelineColorAttachmentDescriptor * self) {
+    return ((bool(*)(void*,void*))objc_msgSend)((void*)self, (void*)sel_getUid("isBlendingEnabled"));
+}
+static void MTLRenderPipelineColorAttachmentDescriptor_setWriteMask(MTLRenderPipelineColorAttachmentDescriptor * self, MTLColorWriteMask val) {
+    return ((void(*)(void*,void*,MTLColorWriteMask))objc_msgSend)((void*)self, (void*)sel_getUid("setWriteMask:"), val);
+}
+static MTLColorWriteMask MTLRenderPipelineColorAttachmentDescriptor_writeMask(MTLRenderPipelineColorAttachmentDescriptor * self) {
+    return ((MTLColorWriteMask(*)(void*,void*))objc_msgSend)((void*)self, (void*)sel_getUid("writeMask"));
+}
+static void MTLRenderPipelineDescriptor_setVertexFunction(MTLRenderPipelineDescriptor * self, MTLFunction* val) {
+    return ((void(*)(void*,void*,MTLFunction*))objc_msgSend)((void*)self, (void*)sel_getUid("setVertexFunction:"), val);
+}
+static MTLFunction* MTLRenderPipelineDescriptor_vertexFunction(MTLRenderPipelineDescriptor * self) {
+    return ((MTLFunction*(*)(void*,void*))objc_msgSend)((void*)self, (void*)sel_getUid("vertexFunction"));
+}
+static void MTLRenderPipelineDescriptor_setFragmentFunction(MTLRenderPipelineDescriptor * self, MTLFunction* val) {
+    return ((void(*)(void*,void*,MTLFunction*))objc_msgSend)((void*)self, (void*)sel_getUid("setFragmentFunction:"), val);
+}
+static MTLFunction* MTLRenderPipelineDescriptor_fragmentFunction(MTLRenderPipelineDescriptor * self) {
+    return ((MTLFunction*(*)(void*,void*))objc_msgSend)((void*)self, (void*)sel_getUid("fragmentFunction"));
+}
+static void MTLRenderPipelineDescriptor_setVertexDescriptor(MTLRenderPipelineDescriptor * self, MTLVertexDescriptor * val) {
+    return ((void(*)(void*,void*,MTLVertexDescriptor *))objc_msgSend)((void*)self, (void*)sel_getUid("setVertexDescriptor:"), val);
+}
+static MTLVertexDescriptor * MTLRenderPipelineDescriptor_vertexDescriptor(MTLRenderPipelineDescriptor * self) {
+    return ((MTLVertexDescriptor *(*)(void*,void*))objc_msgSend)((void*)self, (void*)sel_getUid("vertexDescriptor"));
+}
+static void MTLRenderPipelineDescriptor_setSampleCount(MTLRenderPipelineDescriptor * self, uint64_t val) {
+    return ((void(*)(void*,void*,uint64_t))objc_msgSend)((void*)self, (void*)sel_getUid("setSampleCount:"), val);
+}
+static uint64_t MTLRenderPipelineDescriptor_sampleCount(MTLRenderPipelineDescriptor * self) {
+    return ((uint64_t(*)(void*,void*))objc_msgSend)((void*)self, (void*)sel_getUid("sampleCount"));
+}
+static void MTLRenderPipelineDescriptor_setAlphaToCoverageEnabled(MTLRenderPipelineDescriptor * self, bool val) {
+    return ((void(*)(void*,void*,bool))objc_msgSend)((void*)self, (void*)sel_getUid("setAlphaToCoverageEnabled:"), val);
+}
+static bool MTLRenderPipelineDescriptor_isAlphaToCoverageEnabled(MTLRenderPipelineDescriptor * self) {
+    return ((bool(*)(void*,void*))objc_msgSend)((void*)self, (void*)sel_getUid("isAlphaToCoverageEnabled"));
+}
+static void MTLRenderPipelineDescriptor_setAlphaToOneEnabled(MTLRenderPipelineDescriptor * self, bool val) {
+    return ((void(*)(void*,void*,bool))objc_msgSend)((void*)self, (void*)sel_getUid("setAlphaToOneEnabled:"), val);
+}
+static bool MTLRenderPipelineDescriptor_isAlphaToOneEnabled(MTLRenderPipelineDescriptor * self) {
+    return ((bool(*)(void*,void*))objc_msgSend)((void*)self, (void*)sel_getUid("isAlphaToOneEnabled"));
+}
+static void MTLRenderPipelineDescriptor_setRasterizationEnabled(MTLRenderPipelineDescriptor * self, bool val) {
+    return ((void(*)(void*,void*,bool))objc_msgSend)((void*)self, (void*)sel_getUid("setRasterizationEnabled:"), val);
+}
+static bool MTLRenderPipelineDescriptor_isRasterizationEnabled(MTLRenderPipelineDescriptor * self) {
+    return ((bool(*)(void*,void*))objc_msgSend)((void*)self, (void*)sel_getUid("isRasterizationEnabled"));
+}
+static MTLRenderPipelineColorAttachmentDescriptorArray * MTLRenderPipelineDescriptor_colorAttachments(MTLRenderPipelineDescriptor * self) {
+    return ((MTLRenderPipelineColorAttachmentDescriptorArray *(*)(void*,void*))objc_msgSend)((void*)self, (void*)sel_getUid("colorAttachments"));
+}
+static void MTLRenderPipelineDescriptor_setDepthAttachmentPixelFormat(MTLRenderPipelineDescriptor * self, MTLPixelFormat val) {
+    return ((void(*)(void*,void*,MTLPixelFormat))objc_msgSend)((void*)self, (void*)sel_getUid("setDepthAttachmentPixelFormat:"), val);
+}
+static MTLPixelFormat MTLRenderPipelineDescriptor_depthAttachmentPixelFormat(MTLRenderPipelineDescriptor * self) {
+    return ((MTLPixelFormat(*)(void*,void*))objc_msgSend)((void*)self, (void*)sel_getUid("depthAttachmentPixelFormat"));
+}
+static MTLRenderPipelineColorAttachmentDescriptor * MTLRenderPipelineColorAttachmentDescriptorArray_objectAtIndexedSubscript(MTLRenderPipelineColorAttachmentDescriptorArray * self, uint64_t attachmentIndex) {
+    return ((MTLRenderPipelineColorAttachmentDescriptor *(*)(void*,void*,uint64_t))objc_msgSend)((void*)self, (void*)sel_getUid("objectAtIndexedSubscript:"), attachmentIndex);
+}
+static void MTLRenderPipelineColorAttachmentDescriptorArray_setObject_atIndexedSubscript(MTLRenderPipelineColorAttachmentDescriptorArray * self, MTLRenderPipelineColorAttachmentDescriptor * attachment, uint64_t attachmentIndex) {
+    return ((void(*)(void*,void*,MTLRenderPipelineColorAttachmentDescriptor *,uint64_t))objc_msgSend)((void*)self, (void*)sel_getUid("setObject:atIndexedSubscript:"), attachment, attachmentIndex);
+}
+static void MTLVertexBufferLayoutDescriptor_setStride(MTLVertexBufferLayoutDescriptor * self, uint64_t val) {
+    return ((void(*)(void*,void*,uint64_t))objc_msgSend)((void*)self, (void*)sel_getUid("setStride:"), val);
+}
+static uint64_t MTLVertexBufferLayoutDescriptor_stride(MTLVertexBufferLayoutDescriptor * self) {
+    return ((uint64_t(*)(void*,void*))objc_msgSend)((void*)self, (void*)sel_getUid("stride"));
+}
+static void MTLVertexBufferLayoutDescriptor_setStepFunction(MTLVertexBufferLayoutDescriptor * self, MTLVertexStepFunction val) {
+    return ((void(*)(void*,void*,MTLVertexStepFunction))objc_msgSend)((void*)self, (void*)sel_getUid("setStepFunction:"), val);
+}
+static MTLVertexStepFunction MTLVertexBufferLayoutDescriptor_stepFunction(MTLVertexBufferLayoutDescriptor * self) {
+    return ((MTLVertexStepFunction(*)(void*,void*))objc_msgSend)((void*)self, (void*)sel_getUid("stepFunction"));
+}
+static void MTLVertexBufferLayoutDescriptor_setStepRate(MTLVertexBufferLayoutDescriptor * self, uint64_t val) {
+    return ((void(*)(void*,void*,uint64_t))objc_msgSend)((void*)self, (void*)sel_getUid("setStepRate:"), val);
+}
+static uint64_t MTLVertexBufferLayoutDescriptor_stepRate(MTLVertexBufferLayoutDescriptor * self) {
+    return ((uint64_t(*)(void*,void*))objc_msgSend)((void*)self, (void*)sel_getUid("stepRate"));
+}
+static MTLVertexBufferLayoutDescriptor * MTLVertexBufferLayoutDescriptorArray_objectAtIndexedSubscript(MTLVertexBufferLayoutDescriptorArray * self, uint64_t index) {
+    return ((MTLVertexBufferLayoutDescriptor *(*)(void*,void*,uint64_t))objc_msgSend)((void*)self, (void*)sel_getUid("objectAtIndexedSubscript:"), index);
+}
+static void MTLVertexBufferLayoutDescriptorArray_setObject_atIndexedSubscript(MTLVertexBufferLayoutDescriptorArray * self, MTLVertexBufferLayoutDescriptor * bufferDesc, uint64_t index) {
+    return ((void(*)(void*,void*,MTLVertexBufferLayoutDescriptor *,uint64_t))objc_msgSend)((void*)self, (void*)sel_getUid("setObject:atIndexedSubscript:"), bufferDesc, index);
+}
+static void MTLVertexAttributeDescriptor_setFormat(MTLVertexAttributeDescriptor * self, MTLVertexFormat val) {
+    return ((void(*)(void*,void*,MTLVertexFormat))objc_msgSend)((void*)self, (void*)sel_getUid("setFormat:"), val);
+}
+static MTLVertexFormat MTLVertexAttributeDescriptor_format(MTLVertexAttributeDescriptor * self) {
+    return ((MTLVertexFormat(*)(void*,void*))objc_msgSend)((void*)self, (void*)sel_getUid("format"));
+}
+static void MTLVertexAttributeDescriptor_setOffset(MTLVertexAttributeDescriptor * self, uint64_t val) {
+    return ((void(*)(void*,void*,uint64_t))objc_msgSend)((void*)self, (void*)sel_getUid("setOffset:"), val);
+}
+static uint64_t MTLVertexAttributeDescriptor_offset(MTLVertexAttributeDescriptor * self) {
+    return ((uint64_t(*)(void*,void*))objc_msgSend)((void*)self, (void*)sel_getUid("offset"));
+}
+static void MTLVertexAttributeDescriptor_setBufferIndex(MTLVertexAttributeDescriptor * self, uint64_t val) {
+    return ((void(*)(void*,void*,uint64_t))objc_msgSend)((void*)self, (void*)sel_getUid("setBufferIndex:"), val);
+}
+static uint64_t MTLVertexAttributeDescriptor_bufferIndex(MTLVertexAttributeDescriptor * self) {
+    return ((uint64_t(*)(void*,void*))objc_msgSend)((void*)self, (void*)sel_getUid("bufferIndex"));
+}
+static MTLVertexAttributeDescriptor * MTLVertexAttributeDescriptorArray_objectAtIndexedSubscript(MTLVertexAttributeDescriptorArray * self, uint64_t index) {
+    return ((MTLVertexAttributeDescriptor *(*)(void*,void*,uint64_t))objc_msgSend)((void*)self, (void*)sel_getUid("objectAtIndexedSubscript:"), index);
+}
+static void MTLVertexAttributeDescriptorArray_setObject_atIndexedSubscript(MTLVertexAttributeDescriptorArray * self, MTLVertexAttributeDescriptor * attributeDesc, uint64_t index) {
+    return ((void(*)(void*,void*,MTLVertexAttributeDescriptor *,uint64_t))objc_msgSend)((void*)self, (void*)sel_getUid("setObject:atIndexedSubscript:"), attributeDesc, index);
+}
+static MTLVertexDescriptor * MTLVertexDescriptor_vertexDescriptor(void) {
+    return ((MTLVertexDescriptor *(*)(void*,void*))objc_msgSend)((void*)objc_getClass("MTLVertexDescriptor"), (void*)sel_getUid("vertexDescriptor"));
+}
+static MTLVertexBufferLayoutDescriptorArray * MTLVertexDescriptor_layouts(MTLVertexDescriptor * self) {
+    return ((MTLVertexBufferLayoutDescriptorArray *(*)(void*,void*))objc_msgSend)((void*)self, (void*)sel_getUid("layouts"));
+}
+static MTLVertexAttributeDescriptorArray * MTLVertexDescriptor_attributes(MTLVertexDescriptor * self) {
+    return ((MTLVertexAttributeDescriptorArray *(*)(void*,void*))objc_msgSend)((void*)self, (void*)sel_getUid("attributes"));
 }
 static void MTKView_setDevice(MTKView * self, MTLDevice* val) {
     return ((void(*)(void*,void*,MTLDevice*))objc_msgSend)((void*)self, (void*)sel_getUid("setDevice:"), val);

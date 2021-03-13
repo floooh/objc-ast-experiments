@@ -121,7 +121,7 @@ dispatch_semaphore_t sem;
     rp_desc.colorAttachments[0].pixelFormat = MTLPixelFormatBGRA8Unorm;
     rp_desc.colorAttachments[0].writeMask = MTLColorWriteMaskAll;
     rp_desc.colorAttachments[0].blendingEnabled = NO;
-    mtl_rps = [mtl_device newRenderPipelineStateWithDescriptor: rp_desc error:&err];
+    mtl_rps = [mtl_device newRenderPipelineStateWithDescriptor:rp_desc error:&err];
     [rp_desc release];
     [vs_func release];
     [fs_func release];

@@ -49,12 +49,22 @@
         "NSWindowDelegate": [ ],
         "NSResponder": [ ],
         "NSView": [ ],
+        "NSError": [ ],
         "MTLCreateSystemDefaultDevice": [ ],
         "MTLClearColor": [ ],
         "MTLLoadAction": [ ],
         "MTLPixelFormat": [ ],
+        "MTLVertexStepFunction": [ ],
+        "MTLVertexFormat": [ ],
+        "MTLCompareFunction": [ ],
+        "MTLCullMode": [ ],
+        "MTLPrimitiveType": [ ],
         "MTLDevice": [
-            "newCommandQueue"
+            "newCommandQueue",
+            "newBufferWithBytes:length:options:",
+            "newLibraryWithSource:options:error:",
+            "newRenderPipelineStateWithDescriptor:error:",
+            "newDepthStencilStateWithDescriptor:"
         ],
         "MTLDrawable": [ ],
         "CAMetalDrawable": [ ],
@@ -80,7 +90,13 @@
         "MTLCommandEncoder": [
             "endEncoding"
         ],
-        "MTLRenderCommandEncoder": [ ],
+        "MTLRenderCommandEncoder": [
+            "setCullMode:",
+            "setRenderPipelineState:",
+            "setDepthStencilState:",
+            "setVertexBuffer:offset:atIndex:",
+            "drawPrimitives:vertexStart:vertexCount:" 
+        ],
         "MTLRenderPassDescriptor": [
             "colorAttachments",
             "depthAttachment"
@@ -94,6 +110,57 @@
         ],
         "MTLRenderPassDepthAttachmentDescriptor": [
             "clearDepth"
-        ]
+        ],
+        "MTLCPUCacheMode": [ ],
+        "MTLStorageMode": [ ],
+        "MTLHazardTrackingMode": [ ],
+        "MTLResourceOptions": [ ],
+        "MTLBuffer": [ ],
+        "MTLCompileOptions": [ ],
+        "MTLColorWriteMask": [ ],
+        "MTLFunction": [ ],
+        "MTLLibrary": [
+            "newFunctionWithName:"
+        ],
+        "MTLVertexBufferLayoutDescriptor": [
+            "stride",
+            "stepFunction",
+            "stepRate"
+        ],
+        "MTLVertexAttributeDescriptor": [
+            "format",
+            "offset",
+            "bufferIndex"
+        ],
+        "MTLVertexBufferLayoutDescriptorArray": [ "ALL" ],
+        "MTLVertexAttributeDescriptorArray": [ "ALL" ],
+        "MTLVertexDescriptor": [
+            "vertexDescriptor",
+            "layouts",
+            "attributes"
+        ],
+        "MTLRenderPipelineColorAttachmentDescriptorArray": [ "ALL" ],
+        "MTLRenderPipelineColorAttachmentDescriptor": [
+            "pixelFormat",
+            "writeMask",
+            "blendingEnabled"
+        ],
+        "MTLRenderPipelineDescriptor": [
+            "vertexDescriptor", 
+            "vertexFunction", 
+            "fragmentFunction",
+            "sampleCount",
+            "alphaToCoverageEnabled",
+            "alphaToOneEnabled",
+            "rasterizationEnabled",
+            "depthAttachmentPixelFormat",
+            "colorAttachments"
+        ],
+        "MTLRenderPipelineState": [ ],
+        "MTLDepthStencilDescriptor": [
+            "depthCompareFunction",
+            "depthWriteEnabled"
+        ],
+        "MTLDepthStencilState": [ ]
     }
 }
