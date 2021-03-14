@@ -7,9 +7,6 @@
 
 import json, subprocess, sys, tempfile
 
-# prevent double inclusion of types (for instance because of typedefs)
-added_types = {}
-
 def filter_item(item_name, item_filter):
     if len(item_filter) == 0:
         return False
@@ -252,10 +249,13 @@ def parse_objc_methods_and_properties(decls, item_filter):
                     append_unique_named_item(getter_item, outp)
     return has_items, outp
 
-def parse_objc_interface(decl, item_filter):
+def parse_objc_interface_or_protocol_or_category(decl, item_filter):
     outp = {}
-    outp['kind'] = 'objc_interface'
-    outp['name'] = decl['name']
+    outp['kind'] = 'objc_class'
+    if decl['kind'] == 'ObjCCategoryDecl':
+        outp['name'] = decl['interface']['name']
+    else:
+        outp['name'] = decl['name']
     has_items = False
     if 'inner' in decl:
         has_items, outp['items'] = parse_objc_methods_and_properties(decl['inner'], item_filter)
@@ -263,29 +263,6 @@ def parse_objc_interface(decl, item_filter):
         return outp
     else:
         return None
-
-def parse_objc_protocol(decl, item_filter):
-    outp = {}
-    outp['kind'] = 'objc_protocol'
-    outp['name'] = decl['name']
-    has_items = False
-    if 'inner' in decl:
-        has_items, outp['items'] = parse_objc_methods_and_properties(decl['inner'], item_filter)
-    if has_items:
-        return outp
-    else:
-        return None
-
-def parse_objc_category(decl, item_filter):
-    outp = {}
-    outp['kind'] = 'objc_category'
-    outp['name'] = decl['name']
-    outp['interface'] = decl['interface']['name']
-    if 'inner' in decl:
-        has_items, outp['items'] = parse_objc_methods_and_properties(decl['inner'], item_filter)
-        if has_items:
-            return outp
-    return None
 
 def parse_decl(decl, filter, all_decls):
     if 'name' not in decl:
@@ -307,36 +284,28 @@ def parse_decl(decl, filter, all_decls):
         return parse_typedef(decl, all_decls)
     elif kind == 'EnumDecl':
         return parse_enum(decl, item_filter)
-    elif kind == 'ObjCInterfaceDecl':
-        return parse_objc_interface(decl, item_filter)
-    elif kind == 'ObjCProtocolDecl':
-        return parse_objc_protocol(decl, item_filter)
-    elif kind == 'ObjCCategoryDecl':
-        return parse_objc_category(decl, item_filter)
+    elif kind in ['ObjCInterfaceDecl', 'ObjCProtocolDecl', 'ObjCCategoryDecl']:
+        return parse_objc_interface_or_protocol_or_category(decl, item_filter)
 
-def integrate_category(all_decls, category_decl):
-    interface_name = category_decl['interface']
+# associated Protocols, Interfaces and Categories are integrated into a single 'class'
+# FIXME: this will become slow very quickly as number of filtered decls grows
+def integrate_decl(all_decls, new_decl):
+    new_decl_name = new_decl['name']
     for decl in all_decls:
-        if decl['name'] == interface_name:
-            for category_item in category_decl['items']:
-                append_unique_named_item(category_item, decl['items'])
+        if decl['name'] == new_decl_name:
+            for new_item in new_decl['items']:
+                append_unique_named_item(new_item, decl['items'])
             break
+    else:
+        # this is a new item
+        all_decls.append(new_decl)
 
 def parse_decls(decls, filter):
     outp = []
     for decl in decls:
         outp_decl = parse_decl(decl, filter, decls)
         if outp_decl is not None:
-            if outp_decl['kind'] != 'objc_category':
-                # don't add duplicates
-                if outp_decl['name'] in added_types:
-                    continue
-                else:
-                    added_types[outp_decl['name']] = 1
-                outp.append(outp_decl)
-            else:
-                # categories must be integrated with existing interfaces
-                integrate_category(outp, outp_decl)
+            integrate_decl(outp, outp_decl)
     return outp
 
 def clang(csrc_path):
