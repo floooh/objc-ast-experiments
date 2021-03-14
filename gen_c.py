@@ -76,7 +76,7 @@ def write_header():
 def write_typedefs(ir, c_prefix):
     for decl in ir['decls']:
         kind = decl['kind']
-        if kind in ['objc_interface', 'objc_protocol']:
+        if kind == 'objc_class':
             typename = f"{c_prefix}{decl['name']}"
             l(f"typedef struct {typename} {{ }} {typename};")
         elif kind == 'typedef':
@@ -124,6 +124,36 @@ def write_structs(ir, c_prefix):
             l(f"}} {struct_type};")
             l('')
 
+# write a global variable which holds the class pointers and selector hashes
+def write_class_metadata(ir, c_prefix):
+
+    def method_name(decl):
+        return decl['name'].replace(':', '_').rstrip('_')
+
+    l('static struct {')
+    for class_decl in ir['decls']:
+        if class_decl['kind'] == 'objc_class':
+            class_name = class_decl['name']
+            l('    struct {')
+            l('        void* cls;')
+            for method_decl in class_decl['items']:
+                if method_decl['kind'] == 'objc_method':
+                    l(f"        void* {method_name(method_decl)};")
+            l(f"    }} {class_name};")
+    l(f"}} {c_prefix}oc;\n")
+    
+    # ...the init function to setup Class pointers and selector hashes
+    l(f"static void {c_prefix}oc_initialize(void) {{")
+    for class_decl in ir['decls']:
+        if class_decl['kind'] == 'objc_class':
+            class_name = class_decl['name']
+            l(f'    {c_prefix}oc.{class_name}.cls = (void*)objc_getClass("{class_name}");')
+            for method_decl in class_decl['items']:
+                if method_decl['kind'] == 'objc_method':
+                    objc_method_name = method_decl['name']
+                    l(f'    {c_prefix}oc.{class_name}.{method_name(method_decl)} = (void*)sel_getUid("{objc_method_name}");')
+    l('}\n')
+
 def objcmethod_func_name(c_prefix, objc_class_name, objc_method_name):
     name = f"{c_prefix}{objc_class_name}_{objc_method_name}"
     name = name.replace(':', '_').rstrip('_')
@@ -143,12 +173,12 @@ def cfunc_args_as_string(c_prefix, self_type, args_decl):
 def objcfunc_args_as_string(c_prefix, self_type, class_name, method_name, args_decl):
     args = []
     if self_type is not None:
-        args.append("(void*)self")
+        args.append('(void*)self')
     else:
         # FIXME: use cached class 
-        args.append(f'(void*)objc_getClass("{class_name}")')
+        args.append(f'oc.{class_name}.cls')
     # FIXME: use a cached selector
-    args.append(f'(void*)sel_getUid("{method_name}")')
+    args.append(f"oc.{class_name}.{method_name.replace(':','_').rstrip('_')}")
     for arg_decl in args_decl:
         args.append(arg_decl['name'])
     return ', '.join(args)
@@ -163,7 +193,7 @@ def objcfunc_prototype_as_string(c_prefix, self_type, args_decl, return_type):
 
 def write_objcmethod_funcs(ir, c_prefix):
     for class_decl in ir['decls']:
-        if class_decl['kind'] in ['objc_interface', 'objc_protocol']:
+        if class_decl['kind'] == 'objc_class':
             class_name = class_decl['name']
             for method_decl in class_decl['items']:
                 if method_decl['kind'] == 'objc_method':
@@ -208,6 +238,7 @@ def gen(ir, output_path):
     type_map = ir['c_typemap']
     extract_api_types(ir)
     write_header()
+    write_class_metadata(ir, c_prefix)
     write_typedefs(ir, c_prefix)
     write_enums(ir, c_prefix)
     write_structs(ir, c_prefix)
