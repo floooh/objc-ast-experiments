@@ -1,6 +1,387 @@
 #include <stdint.h>
 #include <objc/objc-runtime.h>
 
+static struct {
+    struct {
+        void* cls;
+        void* release;
+        void* init;
+        void* alloc;
+    } NSObject;
+    struct {
+        void* cls;
+        void* stringWithUTF8String;
+    } NSString;
+    struct {
+        void* cls;
+    } NSNotification;
+    struct {
+        void* cls;
+    } NSError;
+    struct {
+        void* cls;
+    } NSResponder;
+    struct {
+        void* cls;
+    } NSView;
+    struct {
+        void* cls;
+        void* sharedApplication;
+        void* activateIgnoringOtherApps;
+        void* run;
+        void* setActivationPolicy;
+        void* setDelegate;
+    } NSApplication;
+    struct {
+        void* cls;
+    } NSApplicationDelegate;
+    struct {
+        void* cls;
+        void* initWithContentRect_styleMask_backing_defer;
+        void* setContentView;
+        void* contentView;
+        void* makeFirstResponder;
+        void* center;
+        void* makeKeyAndOrderFront;
+        void* setTitle;
+        void* setDelegate;
+        void* setAcceptsMouseMovedEvents;
+        void* acceptsMouseMovedEvents;
+        void* setRestorable;
+        void* isRestorable;
+    } NSWindow;
+    struct {
+        void* cls;
+    } NSWindowDelegate;
+    struct {
+        void* cls;
+        void* endEncoding;
+    } MTLCommandEncoder;
+    struct {
+        void* cls;
+    } MTLBuffer;
+    struct {
+        void* cls;
+    } MTLFunction;
+    struct {
+        void* cls;
+    } MTLCompileOptions;
+    struct {
+        void* cls;
+        void* newFunctionWithName;
+    } MTLLibrary;
+    struct {
+        void* cls;
+        void* newCommandQueue;
+        void* newBufferWithBytes_length_options;
+        void* newDepthStencilStateWithDescriptor;
+        void* newLibraryWithSource_options_error;
+        void* newRenderPipelineStateWithDescriptor_error;
+    } MTLDevice;
+    struct {
+        void* cls;
+        void* setLoadAction;
+        void* loadAction;
+    } MTLRenderPassAttachmentDescriptor;
+    struct {
+        void* cls;
+        void* setClearColor;
+        void* clearColor;
+    } MTLRenderPassColorAttachmentDescriptor;
+    struct {
+        void* cls;
+        void* setClearDepth;
+        void* clearDepth;
+    } MTLRenderPassDepthAttachmentDescriptor;
+    struct {
+        void* cls;
+        void* objectAtIndexedSubscript;
+        void* setObject_atIndexedSubscript;
+    } MTLRenderPassColorAttachmentDescriptorArray;
+    struct {
+        void* cls;
+        void* colorAttachments;
+        void* setDepthAttachment;
+        void* depthAttachment;
+    } MTLRenderPassDescriptor;
+    struct {
+        void* cls;
+        void* commit;
+        void* presentDrawable;
+        void* addCompletedHandler;
+        void* renderCommandEncoderWithDescriptor;
+    } MTLCommandBuffer;
+    struct {
+        void* cls;
+        void* commandBuffer;
+    } MTLCommandQueue;
+    struct {
+        void* cls;
+        void* setDepthCompareFunction;
+        void* depthCompareFunction;
+        void* setDepthWriteEnabled;
+        void* isDepthWriteEnabled;
+    } MTLDepthStencilDescriptor;
+    struct {
+        void* cls;
+    } MTLDepthStencilState;
+    struct {
+        void* cls;
+    } MTLDrawable;
+    struct {
+        void* cls;
+        void* setRenderPipelineState;
+        void* setVertexBuffer_offset_atIndex;
+        void* setCullMode;
+        void* setDepthStencilState;
+        void* drawPrimitives_vertexStart_vertexCount;
+    } MTLRenderCommandEncoder;
+    struct {
+        void* cls;
+        void* setPixelFormat;
+        void* pixelFormat;
+        void* setBlendingEnabled;
+        void* isBlendingEnabled;
+        void* setWriteMask;
+        void* writeMask;
+    } MTLRenderPipelineColorAttachmentDescriptor;
+    struct {
+        void* cls;
+        void* setVertexFunction;
+        void* vertexFunction;
+        void* setFragmentFunction;
+        void* fragmentFunction;
+        void* setVertexDescriptor;
+        void* vertexDescriptor;
+        void* setSampleCount;
+        void* sampleCount;
+        void* setAlphaToCoverageEnabled;
+        void* isAlphaToCoverageEnabled;
+        void* setAlphaToOneEnabled;
+        void* isAlphaToOneEnabled;
+        void* setRasterizationEnabled;
+        void* isRasterizationEnabled;
+        void* colorAttachments;
+        void* setDepthAttachmentPixelFormat;
+        void* depthAttachmentPixelFormat;
+    } MTLRenderPipelineDescriptor;
+    struct {
+        void* cls;
+    } MTLRenderPipelineState;
+    struct {
+        void* cls;
+        void* objectAtIndexedSubscript;
+        void* setObject_atIndexedSubscript;
+    } MTLRenderPipelineColorAttachmentDescriptorArray;
+    struct {
+        void* cls;
+        void* setStride;
+        void* stride;
+        void* setStepFunction;
+        void* stepFunction;
+        void* setStepRate;
+        void* stepRate;
+    } MTLVertexBufferLayoutDescriptor;
+    struct {
+        void* cls;
+        void* objectAtIndexedSubscript;
+        void* setObject_atIndexedSubscript;
+    } MTLVertexBufferLayoutDescriptorArray;
+    struct {
+        void* cls;
+        void* setFormat;
+        void* format;
+        void* setOffset;
+        void* offset;
+        void* setBufferIndex;
+        void* bufferIndex;
+    } MTLVertexAttributeDescriptor;
+    struct {
+        void* cls;
+        void* objectAtIndexedSubscript;
+        void* setObject_atIndexedSubscript;
+    } MTLVertexAttributeDescriptorArray;
+    struct {
+        void* cls;
+        void* vertexDescriptor;
+        void* layouts;
+        void* attributes;
+    } MTLVertexDescriptor;
+    struct {
+        void* cls;
+    } CAMetalDrawable;
+    struct {
+        void* cls;
+        void* setDevice;
+        void* device;
+        void* currentDrawable;
+        void* setColorPixelFormat;
+        void* colorPixelFormat;
+        void* setDepthStencilPixelFormat;
+        void* depthStencilPixelFormat;
+        void* setSampleCount;
+        void* sampleCount;
+        void* currentRenderPassDescriptor;
+        void* setPreferredFramesPerSecond;
+        void* preferredFramesPerSecond;
+        void* setAutoResizeDrawable;
+        void* autoResizeDrawable;
+    } MTKView;
+} oc;
+
+static void oc_initialize(void) {
+    oc.NSObject.cls = (void*)objc_getClass("NSObject");
+    oc.NSObject.release = (void*)sel_getUid("release");
+    oc.NSObject.init = (void*)sel_getUid("init");
+    oc.NSObject.alloc = (void*)sel_getUid("alloc");
+    oc.NSString.cls = (void*)objc_getClass("NSString");
+    oc.NSString.stringWithUTF8String = (void*)sel_getUid("stringWithUTF8String:");
+    oc.NSNotification.cls = (void*)objc_getClass("NSNotification");
+    oc.NSError.cls = (void*)objc_getClass("NSError");
+    oc.NSResponder.cls = (void*)objc_getClass("NSResponder");
+    oc.NSView.cls = (void*)objc_getClass("NSView");
+    oc.NSApplication.cls = (void*)objc_getClass("NSApplication");
+    oc.NSApplication.sharedApplication = (void*)sel_getUid("sharedApplication");
+    oc.NSApplication.activateIgnoringOtherApps = (void*)sel_getUid("activateIgnoringOtherApps:");
+    oc.NSApplication.run = (void*)sel_getUid("run");
+    oc.NSApplication.setActivationPolicy = (void*)sel_getUid("setActivationPolicy:");
+    oc.NSApplication.setDelegate = (void*)sel_getUid("setDelegate:");
+    oc.NSApplicationDelegate.cls = (void*)objc_getClass("NSApplicationDelegate");
+    oc.NSWindow.cls = (void*)objc_getClass("NSWindow");
+    oc.NSWindow.initWithContentRect_styleMask_backing_defer = (void*)sel_getUid("initWithContentRect:styleMask:backing:defer:");
+    oc.NSWindow.setContentView = (void*)sel_getUid("setContentView:");
+    oc.NSWindow.contentView = (void*)sel_getUid("contentView");
+    oc.NSWindow.makeFirstResponder = (void*)sel_getUid("makeFirstResponder:");
+    oc.NSWindow.center = (void*)sel_getUid("center");
+    oc.NSWindow.makeKeyAndOrderFront = (void*)sel_getUid("makeKeyAndOrderFront:");
+    oc.NSWindow.setTitle = (void*)sel_getUid("setTitle:");
+    oc.NSWindow.setDelegate = (void*)sel_getUid("setDelegate:");
+    oc.NSWindow.setAcceptsMouseMovedEvents = (void*)sel_getUid("setAcceptsMouseMovedEvents:");
+    oc.NSWindow.acceptsMouseMovedEvents = (void*)sel_getUid("acceptsMouseMovedEvents");
+    oc.NSWindow.setRestorable = (void*)sel_getUid("setRestorable:");
+    oc.NSWindow.isRestorable = (void*)sel_getUid("isRestorable");
+    oc.NSWindowDelegate.cls = (void*)objc_getClass("NSWindowDelegate");
+    oc.MTLCommandEncoder.cls = (void*)objc_getClass("MTLCommandEncoder");
+    oc.MTLCommandEncoder.endEncoding = (void*)sel_getUid("endEncoding");
+    oc.MTLBuffer.cls = (void*)objc_getClass("MTLBuffer");
+    oc.MTLFunction.cls = (void*)objc_getClass("MTLFunction");
+    oc.MTLCompileOptions.cls = (void*)objc_getClass("MTLCompileOptions");
+    oc.MTLLibrary.cls = (void*)objc_getClass("MTLLibrary");
+    oc.MTLLibrary.newFunctionWithName = (void*)sel_getUid("newFunctionWithName:");
+    oc.MTLDevice.cls = (void*)objc_getClass("MTLDevice");
+    oc.MTLDevice.newCommandQueue = (void*)sel_getUid("newCommandQueue");
+    oc.MTLDevice.newBufferWithBytes_length_options = (void*)sel_getUid("newBufferWithBytes:length:options:");
+    oc.MTLDevice.newDepthStencilStateWithDescriptor = (void*)sel_getUid("newDepthStencilStateWithDescriptor:");
+    oc.MTLDevice.newLibraryWithSource_options_error = (void*)sel_getUid("newLibraryWithSource:options:error:");
+    oc.MTLDevice.newRenderPipelineStateWithDescriptor_error = (void*)sel_getUid("newRenderPipelineStateWithDescriptor:error:");
+    oc.MTLRenderPassAttachmentDescriptor.cls = (void*)objc_getClass("MTLRenderPassAttachmentDescriptor");
+    oc.MTLRenderPassAttachmentDescriptor.setLoadAction = (void*)sel_getUid("setLoadAction:");
+    oc.MTLRenderPassAttachmentDescriptor.loadAction = (void*)sel_getUid("loadAction");
+    oc.MTLRenderPassColorAttachmentDescriptor.cls = (void*)objc_getClass("MTLRenderPassColorAttachmentDescriptor");
+    oc.MTLRenderPassColorAttachmentDescriptor.setClearColor = (void*)sel_getUid("setClearColor:");
+    oc.MTLRenderPassColorAttachmentDescriptor.clearColor = (void*)sel_getUid("clearColor");
+    oc.MTLRenderPassDepthAttachmentDescriptor.cls = (void*)objc_getClass("MTLRenderPassDepthAttachmentDescriptor");
+    oc.MTLRenderPassDepthAttachmentDescriptor.setClearDepth = (void*)sel_getUid("setClearDepth:");
+    oc.MTLRenderPassDepthAttachmentDescriptor.clearDepth = (void*)sel_getUid("clearDepth");
+    oc.MTLRenderPassColorAttachmentDescriptorArray.cls = (void*)objc_getClass("MTLRenderPassColorAttachmentDescriptorArray");
+    oc.MTLRenderPassColorAttachmentDescriptorArray.objectAtIndexedSubscript = (void*)sel_getUid("objectAtIndexedSubscript:");
+    oc.MTLRenderPassColorAttachmentDescriptorArray.setObject_atIndexedSubscript = (void*)sel_getUid("setObject:atIndexedSubscript:");
+    oc.MTLRenderPassDescriptor.cls = (void*)objc_getClass("MTLRenderPassDescriptor");
+    oc.MTLRenderPassDescriptor.colorAttachments = (void*)sel_getUid("colorAttachments");
+    oc.MTLRenderPassDescriptor.setDepthAttachment = (void*)sel_getUid("setDepthAttachment:");
+    oc.MTLRenderPassDescriptor.depthAttachment = (void*)sel_getUid("depthAttachment");
+    oc.MTLCommandBuffer.cls = (void*)objc_getClass("MTLCommandBuffer");
+    oc.MTLCommandBuffer.commit = (void*)sel_getUid("commit");
+    oc.MTLCommandBuffer.presentDrawable = (void*)sel_getUid("presentDrawable:");
+    oc.MTLCommandBuffer.addCompletedHandler = (void*)sel_getUid("addCompletedHandler:");
+    oc.MTLCommandBuffer.renderCommandEncoderWithDescriptor = (void*)sel_getUid("renderCommandEncoderWithDescriptor:");
+    oc.MTLCommandQueue.cls = (void*)objc_getClass("MTLCommandQueue");
+    oc.MTLCommandQueue.commandBuffer = (void*)sel_getUid("commandBuffer");
+    oc.MTLDepthStencilDescriptor.cls = (void*)objc_getClass("MTLDepthStencilDescriptor");
+    oc.MTLDepthStencilDescriptor.setDepthCompareFunction = (void*)sel_getUid("setDepthCompareFunction:");
+    oc.MTLDepthStencilDescriptor.depthCompareFunction = (void*)sel_getUid("depthCompareFunction");
+    oc.MTLDepthStencilDescriptor.setDepthWriteEnabled = (void*)sel_getUid("setDepthWriteEnabled:");
+    oc.MTLDepthStencilDescriptor.isDepthWriteEnabled = (void*)sel_getUid("isDepthWriteEnabled");
+    oc.MTLDepthStencilState.cls = (void*)objc_getClass("MTLDepthStencilState");
+    oc.MTLDrawable.cls = (void*)objc_getClass("MTLDrawable");
+    oc.MTLRenderCommandEncoder.cls = (void*)objc_getClass("MTLRenderCommandEncoder");
+    oc.MTLRenderCommandEncoder.setRenderPipelineState = (void*)sel_getUid("setRenderPipelineState:");
+    oc.MTLRenderCommandEncoder.setVertexBuffer_offset_atIndex = (void*)sel_getUid("setVertexBuffer:offset:atIndex:");
+    oc.MTLRenderCommandEncoder.setCullMode = (void*)sel_getUid("setCullMode:");
+    oc.MTLRenderCommandEncoder.setDepthStencilState = (void*)sel_getUid("setDepthStencilState:");
+    oc.MTLRenderCommandEncoder.drawPrimitives_vertexStart_vertexCount = (void*)sel_getUid("drawPrimitives:vertexStart:vertexCount:");
+    oc.MTLRenderPipelineColorAttachmentDescriptor.cls = (void*)objc_getClass("MTLRenderPipelineColorAttachmentDescriptor");
+    oc.MTLRenderPipelineColorAttachmentDescriptor.setPixelFormat = (void*)sel_getUid("setPixelFormat:");
+    oc.MTLRenderPipelineColorAttachmentDescriptor.pixelFormat = (void*)sel_getUid("pixelFormat");
+    oc.MTLRenderPipelineColorAttachmentDescriptor.setBlendingEnabled = (void*)sel_getUid("setBlendingEnabled:");
+    oc.MTLRenderPipelineColorAttachmentDescriptor.isBlendingEnabled = (void*)sel_getUid("isBlendingEnabled");
+    oc.MTLRenderPipelineColorAttachmentDescriptor.setWriteMask = (void*)sel_getUid("setWriteMask:");
+    oc.MTLRenderPipelineColorAttachmentDescriptor.writeMask = (void*)sel_getUid("writeMask");
+    oc.MTLRenderPipelineDescriptor.cls = (void*)objc_getClass("MTLRenderPipelineDescriptor");
+    oc.MTLRenderPipelineDescriptor.setVertexFunction = (void*)sel_getUid("setVertexFunction:");
+    oc.MTLRenderPipelineDescriptor.vertexFunction = (void*)sel_getUid("vertexFunction");
+    oc.MTLRenderPipelineDescriptor.setFragmentFunction = (void*)sel_getUid("setFragmentFunction:");
+    oc.MTLRenderPipelineDescriptor.fragmentFunction = (void*)sel_getUid("fragmentFunction");
+    oc.MTLRenderPipelineDescriptor.setVertexDescriptor = (void*)sel_getUid("setVertexDescriptor:");
+    oc.MTLRenderPipelineDescriptor.vertexDescriptor = (void*)sel_getUid("vertexDescriptor");
+    oc.MTLRenderPipelineDescriptor.setSampleCount = (void*)sel_getUid("setSampleCount:");
+    oc.MTLRenderPipelineDescriptor.sampleCount = (void*)sel_getUid("sampleCount");
+    oc.MTLRenderPipelineDescriptor.setAlphaToCoverageEnabled = (void*)sel_getUid("setAlphaToCoverageEnabled:");
+    oc.MTLRenderPipelineDescriptor.isAlphaToCoverageEnabled = (void*)sel_getUid("isAlphaToCoverageEnabled");
+    oc.MTLRenderPipelineDescriptor.setAlphaToOneEnabled = (void*)sel_getUid("setAlphaToOneEnabled:");
+    oc.MTLRenderPipelineDescriptor.isAlphaToOneEnabled = (void*)sel_getUid("isAlphaToOneEnabled");
+    oc.MTLRenderPipelineDescriptor.setRasterizationEnabled = (void*)sel_getUid("setRasterizationEnabled:");
+    oc.MTLRenderPipelineDescriptor.isRasterizationEnabled = (void*)sel_getUid("isRasterizationEnabled");
+    oc.MTLRenderPipelineDescriptor.colorAttachments = (void*)sel_getUid("colorAttachments");
+    oc.MTLRenderPipelineDescriptor.setDepthAttachmentPixelFormat = (void*)sel_getUid("setDepthAttachmentPixelFormat:");
+    oc.MTLRenderPipelineDescriptor.depthAttachmentPixelFormat = (void*)sel_getUid("depthAttachmentPixelFormat");
+    oc.MTLRenderPipelineState.cls = (void*)objc_getClass("MTLRenderPipelineState");
+    oc.MTLRenderPipelineColorAttachmentDescriptorArray.cls = (void*)objc_getClass("MTLRenderPipelineColorAttachmentDescriptorArray");
+    oc.MTLRenderPipelineColorAttachmentDescriptorArray.objectAtIndexedSubscript = (void*)sel_getUid("objectAtIndexedSubscript:");
+    oc.MTLRenderPipelineColorAttachmentDescriptorArray.setObject_atIndexedSubscript = (void*)sel_getUid("setObject:atIndexedSubscript:");
+    oc.MTLVertexBufferLayoutDescriptor.cls = (void*)objc_getClass("MTLVertexBufferLayoutDescriptor");
+    oc.MTLVertexBufferLayoutDescriptor.setStride = (void*)sel_getUid("setStride:");
+    oc.MTLVertexBufferLayoutDescriptor.stride = (void*)sel_getUid("stride");
+    oc.MTLVertexBufferLayoutDescriptor.setStepFunction = (void*)sel_getUid("setStepFunction:");
+    oc.MTLVertexBufferLayoutDescriptor.stepFunction = (void*)sel_getUid("stepFunction");
+    oc.MTLVertexBufferLayoutDescriptor.setStepRate = (void*)sel_getUid("setStepRate:");
+    oc.MTLVertexBufferLayoutDescriptor.stepRate = (void*)sel_getUid("stepRate");
+    oc.MTLVertexBufferLayoutDescriptorArray.cls = (void*)objc_getClass("MTLVertexBufferLayoutDescriptorArray");
+    oc.MTLVertexBufferLayoutDescriptorArray.objectAtIndexedSubscript = (void*)sel_getUid("objectAtIndexedSubscript:");
+    oc.MTLVertexBufferLayoutDescriptorArray.setObject_atIndexedSubscript = (void*)sel_getUid("setObject:atIndexedSubscript:");
+    oc.MTLVertexAttributeDescriptor.cls = (void*)objc_getClass("MTLVertexAttributeDescriptor");
+    oc.MTLVertexAttributeDescriptor.setFormat = (void*)sel_getUid("setFormat:");
+    oc.MTLVertexAttributeDescriptor.format = (void*)sel_getUid("format");
+    oc.MTLVertexAttributeDescriptor.setOffset = (void*)sel_getUid("setOffset:");
+    oc.MTLVertexAttributeDescriptor.offset = (void*)sel_getUid("offset");
+    oc.MTLVertexAttributeDescriptor.setBufferIndex = (void*)sel_getUid("setBufferIndex:");
+    oc.MTLVertexAttributeDescriptor.bufferIndex = (void*)sel_getUid("bufferIndex");
+    oc.MTLVertexAttributeDescriptorArray.cls = (void*)objc_getClass("MTLVertexAttributeDescriptorArray");
+    oc.MTLVertexAttributeDescriptorArray.objectAtIndexedSubscript = (void*)sel_getUid("objectAtIndexedSubscript:");
+    oc.MTLVertexAttributeDescriptorArray.setObject_atIndexedSubscript = (void*)sel_getUid("setObject:atIndexedSubscript:");
+    oc.MTLVertexDescriptor.cls = (void*)objc_getClass("MTLVertexDescriptor");
+    oc.MTLVertexDescriptor.vertexDescriptor = (void*)sel_getUid("vertexDescriptor");
+    oc.MTLVertexDescriptor.layouts = (void*)sel_getUid("layouts");
+    oc.MTLVertexDescriptor.attributes = (void*)sel_getUid("attributes");
+    oc.CAMetalDrawable.cls = (void*)objc_getClass("CAMetalDrawable");
+    oc.MTKView.cls = (void*)objc_getClass("MTKView");
+    oc.MTKView.setDevice = (void*)sel_getUid("setDevice:");
+    oc.MTKView.device = (void*)sel_getUid("device");
+    oc.MTKView.currentDrawable = (void*)sel_getUid("currentDrawable");
+    oc.MTKView.setColorPixelFormat = (void*)sel_getUid("setColorPixelFormat:");
+    oc.MTKView.colorPixelFormat = (void*)sel_getUid("colorPixelFormat");
+    oc.MTKView.setDepthStencilPixelFormat = (void*)sel_getUid("setDepthStencilPixelFormat:");
+    oc.MTKView.depthStencilPixelFormat = (void*)sel_getUid("depthStencilPixelFormat");
+    oc.MTKView.setSampleCount = (void*)sel_getUid("setSampleCount:");
+    oc.MTKView.sampleCount = (void*)sel_getUid("sampleCount");
+    oc.MTKView.currentRenderPassDescriptor = (void*)sel_getUid("currentRenderPassDescriptor");
+    oc.MTKView.setPreferredFramesPerSecond = (void*)sel_getUid("setPreferredFramesPerSecond:");
+    oc.MTKView.preferredFramesPerSecond = (void*)sel_getUid("preferredFramesPerSecond");
+    oc.MTKView.setAutoResizeDrawable = (void*)sel_getUid("setAutoResizeDrawable:");
+    oc.MTKView.autoResizeDrawable = (void*)sel_getUid("autoResizeDrawable");
+}
+
+typedef struct NSObject { } NSObject;
 typedef unsigned long long dispatch_time_t;
 typedef void* dispatch_semaphore_t;
 typedef struct NSString { } NSString;
@@ -372,327 +753,336 @@ extern dispatch_semaphore_t dispatch_semaphore_create(intptr_t value);
 extern intptr_t dispatch_semaphore_wait(dispatch_semaphore_t dsema, dispatch_time_t timeout);
 extern intptr_t dispatch_semaphore_signal(dispatch_semaphore_t dsema);
 extern MTLDevice* MTLCreateSystemDefaultDevice(void);
+static void NSObject_release(NSObject * self) {
+    return ((void(*)(void*,void*))objc_msgSend)((void*)self, oc.NSObject.release);
+}
+static NSObject* NSObject_init(NSObject * self) {
+    return ((NSObject*(*)(void*,void*))objc_msgSend)((void*)self, oc.NSObject.init);
+}
+static NSObject* NSObject_alloc(void) {
+    return ((NSObject*(*)(void*,void*))objc_msgSend)(oc.NSObject.cls, oc.NSObject.alloc);
+}
 static NSString* NSString_stringWithUTF8String(const char * nullTerminatedCString) {
-    return ((NSString*(*)(void*,void*,const char *))objc_msgSend)((void*)objc_getClass("NSString"), (void*)sel_getUid("stringWithUTF8String:"), nullTerminatedCString);
+    return ((NSString*(*)(void*,void*,const char *))objc_msgSend)(oc.NSString.cls, oc.NSString.stringWithUTF8String, nullTerminatedCString);
 }
 static NSApplication * NSApplication_sharedApplication(void) {
-    return ((NSApplication *(*)(void*,void*))objc_msgSend)((void*)objc_getClass("NSApplication"), (void*)sel_getUid("sharedApplication"));
+    return ((NSApplication *(*)(void*,void*))objc_msgSend)(oc.NSApplication.cls, oc.NSApplication.sharedApplication);
 }
 static void NSApplication_activateIgnoringOtherApps(NSApplication * self, bool flag) {
-    return ((void(*)(void*,void*,bool))objc_msgSend)((void*)self, (void*)sel_getUid("activateIgnoringOtherApps:"), flag);
+    return ((void(*)(void*,void*,bool))objc_msgSend)((void*)self, oc.NSApplication.activateIgnoringOtherApps, flag);
 }
 static void NSApplication_run(NSApplication * self) {
-    return ((void(*)(void*,void*))objc_msgSend)((void*)self, (void*)sel_getUid("run"));
+    return ((void(*)(void*,void*))objc_msgSend)((void*)self, oc.NSApplication.run);
 }
 static bool NSApplication_setActivationPolicy(NSApplication * self, NSApplicationActivationPolicy activationPolicy) {
-    return ((bool(*)(void*,void*,NSApplicationActivationPolicy))objc_msgSend)((void*)self, (void*)sel_getUid("setActivationPolicy:"), activationPolicy);
+    return ((bool(*)(void*,void*,NSApplicationActivationPolicy))objc_msgSend)((void*)self, oc.NSApplication.setActivationPolicy, activationPolicy);
 }
 static void NSApplication_setDelegate(NSApplication * self, NSApplicationDelegate* delegate) {
-    return ((void(*)(void*,void*,NSApplicationDelegate*))objc_msgSend)((void*)self, (void*)sel_getUid("setDelegate:"), delegate);
+    return ((void(*)(void*,void*,NSApplicationDelegate*))objc_msgSend)((void*)self, oc.NSApplication.setDelegate, delegate);
 }
 static NSWindow* NSWindow_initWithContentRect_styleMask_backing_defer(NSWindow * self, NSRect contentRect, NSWindowStyleMask style, NSBackingStoreType backingStoreType, bool flag) {
-    return ((NSWindow*(*)(void*,void*,NSRect,NSWindowStyleMask,NSBackingStoreType,bool))objc_msgSend)((void*)self, (void*)sel_getUid("initWithContentRect:styleMask:backing:defer:"), contentRect, style, backingStoreType, flag);
+    return ((NSWindow*(*)(void*,void*,NSRect,NSWindowStyleMask,NSBackingStoreType,bool))objc_msgSend)((void*)self, oc.NSWindow.initWithContentRect_styleMask_backing_defer, contentRect, style, backingStoreType, flag);
 }
 static void NSWindow_setContentView(NSWindow * self, NSView * val) {
-    return ((void(*)(void*,void*,NSView *))objc_msgSend)((void*)self, (void*)sel_getUid("setContentView:"), val);
+    return ((void(*)(void*,void*,NSView *))objc_msgSend)((void*)self, oc.NSWindow.setContentView, val);
 }
 static NSView * NSWindow_contentView(NSWindow * self) {
-    return ((NSView *(*)(void*,void*))objc_msgSend)((void*)self, (void*)sel_getUid("contentView"));
+    return ((NSView *(*)(void*,void*))objc_msgSend)((void*)self, oc.NSWindow.contentView);
 }
 static bool NSWindow_makeFirstResponder(NSWindow * self, NSResponder * responder) {
-    return ((bool(*)(void*,void*,NSResponder *))objc_msgSend)((void*)self, (void*)sel_getUid("makeFirstResponder:"), responder);
+    return ((bool(*)(void*,void*,NSResponder *))objc_msgSend)((void*)self, oc.NSWindow.makeFirstResponder, responder);
 }
 static void NSWindow_center(NSWindow * self) {
-    return ((void(*)(void*,void*))objc_msgSend)((void*)self, (void*)sel_getUid("center"));
+    return ((void(*)(void*,void*))objc_msgSend)((void*)self, oc.NSWindow.center);
 }
 static void NSWindow_makeKeyAndOrderFront(NSWindow * self, id sender) {
-    return ((void(*)(void*,void*,id))objc_msgSend)((void*)self, (void*)sel_getUid("makeKeyAndOrderFront:"), sender);
+    return ((void(*)(void*,void*,id))objc_msgSend)((void*)self, oc.NSWindow.makeKeyAndOrderFront, sender);
 }
 static void NSWindow_setTitle(NSWindow * self, NSString * title) {
-    return ((void(*)(void*,void*,NSString *))objc_msgSend)((void*)self, (void*)sel_getUid("setTitle:"), title);
+    return ((void(*)(void*,void*,NSString *))objc_msgSend)((void*)self, oc.NSWindow.setTitle, title);
 }
 static void NSWindow_setDelegate(NSWindow * self, NSWindowDelegate* delegate) {
-    return ((void(*)(void*,void*,NSWindowDelegate*))objc_msgSend)((void*)self, (void*)sel_getUid("setDelegate:"), delegate);
+    return ((void(*)(void*,void*,NSWindowDelegate*))objc_msgSend)((void*)self, oc.NSWindow.setDelegate, delegate);
 }
 static void NSWindow_setAcceptsMouseMovedEvents(NSWindow * self, bool val) {
-    return ((void(*)(void*,void*,bool))objc_msgSend)((void*)self, (void*)sel_getUid("setAcceptsMouseMovedEvents:"), val);
+    return ((void(*)(void*,void*,bool))objc_msgSend)((void*)self, oc.NSWindow.setAcceptsMouseMovedEvents, val);
 }
 static bool NSWindow_acceptsMouseMovedEvents(NSWindow * self) {
-    return ((bool(*)(void*,void*))objc_msgSend)((void*)self, (void*)sel_getUid("acceptsMouseMovedEvents"));
+    return ((bool(*)(void*,void*))objc_msgSend)((void*)self, oc.NSWindow.acceptsMouseMovedEvents);
 }
 static void NSWindow_setRestorable(NSWindow * self, bool val) {
-    return ((void(*)(void*,void*,bool))objc_msgSend)((void*)self, (void*)sel_getUid("setRestorable:"), val);
+    return ((void(*)(void*,void*,bool))objc_msgSend)((void*)self, oc.NSWindow.setRestorable, val);
 }
 static bool NSWindow_isRestorable(NSWindow * self) {
-    return ((bool(*)(void*,void*))objc_msgSend)((void*)self, (void*)sel_getUid("isRestorable"));
+    return ((bool(*)(void*,void*))objc_msgSend)((void*)self, oc.NSWindow.isRestorable);
 }
 static void MTLCommandEncoder_endEncoding(MTLCommandEncoder * self) {
-    return ((void(*)(void*,void*))objc_msgSend)((void*)self, (void*)sel_getUid("endEncoding"));
+    return ((void(*)(void*,void*))objc_msgSend)((void*)self, oc.MTLCommandEncoder.endEncoding);
 }
 static MTLFunction* MTLLibrary_newFunctionWithName(MTLLibrary * self, NSString * functionName) {
-    return ((MTLFunction*(*)(void*,void*,NSString *))objc_msgSend)((void*)self, (void*)sel_getUid("newFunctionWithName:"), functionName);
+    return ((MTLFunction*(*)(void*,void*,NSString *))objc_msgSend)((void*)self, oc.MTLLibrary.newFunctionWithName, functionName);
 }
 static MTLCommandQueue* MTLDevice_newCommandQueue(MTLDevice * self) {
-    return ((MTLCommandQueue*(*)(void*,void*))objc_msgSend)((void*)self, (void*)sel_getUid("newCommandQueue"));
+    return ((MTLCommandQueue*(*)(void*,void*))objc_msgSend)((void*)self, oc.MTLDevice.newCommandQueue);
 }
 static MTLBuffer* MTLDevice_newBufferWithBytes_length_options(MTLDevice * self, const void * pointer, uint64_t length, MTLResourceOptions options) {
-    return ((MTLBuffer*(*)(void*,void*,const void *,uint64_t,MTLResourceOptions))objc_msgSend)((void*)self, (void*)sel_getUid("newBufferWithBytes:length:options:"), pointer, length, options);
+    return ((MTLBuffer*(*)(void*,void*,const void *,uint64_t,MTLResourceOptions))objc_msgSend)((void*)self, oc.MTLDevice.newBufferWithBytes_length_options, pointer, length, options);
 }
 static MTLDepthStencilState* MTLDevice_newDepthStencilStateWithDescriptor(MTLDevice * self, MTLDepthStencilDescriptor * descriptor) {
-    return ((MTLDepthStencilState*(*)(void*,void*,MTLDepthStencilDescriptor *))objc_msgSend)((void*)self, (void*)sel_getUid("newDepthStencilStateWithDescriptor:"), descriptor);
+    return ((MTLDepthStencilState*(*)(void*,void*,MTLDepthStencilDescriptor *))objc_msgSend)((void*)self, oc.MTLDevice.newDepthStencilStateWithDescriptor, descriptor);
 }
 static MTLLibrary* MTLDevice_newLibraryWithSource_options_error(MTLDevice * self, NSString * source, MTLCompileOptions * options, NSError *  * error) {
-    return ((MTLLibrary*(*)(void*,void*,NSString *,MTLCompileOptions *,NSError *  *))objc_msgSend)((void*)self, (void*)sel_getUid("newLibraryWithSource:options:error:"), source, options, error);
+    return ((MTLLibrary*(*)(void*,void*,NSString *,MTLCompileOptions *,NSError *  *))objc_msgSend)((void*)self, oc.MTLDevice.newLibraryWithSource_options_error, source, options, error);
 }
 static MTLRenderPipelineState* MTLDevice_newRenderPipelineStateWithDescriptor_error(MTLDevice * self, MTLRenderPipelineDescriptor * descriptor, NSError *  * error) {
-    return ((MTLRenderPipelineState*(*)(void*,void*,MTLRenderPipelineDescriptor *,NSError *  *))objc_msgSend)((void*)self, (void*)sel_getUid("newRenderPipelineStateWithDescriptor:error:"), descriptor, error);
+    return ((MTLRenderPipelineState*(*)(void*,void*,MTLRenderPipelineDescriptor *,NSError *  *))objc_msgSend)((void*)self, oc.MTLDevice.newRenderPipelineStateWithDescriptor_error, descriptor, error);
 }
 static void MTLRenderPassAttachmentDescriptor_setLoadAction(MTLRenderPassAttachmentDescriptor * self, MTLLoadAction val) {
-    return ((void(*)(void*,void*,MTLLoadAction))objc_msgSend)((void*)self, (void*)sel_getUid("setLoadAction:"), val);
+    return ((void(*)(void*,void*,MTLLoadAction))objc_msgSend)((void*)self, oc.MTLRenderPassAttachmentDescriptor.setLoadAction, val);
 }
 static MTLLoadAction MTLRenderPassAttachmentDescriptor_loadAction(MTLRenderPassAttachmentDescriptor * self) {
-    return ((MTLLoadAction(*)(void*,void*))objc_msgSend)((void*)self, (void*)sel_getUid("loadAction"));
+    return ((MTLLoadAction(*)(void*,void*))objc_msgSend)((void*)self, oc.MTLRenderPassAttachmentDescriptor.loadAction);
 }
 static void MTLRenderPassColorAttachmentDescriptor_setClearColor(MTLRenderPassColorAttachmentDescriptor * self, MTLClearColor val) {
-    return ((void(*)(void*,void*,MTLClearColor))objc_msgSend)((void*)self, (void*)sel_getUid("setClearColor:"), val);
+    return ((void(*)(void*,void*,MTLClearColor))objc_msgSend)((void*)self, oc.MTLRenderPassColorAttachmentDescriptor.setClearColor, val);
 }
 static MTLClearColor MTLRenderPassColorAttachmentDescriptor_clearColor(MTLRenderPassColorAttachmentDescriptor * self) {
-    return ((MTLClearColor(*)(void*,void*))objc_msgSend_stret)((void*)self, (void*)sel_getUid("clearColor"));
+    return ((MTLClearColor(*)(void*,void*))objc_msgSend_stret)((void*)self, oc.MTLRenderPassColorAttachmentDescriptor.clearColor);
 }
 static void MTLRenderPassDepthAttachmentDescriptor_setClearDepth(MTLRenderPassDepthAttachmentDescriptor * self, double val) {
-    return ((void(*)(void*,void*,double))objc_msgSend)((void*)self, (void*)sel_getUid("setClearDepth:"), val);
+    return ((void(*)(void*,void*,double))objc_msgSend)((void*)self, oc.MTLRenderPassDepthAttachmentDescriptor.setClearDepth, val);
 }
 static double MTLRenderPassDepthAttachmentDescriptor_clearDepth(MTLRenderPassDepthAttachmentDescriptor * self) {
-    return ((double(*)(void*,void*))objc_msgSend_fpret)((void*)self, (void*)sel_getUid("clearDepth"));
+    return ((double(*)(void*,void*))objc_msgSend_fpret)((void*)self, oc.MTLRenderPassDepthAttachmentDescriptor.clearDepth);
 }
 static MTLRenderPassColorAttachmentDescriptor * MTLRenderPassColorAttachmentDescriptorArray_objectAtIndexedSubscript(MTLRenderPassColorAttachmentDescriptorArray * self, uint64_t attachmentIndex) {
-    return ((MTLRenderPassColorAttachmentDescriptor *(*)(void*,void*,uint64_t))objc_msgSend)((void*)self, (void*)sel_getUid("objectAtIndexedSubscript:"), attachmentIndex);
+    return ((MTLRenderPassColorAttachmentDescriptor *(*)(void*,void*,uint64_t))objc_msgSend)((void*)self, oc.MTLRenderPassColorAttachmentDescriptorArray.objectAtIndexedSubscript, attachmentIndex);
 }
 static void MTLRenderPassColorAttachmentDescriptorArray_setObject_atIndexedSubscript(MTLRenderPassColorAttachmentDescriptorArray * self, MTLRenderPassColorAttachmentDescriptor * attachment, uint64_t attachmentIndex) {
-    return ((void(*)(void*,void*,MTLRenderPassColorAttachmentDescriptor *,uint64_t))objc_msgSend)((void*)self, (void*)sel_getUid("setObject:atIndexedSubscript:"), attachment, attachmentIndex);
+    return ((void(*)(void*,void*,MTLRenderPassColorAttachmentDescriptor *,uint64_t))objc_msgSend)((void*)self, oc.MTLRenderPassColorAttachmentDescriptorArray.setObject_atIndexedSubscript, attachment, attachmentIndex);
 }
 static MTLRenderPassColorAttachmentDescriptorArray * MTLRenderPassDescriptor_colorAttachments(MTLRenderPassDescriptor * self) {
-    return ((MTLRenderPassColorAttachmentDescriptorArray *(*)(void*,void*))objc_msgSend)((void*)self, (void*)sel_getUid("colorAttachments"));
+    return ((MTLRenderPassColorAttachmentDescriptorArray *(*)(void*,void*))objc_msgSend)((void*)self, oc.MTLRenderPassDescriptor.colorAttachments);
 }
 static void MTLRenderPassDescriptor_setDepthAttachment(MTLRenderPassDescriptor * self, MTLRenderPassDepthAttachmentDescriptor * val) {
-    return ((void(*)(void*,void*,MTLRenderPassDepthAttachmentDescriptor *))objc_msgSend)((void*)self, (void*)sel_getUid("setDepthAttachment:"), val);
+    return ((void(*)(void*,void*,MTLRenderPassDepthAttachmentDescriptor *))objc_msgSend)((void*)self, oc.MTLRenderPassDescriptor.setDepthAttachment, val);
 }
 static MTLRenderPassDepthAttachmentDescriptor * MTLRenderPassDescriptor_depthAttachment(MTLRenderPassDescriptor * self) {
-    return ((MTLRenderPassDepthAttachmentDescriptor *(*)(void*,void*))objc_msgSend)((void*)self, (void*)sel_getUid("depthAttachment"));
+    return ((MTLRenderPassDepthAttachmentDescriptor *(*)(void*,void*))objc_msgSend)((void*)self, oc.MTLRenderPassDescriptor.depthAttachment);
 }
 static void MTLCommandBuffer_commit(MTLCommandBuffer * self) {
-    return ((void(*)(void*,void*))objc_msgSend)((void*)self, (void*)sel_getUid("commit"));
+    return ((void(*)(void*,void*))objc_msgSend)((void*)self, oc.MTLCommandBuffer.commit);
 }
 static void MTLCommandBuffer_presentDrawable(MTLCommandBuffer * self, MTLDrawable* drawable) {
-    return ((void(*)(void*,void*,MTLDrawable*))objc_msgSend)((void*)self, (void*)sel_getUid("presentDrawable:"), drawable);
+    return ((void(*)(void*,void*,MTLDrawable*))objc_msgSend)((void*)self, oc.MTLCommandBuffer.presentDrawable, drawable);
 }
 static void MTLCommandBuffer_addCompletedHandler(MTLCommandBuffer * self, void* block) {
-    return ((void(*)(void*,void*,void*))objc_msgSend)((void*)self, (void*)sel_getUid("addCompletedHandler:"), block);
+    return ((void(*)(void*,void*,void*))objc_msgSend)((void*)self, oc.MTLCommandBuffer.addCompletedHandler, block);
 }
 static MTLRenderCommandEncoder* MTLCommandBuffer_renderCommandEncoderWithDescriptor(MTLCommandBuffer * self, MTLRenderPassDescriptor * renderPassDescriptor) {
-    return ((MTLRenderCommandEncoder*(*)(void*,void*,MTLRenderPassDescriptor *))objc_msgSend)((void*)self, (void*)sel_getUid("renderCommandEncoderWithDescriptor:"), renderPassDescriptor);
+    return ((MTLRenderCommandEncoder*(*)(void*,void*,MTLRenderPassDescriptor *))objc_msgSend)((void*)self, oc.MTLCommandBuffer.renderCommandEncoderWithDescriptor, renderPassDescriptor);
 }
 static MTLCommandBuffer* MTLCommandQueue_commandBuffer(MTLCommandQueue * self) {
-    return ((MTLCommandBuffer*(*)(void*,void*))objc_msgSend)((void*)self, (void*)sel_getUid("commandBuffer"));
+    return ((MTLCommandBuffer*(*)(void*,void*))objc_msgSend)((void*)self, oc.MTLCommandQueue.commandBuffer);
 }
 static void MTLDepthStencilDescriptor_setDepthCompareFunction(MTLDepthStencilDescriptor * self, MTLCompareFunction val) {
-    return ((void(*)(void*,void*,MTLCompareFunction))objc_msgSend)((void*)self, (void*)sel_getUid("setDepthCompareFunction:"), val);
+    return ((void(*)(void*,void*,MTLCompareFunction))objc_msgSend)((void*)self, oc.MTLDepthStencilDescriptor.setDepthCompareFunction, val);
 }
 static MTLCompareFunction MTLDepthStencilDescriptor_depthCompareFunction(MTLDepthStencilDescriptor * self) {
-    return ((MTLCompareFunction(*)(void*,void*))objc_msgSend)((void*)self, (void*)sel_getUid("depthCompareFunction"));
+    return ((MTLCompareFunction(*)(void*,void*))objc_msgSend)((void*)self, oc.MTLDepthStencilDescriptor.depthCompareFunction);
 }
 static void MTLDepthStencilDescriptor_setDepthWriteEnabled(MTLDepthStencilDescriptor * self, bool val) {
-    return ((void(*)(void*,void*,bool))objc_msgSend)((void*)self, (void*)sel_getUid("setDepthWriteEnabled:"), val);
+    return ((void(*)(void*,void*,bool))objc_msgSend)((void*)self, oc.MTLDepthStencilDescriptor.setDepthWriteEnabled, val);
 }
 static bool MTLDepthStencilDescriptor_isDepthWriteEnabled(MTLDepthStencilDescriptor * self) {
-    return ((bool(*)(void*,void*))objc_msgSend)((void*)self, (void*)sel_getUid("isDepthWriteEnabled"));
+    return ((bool(*)(void*,void*))objc_msgSend)((void*)self, oc.MTLDepthStencilDescriptor.isDepthWriteEnabled);
 }
 static void MTLRenderCommandEncoder_setRenderPipelineState(MTLRenderCommandEncoder * self, MTLRenderPipelineState* pipelineState) {
-    return ((void(*)(void*,void*,MTLRenderPipelineState*))objc_msgSend)((void*)self, (void*)sel_getUid("setRenderPipelineState:"), pipelineState);
+    return ((void(*)(void*,void*,MTLRenderPipelineState*))objc_msgSend)((void*)self, oc.MTLRenderCommandEncoder.setRenderPipelineState, pipelineState);
 }
 static void MTLRenderCommandEncoder_setVertexBuffer_offset_atIndex(MTLRenderCommandEncoder * self, MTLBuffer* buffer, uint64_t offset, uint64_t index) {
-    return ((void(*)(void*,void*,MTLBuffer*,uint64_t,uint64_t))objc_msgSend)((void*)self, (void*)sel_getUid("setVertexBuffer:offset:atIndex:"), buffer, offset, index);
+    return ((void(*)(void*,void*,MTLBuffer*,uint64_t,uint64_t))objc_msgSend)((void*)self, oc.MTLRenderCommandEncoder.setVertexBuffer_offset_atIndex, buffer, offset, index);
 }
 static void MTLRenderCommandEncoder_setCullMode(MTLRenderCommandEncoder * self, MTLCullMode cullMode) {
-    return ((void(*)(void*,void*,MTLCullMode))objc_msgSend)((void*)self, (void*)sel_getUid("setCullMode:"), cullMode);
+    return ((void(*)(void*,void*,MTLCullMode))objc_msgSend)((void*)self, oc.MTLRenderCommandEncoder.setCullMode, cullMode);
 }
 static void MTLRenderCommandEncoder_setDepthStencilState(MTLRenderCommandEncoder * self, MTLDepthStencilState* depthStencilState) {
-    return ((void(*)(void*,void*,MTLDepthStencilState*))objc_msgSend)((void*)self, (void*)sel_getUid("setDepthStencilState:"), depthStencilState);
+    return ((void(*)(void*,void*,MTLDepthStencilState*))objc_msgSend)((void*)self, oc.MTLRenderCommandEncoder.setDepthStencilState, depthStencilState);
 }
 static void MTLRenderCommandEncoder_drawPrimitives_vertexStart_vertexCount(MTLRenderCommandEncoder * self, MTLPrimitiveType primitiveType, uint64_t vertexStart, uint64_t vertexCount) {
-    return ((void(*)(void*,void*,MTLPrimitiveType,uint64_t,uint64_t))objc_msgSend)((void*)self, (void*)sel_getUid("drawPrimitives:vertexStart:vertexCount:"), primitiveType, vertexStart, vertexCount);
+    return ((void(*)(void*,void*,MTLPrimitiveType,uint64_t,uint64_t))objc_msgSend)((void*)self, oc.MTLRenderCommandEncoder.drawPrimitives_vertexStart_vertexCount, primitiveType, vertexStart, vertexCount);
 }
 static void MTLRenderPipelineColorAttachmentDescriptor_setPixelFormat(MTLRenderPipelineColorAttachmentDescriptor * self, MTLPixelFormat val) {
-    return ((void(*)(void*,void*,MTLPixelFormat))objc_msgSend)((void*)self, (void*)sel_getUid("setPixelFormat:"), val);
+    return ((void(*)(void*,void*,MTLPixelFormat))objc_msgSend)((void*)self, oc.MTLRenderPipelineColorAttachmentDescriptor.setPixelFormat, val);
 }
 static MTLPixelFormat MTLRenderPipelineColorAttachmentDescriptor_pixelFormat(MTLRenderPipelineColorAttachmentDescriptor * self) {
-    return ((MTLPixelFormat(*)(void*,void*))objc_msgSend)((void*)self, (void*)sel_getUid("pixelFormat"));
+    return ((MTLPixelFormat(*)(void*,void*))objc_msgSend)((void*)self, oc.MTLRenderPipelineColorAttachmentDescriptor.pixelFormat);
 }
 static void MTLRenderPipelineColorAttachmentDescriptor_setBlendingEnabled(MTLRenderPipelineColorAttachmentDescriptor * self, bool val) {
-    return ((void(*)(void*,void*,bool))objc_msgSend)((void*)self, (void*)sel_getUid("setBlendingEnabled:"), val);
+    return ((void(*)(void*,void*,bool))objc_msgSend)((void*)self, oc.MTLRenderPipelineColorAttachmentDescriptor.setBlendingEnabled, val);
 }
 static bool MTLRenderPipelineColorAttachmentDescriptor_isBlendingEnabled(MTLRenderPipelineColorAttachmentDescriptor * self) {
-    return ((bool(*)(void*,void*))objc_msgSend)((void*)self, (void*)sel_getUid("isBlendingEnabled"));
+    return ((bool(*)(void*,void*))objc_msgSend)((void*)self, oc.MTLRenderPipelineColorAttachmentDescriptor.isBlendingEnabled);
 }
 static void MTLRenderPipelineColorAttachmentDescriptor_setWriteMask(MTLRenderPipelineColorAttachmentDescriptor * self, MTLColorWriteMask val) {
-    return ((void(*)(void*,void*,MTLColorWriteMask))objc_msgSend)((void*)self, (void*)sel_getUid("setWriteMask:"), val);
+    return ((void(*)(void*,void*,MTLColorWriteMask))objc_msgSend)((void*)self, oc.MTLRenderPipelineColorAttachmentDescriptor.setWriteMask, val);
 }
 static MTLColorWriteMask MTLRenderPipelineColorAttachmentDescriptor_writeMask(MTLRenderPipelineColorAttachmentDescriptor * self) {
-    return ((MTLColorWriteMask(*)(void*,void*))objc_msgSend)((void*)self, (void*)sel_getUid("writeMask"));
+    return ((MTLColorWriteMask(*)(void*,void*))objc_msgSend)((void*)self, oc.MTLRenderPipelineColorAttachmentDescriptor.writeMask);
 }
 static void MTLRenderPipelineDescriptor_setVertexFunction(MTLRenderPipelineDescriptor * self, MTLFunction* val) {
-    return ((void(*)(void*,void*,MTLFunction*))objc_msgSend)((void*)self, (void*)sel_getUid("setVertexFunction:"), val);
+    return ((void(*)(void*,void*,MTLFunction*))objc_msgSend)((void*)self, oc.MTLRenderPipelineDescriptor.setVertexFunction, val);
 }
 static MTLFunction* MTLRenderPipelineDescriptor_vertexFunction(MTLRenderPipelineDescriptor * self) {
-    return ((MTLFunction*(*)(void*,void*))objc_msgSend)((void*)self, (void*)sel_getUid("vertexFunction"));
+    return ((MTLFunction*(*)(void*,void*))objc_msgSend)((void*)self, oc.MTLRenderPipelineDescriptor.vertexFunction);
 }
 static void MTLRenderPipelineDescriptor_setFragmentFunction(MTLRenderPipelineDescriptor * self, MTLFunction* val) {
-    return ((void(*)(void*,void*,MTLFunction*))objc_msgSend)((void*)self, (void*)sel_getUid("setFragmentFunction:"), val);
+    return ((void(*)(void*,void*,MTLFunction*))objc_msgSend)((void*)self, oc.MTLRenderPipelineDescriptor.setFragmentFunction, val);
 }
 static MTLFunction* MTLRenderPipelineDescriptor_fragmentFunction(MTLRenderPipelineDescriptor * self) {
-    return ((MTLFunction*(*)(void*,void*))objc_msgSend)((void*)self, (void*)sel_getUid("fragmentFunction"));
+    return ((MTLFunction*(*)(void*,void*))objc_msgSend)((void*)self, oc.MTLRenderPipelineDescriptor.fragmentFunction);
 }
 static void MTLRenderPipelineDescriptor_setVertexDescriptor(MTLRenderPipelineDescriptor * self, MTLVertexDescriptor * val) {
-    return ((void(*)(void*,void*,MTLVertexDescriptor *))objc_msgSend)((void*)self, (void*)sel_getUid("setVertexDescriptor:"), val);
+    return ((void(*)(void*,void*,MTLVertexDescriptor *))objc_msgSend)((void*)self, oc.MTLRenderPipelineDescriptor.setVertexDescriptor, val);
 }
 static MTLVertexDescriptor * MTLRenderPipelineDescriptor_vertexDescriptor(MTLRenderPipelineDescriptor * self) {
-    return ((MTLVertexDescriptor *(*)(void*,void*))objc_msgSend)((void*)self, (void*)sel_getUid("vertexDescriptor"));
+    return ((MTLVertexDescriptor *(*)(void*,void*))objc_msgSend)((void*)self, oc.MTLRenderPipelineDescriptor.vertexDescriptor);
 }
 static void MTLRenderPipelineDescriptor_setSampleCount(MTLRenderPipelineDescriptor * self, uint64_t val) {
-    return ((void(*)(void*,void*,uint64_t))objc_msgSend)((void*)self, (void*)sel_getUid("setSampleCount:"), val);
+    return ((void(*)(void*,void*,uint64_t))objc_msgSend)((void*)self, oc.MTLRenderPipelineDescriptor.setSampleCount, val);
 }
 static uint64_t MTLRenderPipelineDescriptor_sampleCount(MTLRenderPipelineDescriptor * self) {
-    return ((uint64_t(*)(void*,void*))objc_msgSend)((void*)self, (void*)sel_getUid("sampleCount"));
+    return ((uint64_t(*)(void*,void*))objc_msgSend)((void*)self, oc.MTLRenderPipelineDescriptor.sampleCount);
 }
 static void MTLRenderPipelineDescriptor_setAlphaToCoverageEnabled(MTLRenderPipelineDescriptor * self, bool val) {
-    return ((void(*)(void*,void*,bool))objc_msgSend)((void*)self, (void*)sel_getUid("setAlphaToCoverageEnabled:"), val);
+    return ((void(*)(void*,void*,bool))objc_msgSend)((void*)self, oc.MTLRenderPipelineDescriptor.setAlphaToCoverageEnabled, val);
 }
 static bool MTLRenderPipelineDescriptor_isAlphaToCoverageEnabled(MTLRenderPipelineDescriptor * self) {
-    return ((bool(*)(void*,void*))objc_msgSend)((void*)self, (void*)sel_getUid("isAlphaToCoverageEnabled"));
+    return ((bool(*)(void*,void*))objc_msgSend)((void*)self, oc.MTLRenderPipelineDescriptor.isAlphaToCoverageEnabled);
 }
 static void MTLRenderPipelineDescriptor_setAlphaToOneEnabled(MTLRenderPipelineDescriptor * self, bool val) {
-    return ((void(*)(void*,void*,bool))objc_msgSend)((void*)self, (void*)sel_getUid("setAlphaToOneEnabled:"), val);
+    return ((void(*)(void*,void*,bool))objc_msgSend)((void*)self, oc.MTLRenderPipelineDescriptor.setAlphaToOneEnabled, val);
 }
 static bool MTLRenderPipelineDescriptor_isAlphaToOneEnabled(MTLRenderPipelineDescriptor * self) {
-    return ((bool(*)(void*,void*))objc_msgSend)((void*)self, (void*)sel_getUid("isAlphaToOneEnabled"));
+    return ((bool(*)(void*,void*))objc_msgSend)((void*)self, oc.MTLRenderPipelineDescriptor.isAlphaToOneEnabled);
 }
 static void MTLRenderPipelineDescriptor_setRasterizationEnabled(MTLRenderPipelineDescriptor * self, bool val) {
-    return ((void(*)(void*,void*,bool))objc_msgSend)((void*)self, (void*)sel_getUid("setRasterizationEnabled:"), val);
+    return ((void(*)(void*,void*,bool))objc_msgSend)((void*)self, oc.MTLRenderPipelineDescriptor.setRasterizationEnabled, val);
 }
 static bool MTLRenderPipelineDescriptor_isRasterizationEnabled(MTLRenderPipelineDescriptor * self) {
-    return ((bool(*)(void*,void*))objc_msgSend)((void*)self, (void*)sel_getUid("isRasterizationEnabled"));
+    return ((bool(*)(void*,void*))objc_msgSend)((void*)self, oc.MTLRenderPipelineDescriptor.isRasterizationEnabled);
 }
 static MTLRenderPipelineColorAttachmentDescriptorArray * MTLRenderPipelineDescriptor_colorAttachments(MTLRenderPipelineDescriptor * self) {
-    return ((MTLRenderPipelineColorAttachmentDescriptorArray *(*)(void*,void*))objc_msgSend)((void*)self, (void*)sel_getUid("colorAttachments"));
+    return ((MTLRenderPipelineColorAttachmentDescriptorArray *(*)(void*,void*))objc_msgSend)((void*)self, oc.MTLRenderPipelineDescriptor.colorAttachments);
 }
 static void MTLRenderPipelineDescriptor_setDepthAttachmentPixelFormat(MTLRenderPipelineDescriptor * self, MTLPixelFormat val) {
-    return ((void(*)(void*,void*,MTLPixelFormat))objc_msgSend)((void*)self, (void*)sel_getUid("setDepthAttachmentPixelFormat:"), val);
+    return ((void(*)(void*,void*,MTLPixelFormat))objc_msgSend)((void*)self, oc.MTLRenderPipelineDescriptor.setDepthAttachmentPixelFormat, val);
 }
 static MTLPixelFormat MTLRenderPipelineDescriptor_depthAttachmentPixelFormat(MTLRenderPipelineDescriptor * self) {
-    return ((MTLPixelFormat(*)(void*,void*))objc_msgSend)((void*)self, (void*)sel_getUid("depthAttachmentPixelFormat"));
+    return ((MTLPixelFormat(*)(void*,void*))objc_msgSend)((void*)self, oc.MTLRenderPipelineDescriptor.depthAttachmentPixelFormat);
 }
 static MTLRenderPipelineColorAttachmentDescriptor * MTLRenderPipelineColorAttachmentDescriptorArray_objectAtIndexedSubscript(MTLRenderPipelineColorAttachmentDescriptorArray * self, uint64_t attachmentIndex) {
-    return ((MTLRenderPipelineColorAttachmentDescriptor *(*)(void*,void*,uint64_t))objc_msgSend)((void*)self, (void*)sel_getUid("objectAtIndexedSubscript:"), attachmentIndex);
+    return ((MTLRenderPipelineColorAttachmentDescriptor *(*)(void*,void*,uint64_t))objc_msgSend)((void*)self, oc.MTLRenderPipelineColorAttachmentDescriptorArray.objectAtIndexedSubscript, attachmentIndex);
 }
 static void MTLRenderPipelineColorAttachmentDescriptorArray_setObject_atIndexedSubscript(MTLRenderPipelineColorAttachmentDescriptorArray * self, MTLRenderPipelineColorAttachmentDescriptor * attachment, uint64_t attachmentIndex) {
-    return ((void(*)(void*,void*,MTLRenderPipelineColorAttachmentDescriptor *,uint64_t))objc_msgSend)((void*)self, (void*)sel_getUid("setObject:atIndexedSubscript:"), attachment, attachmentIndex);
+    return ((void(*)(void*,void*,MTLRenderPipelineColorAttachmentDescriptor *,uint64_t))objc_msgSend)((void*)self, oc.MTLRenderPipelineColorAttachmentDescriptorArray.setObject_atIndexedSubscript, attachment, attachmentIndex);
 }
 static void MTLVertexBufferLayoutDescriptor_setStride(MTLVertexBufferLayoutDescriptor * self, uint64_t val) {
-    return ((void(*)(void*,void*,uint64_t))objc_msgSend)((void*)self, (void*)sel_getUid("setStride:"), val);
+    return ((void(*)(void*,void*,uint64_t))objc_msgSend)((void*)self, oc.MTLVertexBufferLayoutDescriptor.setStride, val);
 }
 static uint64_t MTLVertexBufferLayoutDescriptor_stride(MTLVertexBufferLayoutDescriptor * self) {
-    return ((uint64_t(*)(void*,void*))objc_msgSend)((void*)self, (void*)sel_getUid("stride"));
+    return ((uint64_t(*)(void*,void*))objc_msgSend)((void*)self, oc.MTLVertexBufferLayoutDescriptor.stride);
 }
 static void MTLVertexBufferLayoutDescriptor_setStepFunction(MTLVertexBufferLayoutDescriptor * self, MTLVertexStepFunction val) {
-    return ((void(*)(void*,void*,MTLVertexStepFunction))objc_msgSend)((void*)self, (void*)sel_getUid("setStepFunction:"), val);
+    return ((void(*)(void*,void*,MTLVertexStepFunction))objc_msgSend)((void*)self, oc.MTLVertexBufferLayoutDescriptor.setStepFunction, val);
 }
 static MTLVertexStepFunction MTLVertexBufferLayoutDescriptor_stepFunction(MTLVertexBufferLayoutDescriptor * self) {
-    return ((MTLVertexStepFunction(*)(void*,void*))objc_msgSend)((void*)self, (void*)sel_getUid("stepFunction"));
+    return ((MTLVertexStepFunction(*)(void*,void*))objc_msgSend)((void*)self, oc.MTLVertexBufferLayoutDescriptor.stepFunction);
 }
 static void MTLVertexBufferLayoutDescriptor_setStepRate(MTLVertexBufferLayoutDescriptor * self, uint64_t val) {
-    return ((void(*)(void*,void*,uint64_t))objc_msgSend)((void*)self, (void*)sel_getUid("setStepRate:"), val);
+    return ((void(*)(void*,void*,uint64_t))objc_msgSend)((void*)self, oc.MTLVertexBufferLayoutDescriptor.setStepRate, val);
 }
 static uint64_t MTLVertexBufferLayoutDescriptor_stepRate(MTLVertexBufferLayoutDescriptor * self) {
-    return ((uint64_t(*)(void*,void*))objc_msgSend)((void*)self, (void*)sel_getUid("stepRate"));
+    return ((uint64_t(*)(void*,void*))objc_msgSend)((void*)self, oc.MTLVertexBufferLayoutDescriptor.stepRate);
 }
 static MTLVertexBufferLayoutDescriptor * MTLVertexBufferLayoutDescriptorArray_objectAtIndexedSubscript(MTLVertexBufferLayoutDescriptorArray * self, uint64_t index) {
-    return ((MTLVertexBufferLayoutDescriptor *(*)(void*,void*,uint64_t))objc_msgSend)((void*)self, (void*)sel_getUid("objectAtIndexedSubscript:"), index);
+    return ((MTLVertexBufferLayoutDescriptor *(*)(void*,void*,uint64_t))objc_msgSend)((void*)self, oc.MTLVertexBufferLayoutDescriptorArray.objectAtIndexedSubscript, index);
 }
 static void MTLVertexBufferLayoutDescriptorArray_setObject_atIndexedSubscript(MTLVertexBufferLayoutDescriptorArray * self, MTLVertexBufferLayoutDescriptor * bufferDesc, uint64_t index) {
-    return ((void(*)(void*,void*,MTLVertexBufferLayoutDescriptor *,uint64_t))objc_msgSend)((void*)self, (void*)sel_getUid("setObject:atIndexedSubscript:"), bufferDesc, index);
+    return ((void(*)(void*,void*,MTLVertexBufferLayoutDescriptor *,uint64_t))objc_msgSend)((void*)self, oc.MTLVertexBufferLayoutDescriptorArray.setObject_atIndexedSubscript, bufferDesc, index);
 }
 static void MTLVertexAttributeDescriptor_setFormat(MTLVertexAttributeDescriptor * self, MTLVertexFormat val) {
-    return ((void(*)(void*,void*,MTLVertexFormat))objc_msgSend)((void*)self, (void*)sel_getUid("setFormat:"), val);
+    return ((void(*)(void*,void*,MTLVertexFormat))objc_msgSend)((void*)self, oc.MTLVertexAttributeDescriptor.setFormat, val);
 }
 static MTLVertexFormat MTLVertexAttributeDescriptor_format(MTLVertexAttributeDescriptor * self) {
-    return ((MTLVertexFormat(*)(void*,void*))objc_msgSend)((void*)self, (void*)sel_getUid("format"));
+    return ((MTLVertexFormat(*)(void*,void*))objc_msgSend)((void*)self, oc.MTLVertexAttributeDescriptor.format);
 }
 static void MTLVertexAttributeDescriptor_setOffset(MTLVertexAttributeDescriptor * self, uint64_t val) {
-    return ((void(*)(void*,void*,uint64_t))objc_msgSend)((void*)self, (void*)sel_getUid("setOffset:"), val);
+    return ((void(*)(void*,void*,uint64_t))objc_msgSend)((void*)self, oc.MTLVertexAttributeDescriptor.setOffset, val);
 }
 static uint64_t MTLVertexAttributeDescriptor_offset(MTLVertexAttributeDescriptor * self) {
-    return ((uint64_t(*)(void*,void*))objc_msgSend)((void*)self, (void*)sel_getUid("offset"));
+    return ((uint64_t(*)(void*,void*))objc_msgSend)((void*)self, oc.MTLVertexAttributeDescriptor.offset);
 }
 static void MTLVertexAttributeDescriptor_setBufferIndex(MTLVertexAttributeDescriptor * self, uint64_t val) {
-    return ((void(*)(void*,void*,uint64_t))objc_msgSend)((void*)self, (void*)sel_getUid("setBufferIndex:"), val);
+    return ((void(*)(void*,void*,uint64_t))objc_msgSend)((void*)self, oc.MTLVertexAttributeDescriptor.setBufferIndex, val);
 }
 static uint64_t MTLVertexAttributeDescriptor_bufferIndex(MTLVertexAttributeDescriptor * self) {
-    return ((uint64_t(*)(void*,void*))objc_msgSend)((void*)self, (void*)sel_getUid("bufferIndex"));
+    return ((uint64_t(*)(void*,void*))objc_msgSend)((void*)self, oc.MTLVertexAttributeDescriptor.bufferIndex);
 }
 static MTLVertexAttributeDescriptor * MTLVertexAttributeDescriptorArray_objectAtIndexedSubscript(MTLVertexAttributeDescriptorArray * self, uint64_t index) {
-    return ((MTLVertexAttributeDescriptor *(*)(void*,void*,uint64_t))objc_msgSend)((void*)self, (void*)sel_getUid("objectAtIndexedSubscript:"), index);
+    return ((MTLVertexAttributeDescriptor *(*)(void*,void*,uint64_t))objc_msgSend)((void*)self, oc.MTLVertexAttributeDescriptorArray.objectAtIndexedSubscript, index);
 }
 static void MTLVertexAttributeDescriptorArray_setObject_atIndexedSubscript(MTLVertexAttributeDescriptorArray * self, MTLVertexAttributeDescriptor * attributeDesc, uint64_t index) {
-    return ((void(*)(void*,void*,MTLVertexAttributeDescriptor *,uint64_t))objc_msgSend)((void*)self, (void*)sel_getUid("setObject:atIndexedSubscript:"), attributeDesc, index);
+    return ((void(*)(void*,void*,MTLVertexAttributeDescriptor *,uint64_t))objc_msgSend)((void*)self, oc.MTLVertexAttributeDescriptorArray.setObject_atIndexedSubscript, attributeDesc, index);
 }
 static MTLVertexDescriptor * MTLVertexDescriptor_vertexDescriptor(void) {
-    return ((MTLVertexDescriptor *(*)(void*,void*))objc_msgSend)((void*)objc_getClass("MTLVertexDescriptor"), (void*)sel_getUid("vertexDescriptor"));
+    return ((MTLVertexDescriptor *(*)(void*,void*))objc_msgSend)(oc.MTLVertexDescriptor.cls, oc.MTLVertexDescriptor.vertexDescriptor);
 }
 static MTLVertexBufferLayoutDescriptorArray * MTLVertexDescriptor_layouts(MTLVertexDescriptor * self) {
-    return ((MTLVertexBufferLayoutDescriptorArray *(*)(void*,void*))objc_msgSend)((void*)self, (void*)sel_getUid("layouts"));
+    return ((MTLVertexBufferLayoutDescriptorArray *(*)(void*,void*))objc_msgSend)((void*)self, oc.MTLVertexDescriptor.layouts);
 }
 static MTLVertexAttributeDescriptorArray * MTLVertexDescriptor_attributes(MTLVertexDescriptor * self) {
-    return ((MTLVertexAttributeDescriptorArray *(*)(void*,void*))objc_msgSend)((void*)self, (void*)sel_getUid("attributes"));
+    return ((MTLVertexAttributeDescriptorArray *(*)(void*,void*))objc_msgSend)((void*)self, oc.MTLVertexDescriptor.attributes);
 }
 static void MTKView_setDevice(MTKView * self, MTLDevice* val) {
-    return ((void(*)(void*,void*,MTLDevice*))objc_msgSend)((void*)self, (void*)sel_getUid("setDevice:"), val);
+    return ((void(*)(void*,void*,MTLDevice*))objc_msgSend)((void*)self, oc.MTKView.setDevice, val);
 }
 static MTLDevice* MTKView_device(MTKView * self) {
-    return ((MTLDevice*(*)(void*,void*))objc_msgSend)((void*)self, (void*)sel_getUid("device"));
+    return ((MTLDevice*(*)(void*,void*))objc_msgSend)((void*)self, oc.MTKView.device);
 }
 static CAMetalDrawable* MTKView_currentDrawable(MTKView * self) {
-    return ((CAMetalDrawable*(*)(void*,void*))objc_msgSend)((void*)self, (void*)sel_getUid("currentDrawable"));
+    return ((CAMetalDrawable*(*)(void*,void*))objc_msgSend)((void*)self, oc.MTKView.currentDrawable);
 }
 static void MTKView_setColorPixelFormat(MTKView * self, MTLPixelFormat val) {
-    return ((void(*)(void*,void*,MTLPixelFormat))objc_msgSend)((void*)self, (void*)sel_getUid("setColorPixelFormat:"), val);
+    return ((void(*)(void*,void*,MTLPixelFormat))objc_msgSend)((void*)self, oc.MTKView.setColorPixelFormat, val);
 }
 static MTLPixelFormat MTKView_colorPixelFormat(MTKView * self) {
-    return ((MTLPixelFormat(*)(void*,void*))objc_msgSend)((void*)self, (void*)sel_getUid("colorPixelFormat"));
+    return ((MTLPixelFormat(*)(void*,void*))objc_msgSend)((void*)self, oc.MTKView.colorPixelFormat);
 }
 static void MTKView_setDepthStencilPixelFormat(MTKView * self, MTLPixelFormat val) {
-    return ((void(*)(void*,void*,MTLPixelFormat))objc_msgSend)((void*)self, (void*)sel_getUid("setDepthStencilPixelFormat:"), val);
+    return ((void(*)(void*,void*,MTLPixelFormat))objc_msgSend)((void*)self, oc.MTKView.setDepthStencilPixelFormat, val);
 }
 static MTLPixelFormat MTKView_depthStencilPixelFormat(MTKView * self) {
-    return ((MTLPixelFormat(*)(void*,void*))objc_msgSend)((void*)self, (void*)sel_getUid("depthStencilPixelFormat"));
+    return ((MTLPixelFormat(*)(void*,void*))objc_msgSend)((void*)self, oc.MTKView.depthStencilPixelFormat);
 }
 static void MTKView_setSampleCount(MTKView * self, uint64_t val) {
-    return ((void(*)(void*,void*,uint64_t))objc_msgSend)((void*)self, (void*)sel_getUid("setSampleCount:"), val);
+    return ((void(*)(void*,void*,uint64_t))objc_msgSend)((void*)self, oc.MTKView.setSampleCount, val);
 }
 static uint64_t MTKView_sampleCount(MTKView * self) {
-    return ((uint64_t(*)(void*,void*))objc_msgSend)((void*)self, (void*)sel_getUid("sampleCount"));
+    return ((uint64_t(*)(void*,void*))objc_msgSend)((void*)self, oc.MTKView.sampleCount);
 }
 static MTLRenderPassDescriptor * MTKView_currentRenderPassDescriptor(MTKView * self) {
-    return ((MTLRenderPassDescriptor *(*)(void*,void*))objc_msgSend)((void*)self, (void*)sel_getUid("currentRenderPassDescriptor"));
+    return ((MTLRenderPassDescriptor *(*)(void*,void*))objc_msgSend)((void*)self, oc.MTKView.currentRenderPassDescriptor);
 }
 static void MTKView_setPreferredFramesPerSecond(MTKView * self, int64_t val) {
-    return ((void(*)(void*,void*,int64_t))objc_msgSend)((void*)self, (void*)sel_getUid("setPreferredFramesPerSecond:"), val);
+    return ((void(*)(void*,void*,int64_t))objc_msgSend)((void*)self, oc.MTKView.setPreferredFramesPerSecond, val);
 }
 static int64_t MTKView_preferredFramesPerSecond(MTKView * self) {
-    return ((int64_t(*)(void*,void*))objc_msgSend)((void*)self, (void*)sel_getUid("preferredFramesPerSecond"));
+    return ((int64_t(*)(void*,void*))objc_msgSend)((void*)self, oc.MTKView.preferredFramesPerSecond);
 }
 static void MTKView_setAutoResizeDrawable(MTKView * self, bool val) {
-    return ((void(*)(void*,void*,bool))objc_msgSend)((void*)self, (void*)sel_getUid("setAutoResizeDrawable:"), val);
+    return ((void(*)(void*,void*,bool))objc_msgSend)((void*)self, oc.MTKView.setAutoResizeDrawable, val);
 }
 static bool MTKView_autoResizeDrawable(MTKView * self) {
-    return ((bool(*)(void*,void*))objc_msgSend)((void*)self, (void*)sel_getUid("autoResizeDrawable"));
+    return ((bool(*)(void*,void*))objc_msgSend)((void*)self, oc.MTKView.autoResizeDrawable);
 }

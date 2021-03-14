@@ -17,6 +17,11 @@
         "dispatch_semaphore_create": [ ],
         "dispatch_semaphore_wait": [ ],
         "dispatch_semaphore_signal": [ ],
+        "NSObject": [
+            "alloc",
+            "init",
+            "release"
+        ],
         "CGPoint": [ ],
         "CGSize": [ ],
         "NSRect": [ ],

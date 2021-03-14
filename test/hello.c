@@ -37,34 +37,34 @@ static struct Block_literal_1 block = {
     .descriptor = &block_desc,
 };
 
-id app_delegate;
-id win_delegate;
-MTKView* mtk_view;
-MTLCommandQueue* mtl_queue;
-dispatch_semaphore_t sem;
-MTLBuffer* mtl_buf;
-MTLRenderPipelineState* mtl_rps;
-MTLDepthStencilState* mtl_dss;
+static id app_delegate;
+static id win_delegate;
+static MTKView* mtk_view;
+static MTLCommandQueue* mtl_queue;
+static dispatch_semaphore_t sem;
+static MTLBuffer* mtl_buf;
+static MTLRenderPipelineState* mtl_rps;
+static MTLDepthStencilState* mtl_dss;
 
-id oc_alloc(Class cls) {
-    return ((id(*)(id,SEL))objc_msgSend)((id)cls, sel_getUid("alloc"));
+static id oc_alloc(Class cls) {
+    return ((id(*)(id,SEL))objc_msgSend)((id)cls, oc.NSObject.alloc);
 }
 
-id oc_alloc_init(Class cls) {
-    return ((id(*)(id,SEL))objc_msgSend)(oc_alloc(cls), sel_getUid("init"));
+static id oc_alloc_init(Class cls) {
+    return (id)NSObject_init((NSObject*)oc_alloc(cls));
 }
 
-void oc_release(id obj) {
-    ((void(*)(id,SEL))objc_msgSend)(obj, sel_getUid("release"));
+static void oc_release(id obj) {
+    NSObject_release((NSObject*)obj);
 }
 
-void app_didFinishLaunching(id obj, SEL sel, NSNotification* notification) {
+static void app_didFinishLaunching(id obj, SEL sel, NSNotification* notification) {
     uint64_t style_mask = 
         NSWindowStyleMaskTitled |
         NSWindowStyleMaskClosable |
         NSWindowStyleMaskMiniaturizable |
         NSWindowStyleMaskResizable;
-    NSWindow* win = (NSWindow*) oc_alloc(objc_lookUpClass("NSWindow"));
+    NSWindow* win = (NSWindow*) oc_alloc(oc.NSWindow.cls);
     NSWindow_initWithContentRect_styleMask_backing_defer(
         win,
         (NSRect){ .origin = { 0, 0 }, .size = { 300, 300 } },
@@ -149,7 +149,7 @@ void app_didFinishLaunching(id obj, SEL sel, NSNotification* notification) {
     MTLVertexBufferLayoutDescriptor_setStepFunction(layout0, MTLVertexStepFunctionPerVertex);
     MTLVertexBufferLayoutDescriptor_setStepRate(layout0, 1);
 
-    MTLRenderPipelineDescriptor* rp_desc = (MTLRenderPipelineDescriptor*) oc_alloc_init(objc_lookUpClass("MTLRenderPipelineDescriptor"));
+    MTLRenderPipelineDescriptor* rp_desc = (MTLRenderPipelineDescriptor*) oc_alloc_init(oc.MTLRenderPipelineDescriptor.cls);
     MTLRenderPipelineDescriptor_setVertexDescriptor(rp_desc, vtx_desc);
     MTLRenderPipelineDescriptor_setVertexFunction(rp_desc, vs_func);
     MTLRenderPipelineDescriptor_setFragmentFunction(rp_desc, fs_func);
@@ -170,7 +170,7 @@ void app_didFinishLaunching(id obj, SEL sel, NSNotification* notification) {
     oc_release((id)lib);
     printf("mtl_rps: %p\n", mtl_rps);
 
-    MTLDepthStencilDescriptor* ds_desc = (MTLDepthStencilDescriptor*) oc_alloc_init(objc_lookUpClass("MTLDepthStencilDescriptor"));
+    MTLDepthStencilDescriptor* ds_desc = (MTLDepthStencilDescriptor*) oc_alloc_init(oc.MTLDepthStencilDescriptor.cls);
     MTLDepthStencilDescriptor_setDepthCompareFunction(ds_desc, MTLCompareFunctionAlways);
     MTLDepthStencilDescriptor_setDepthWriteEnabled(ds_desc, false);
     mtl_dss = MTLDevice_newDepthStencilStateWithDescriptor(mtl_device, ds_desc);
@@ -178,35 +178,35 @@ void app_didFinishLaunching(id obj, SEL sel, NSNotification* notification) {
     printf("mtl_dss: %p\n", mtl_dss);
 }
 
-bool app_applicationShouldTerminateAfterLastWindowClosed(id obj, SEL sel, NSApplication* sender) {
+static bool app_applicationShouldTerminateAfterLastWindowClosed(id obj, SEL sel, NSApplication* sender) {
     return true;
 }
 
-bool win_windowShouldClose(id obj, SEL sel, id sender) {
+static bool win_windowShouldClose(id obj, SEL sel, id sender) {
     printf("windowShouldClose() called\n");
     return true;
 }
 
-bool view_isOpaque(id obj, SEL sel) {
+static bool view_isOpaque(id obj, SEL sel) {
     printf("isOpaque() called\n");
     return true;
 }
 
-bool view_canBecomeKeyView(id obj, SEL sel) {
+static bool view_canBecomeKeyView(id obj, SEL sel) {
     printf("canBecomeKeyView() called\n");
     return true;
 }
 
-bool view_acceptsFirstResponder(id obj, SEL sel) {
+static bool view_acceptsFirstResponder(id obj, SEL sel) {
     printf("acceptsFirstResponder() called\n");
     return true;
 }
 
-void completed_handler(void* block, void* cmd_buffer) {
+static void completed_handler(void* block, void* cmd_buffer) {
     dispatch_semaphore_signal(sem);
 }
 
-void view_drawRect(id obj, SEL sel, NSRect dirtyRect) {
+static void view_drawRect(id obj, SEL sel, NSRect dirtyRect) {
     static double green = 0.0;
     green += 0.01;
     if (green > 1.0) {
@@ -215,7 +215,6 @@ void view_drawRect(id obj, SEL sel, NSRect dirtyRect) {
 
     // begin pass
     dispatch_semaphore_wait(sem, DISPATCH_TIME_FOREVER);
-
     MTLRenderPassDescriptor* pass_desc = MTKView_currentRenderPassDescriptor(mtk_view);
     MTLRenderPassColorAttachmentDescriptorArray* rpcad_array = MTLRenderPassDescriptor_colorAttachments(pass_desc);
     MTLRenderPassColorAttachmentDescriptor* color_desc = MTLRenderPassColorAttachmentDescriptorArray_objectAtIndexedSubscript(rpcad_array, 0);
@@ -224,7 +223,6 @@ void view_drawRect(id obj, SEL sel, NSRect dirtyRect) {
     MTLRenderPassColorAttachmentDescriptor_setClearColor(color_desc, (MTLClearColor){ 1.0, green, 0.0, 1.0 });
     MTLRenderPassAttachmentDescriptor_setLoadAction((MTLRenderPassAttachmentDescriptor*)depth_desc, MTLLoadActionClear);
     MTLRenderPassDepthAttachmentDescriptor_setClearDepth(depth_desc, 1.0);
-
     MTLCommandBuffer* cmd_buf = MTLCommandQueue_commandBuffer(mtl_queue);
     MTLRenderCommandEncoder* cmd_enc = MTLCommandBuffer_renderCommandEncoderWithDescriptor(cmd_buf, pass_desc);
 
@@ -249,9 +247,10 @@ void view_drawRect(id obj, SEL sel, NSRect dirtyRect) {
     MTLCommandBuffer_commit(cmd_buf);
 }
 
-void init_runtime(void) {
-    // app-delegate
-    Class app_delegate_class = objc_allocateClassPair(objc_lookUpClass("NSObject"), "HelloAppDelegate", 0);
+static void register_classes(void) {
+
+    // register an app-delegate class
+    Class app_delegate_class = objc_allocateClassPair(oc.NSObject.cls, "HelloAppDelegate", 0);
     assert(app_delegate_class);
     class_addMethod(app_delegate_class, sel_getUid("applicationDidFinishLaunching:"), (IMP)app_didFinishLaunching, "v@:@");
     class_addMethod(app_delegate_class, sel_getUid("applicationShouldTerminateAfterLastWindowClosed:"), (IMP)app_applicationShouldTerminateAfterLastWindowClosed, "B@:@");
@@ -260,16 +259,16 @@ void init_runtime(void) {
     assert(app_delegate);
     printf("app_delegate: %p\n", app_delegate);
 
-    // window delegate
-    Class win_delegate_class = objc_allocateClassPair(objc_lookUpClass("NSObject"), "HelloWinDelegate", 0);
+    // register a window delegate class
+    Class win_delegate_class = objc_allocateClassPair(oc.NSObject.cls, "HelloWinDelegate", 0);
     assert(win_delegate_class);
     class_addMethod(win_delegate_class, sel_getUid("windowShouldClose:"), (IMP)win_windowShouldClose, "B@:@");
     win_delegate = oc_alloc_init(win_delegate_class);
     assert(win_delegate);
     printf("win_delegate: %p\n", win_delegate);
 
-    // MTKView subclass
-    Class mtk_view_class = objc_allocateClassPair(objc_lookUpClass("MTKView"), "HelloMtkView", 0);
+    // register a MTKView subclass
+    Class mtk_view_class = objc_allocateClassPair(oc.MTKView.cls, "HelloMtkView", 0);
     assert(mtk_view_class);
     class_addMethod(mtk_view_class, sel_getUid("isOpaque"), (IMP)view_isOpaque, "B@:");
     class_addMethod(mtk_view_class, sel_getUid("canBecomeKeyView"), (IMP)view_canBecomeKeyView, "B@:");
@@ -281,7 +280,11 @@ void init_runtime(void) {
 }
 
 int main() {
-    init_runtime();
+    // preload ObjC runtime class pointers and selectors
+    oc_initialize();
+    // register our own classes
+    register_classes();
+    // ...and the usual NSApplication stuff...
     NSApplication* app = NSApplication_sharedApplication();
     NSApplication_setActivationPolicy(app, NSApplicationActivationPolicyRegular);
     NSApplication_setDelegate(app, (NSApplicationDelegate*)app_delegate);

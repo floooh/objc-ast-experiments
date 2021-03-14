@@ -1,1 +1,1 @@
-clang hello.m -o hello_objc -Wall -Wno-unused-function -framework Cocoa -framework Metal -framework MetalKit
+clang hello.m -o hello_objc -Os -Wall -Wno-unused-function -framework Cocoa -framework Metal -framework MetalKit
