@@ -1,3 +1,4 @@
+// code generated, don't edit!
 #include <stdint.h>
 #include <objc/objc-runtime.h>
 

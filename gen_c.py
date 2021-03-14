@@ -69,6 +69,7 @@ def classify_return_type(type):
         return None
 
 def write_header():
+    l("// code generated, don't edit!")
     l('#include <stdint.h>')
     l("#include <objc/objc-runtime.h>")
     l('')
