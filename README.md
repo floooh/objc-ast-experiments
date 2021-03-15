@@ -1,15 +1,15 @@
 This is an experiment to create language bindings to macOS 
 Objective-C APIs by parsing the output of 'clang -ast-dump=json'.
 
-To dampen the expectations a bit: it's useful for replacing specific
-snippets of Objective-C code, but it's probably too brittle for creating 
-a general solution for writing large macOS applications in 'random'
-programming languages. Reason being that the output of 'clang -ast-dump'
-exposes tons of small type definition details which need to be handled
-specifically by the output parser. Supporting new system header declarations
-is mostly a trial-and-error process where the parser balks at some of the
-more complex type definitions in the macOS system headers, so adding
-new declarations to be 'exported' is a trial-and-error process.
+To dampen the expectations a bit: it's useful for replacing specific snippets
+of Objective-C code, but it's probably too brittle as a general solution for
+writing large macOS applications in 'random' programming languages. Reason
+being that the output of 'clang -ast-dump' exposes tons of small type
+definition details which need to be handled specifically by the output
+parser. Supporting new system header declarations is mostly a trial-and-error
+process where the parser balks at some of the more complex type definitions
+in the macOS system headers, so adding new declarations to be 'exported' is a
+trial-and-error process.
 
 ## How it works
 
