@@ -1,386 +1,6 @@
 // code generated, don't edit!
 #include <stdint.h>
-#include <objc/objc-runtime.h>
-
-static struct {
-    struct {
-        void* cls;
-        void* release;
-        void* init;
-        void* alloc;
-    } NSObject;
-    struct {
-        void* cls;
-        void* stringWithUTF8String;
-    } NSString;
-    struct {
-        void* cls;
-    } NSNotification;
-    struct {
-        void* cls;
-    } NSError;
-    struct {
-        void* cls;
-    } NSResponder;
-    struct {
-        void* cls;
-    } NSView;
-    struct {
-        void* cls;
-        void* sharedApplication;
-        void* activateIgnoringOtherApps;
-        void* run;
-        void* setActivationPolicy;
-        void* setDelegate;
-    } NSApplication;
-    struct {
-        void* cls;
-    } NSApplicationDelegate;
-    struct {
-        void* cls;
-        void* initWithContentRect_styleMask_backing_defer;
-        void* setContentView;
-        void* contentView;
-        void* makeFirstResponder;
-        void* center;
-        void* makeKeyAndOrderFront;
-        void* setTitle;
-        void* setDelegate;
-        void* setAcceptsMouseMovedEvents;
-        void* acceptsMouseMovedEvents;
-        void* setRestorable;
-        void* isRestorable;
-    } NSWindow;
-    struct {
-        void* cls;
-    } NSWindowDelegate;
-    struct {
-        void* cls;
-        void* endEncoding;
-    } MTLCommandEncoder;
-    struct {
-        void* cls;
-    } MTLBuffer;
-    struct {
-        void* cls;
-    } MTLFunction;
-    struct {
-        void* cls;
-    } MTLCompileOptions;
-    struct {
-        void* cls;
-        void* newFunctionWithName;
-    } MTLLibrary;
-    struct {
-        void* cls;
-        void* newCommandQueue;
-        void* newBufferWithBytes_length_options;
-        void* newDepthStencilStateWithDescriptor;
-        void* newLibraryWithSource_options_error;
-        void* newRenderPipelineStateWithDescriptor_error;
-    } MTLDevice;
-    struct {
-        void* cls;
-        void* setLoadAction;
-        void* loadAction;
-    } MTLRenderPassAttachmentDescriptor;
-    struct {
-        void* cls;
-        void* setClearColor;
-        void* clearColor;
-    } MTLRenderPassColorAttachmentDescriptor;
-    struct {
-        void* cls;
-        void* setClearDepth;
-        void* clearDepth;
-    } MTLRenderPassDepthAttachmentDescriptor;
-    struct {
-        void* cls;
-        void* objectAtIndexedSubscript;
-        void* setObject_atIndexedSubscript;
-    } MTLRenderPassColorAttachmentDescriptorArray;
-    struct {
-        void* cls;
-        void* colorAttachments;
-        void* setDepthAttachment;
-        void* depthAttachment;
-    } MTLRenderPassDescriptor;
-    struct {
-        void* cls;
-        void* commit;
-        void* presentDrawable;
-        void* addCompletedHandler;
-        void* renderCommandEncoderWithDescriptor;
-    } MTLCommandBuffer;
-    struct {
-        void* cls;
-        void* commandBuffer;
-    } MTLCommandQueue;
-    struct {
-        void* cls;
-        void* setDepthCompareFunction;
-        void* depthCompareFunction;
-        void* setDepthWriteEnabled;
-        void* isDepthWriteEnabled;
-    } MTLDepthStencilDescriptor;
-    struct {
-        void* cls;
-    } MTLDepthStencilState;
-    struct {
-        void* cls;
-    } MTLDrawable;
-    struct {
-        void* cls;
-        void* setRenderPipelineState;
-        void* setVertexBuffer_offset_atIndex;
-        void* setCullMode;
-        void* setDepthStencilState;
-        void* drawPrimitives_vertexStart_vertexCount;
-    } MTLRenderCommandEncoder;
-    struct {
-        void* cls;
-        void* setPixelFormat;
-        void* pixelFormat;
-        void* setBlendingEnabled;
-        void* isBlendingEnabled;
-        void* setWriteMask;
-        void* writeMask;
-    } MTLRenderPipelineColorAttachmentDescriptor;
-    struct {
-        void* cls;
-        void* setVertexFunction;
-        void* vertexFunction;
-        void* setFragmentFunction;
-        void* fragmentFunction;
-        void* setVertexDescriptor;
-        void* vertexDescriptor;
-        void* setSampleCount;
-        void* sampleCount;
-        void* setAlphaToCoverageEnabled;
-        void* isAlphaToCoverageEnabled;
-        void* setAlphaToOneEnabled;
-        void* isAlphaToOneEnabled;
-        void* setRasterizationEnabled;
-        void* isRasterizationEnabled;
-        void* colorAttachments;
-        void* setDepthAttachmentPixelFormat;
-        void* depthAttachmentPixelFormat;
-    } MTLRenderPipelineDescriptor;
-    struct {
-        void* cls;
-    } MTLRenderPipelineState;
-    struct {
-        void* cls;
-        void* objectAtIndexedSubscript;
-        void* setObject_atIndexedSubscript;
-    } MTLRenderPipelineColorAttachmentDescriptorArray;
-    struct {
-        void* cls;
-        void* setStride;
-        void* stride;
-        void* setStepFunction;
-        void* stepFunction;
-        void* setStepRate;
-        void* stepRate;
-    } MTLVertexBufferLayoutDescriptor;
-    struct {
-        void* cls;
-        void* objectAtIndexedSubscript;
-        void* setObject_atIndexedSubscript;
-    } MTLVertexBufferLayoutDescriptorArray;
-    struct {
-        void* cls;
-        void* setFormat;
-        void* format;
-        void* setOffset;
-        void* offset;
-        void* setBufferIndex;
-        void* bufferIndex;
-    } MTLVertexAttributeDescriptor;
-    struct {
-        void* cls;
-        void* objectAtIndexedSubscript;
-        void* setObject_atIndexedSubscript;
-    } MTLVertexAttributeDescriptorArray;
-    struct {
-        void* cls;
-        void* vertexDescriptor;
-        void* layouts;
-        void* attributes;
-    } MTLVertexDescriptor;
-    struct {
-        void* cls;
-    } CAMetalDrawable;
-    struct {
-        void* cls;
-        void* setDevice;
-        void* device;
-        void* currentDrawable;
-        void* setColorPixelFormat;
-        void* colorPixelFormat;
-        void* setDepthStencilPixelFormat;
-        void* depthStencilPixelFormat;
-        void* setSampleCount;
-        void* sampleCount;
-        void* currentRenderPassDescriptor;
-        void* setPreferredFramesPerSecond;
-        void* preferredFramesPerSecond;
-        void* setAutoResizeDrawable;
-        void* autoResizeDrawable;
-    } MTKView;
-} oc;
-
-static void oc_initialize(void) {
-    oc.NSObject.cls = (void*)objc_getClass("NSObject");
-    oc.NSObject.release = (void*)sel_getUid("release");
-    oc.NSObject.init = (void*)sel_getUid("init");
-    oc.NSObject.alloc = (void*)sel_getUid("alloc");
-    oc.NSString.cls = (void*)objc_getClass("NSString");
-    oc.NSString.stringWithUTF8String = (void*)sel_getUid("stringWithUTF8String:");
-    oc.NSNotification.cls = (void*)objc_getClass("NSNotification");
-    oc.NSError.cls = (void*)objc_getClass("NSError");
-    oc.NSResponder.cls = (void*)objc_getClass("NSResponder");
-    oc.NSView.cls = (void*)objc_getClass("NSView");
-    oc.NSApplication.cls = (void*)objc_getClass("NSApplication");
-    oc.NSApplication.sharedApplication = (void*)sel_getUid("sharedApplication");
-    oc.NSApplication.activateIgnoringOtherApps = (void*)sel_getUid("activateIgnoringOtherApps:");
-    oc.NSApplication.run = (void*)sel_getUid("run");
-    oc.NSApplication.setActivationPolicy = (void*)sel_getUid("setActivationPolicy:");
-    oc.NSApplication.setDelegate = (void*)sel_getUid("setDelegate:");
-    oc.NSApplicationDelegate.cls = (void*)objc_getClass("NSApplicationDelegate");
-    oc.NSWindow.cls = (void*)objc_getClass("NSWindow");
-    oc.NSWindow.initWithContentRect_styleMask_backing_defer = (void*)sel_getUid("initWithContentRect:styleMask:backing:defer:");
-    oc.NSWindow.setContentView = (void*)sel_getUid("setContentView:");
-    oc.NSWindow.contentView = (void*)sel_getUid("contentView");
-    oc.NSWindow.makeFirstResponder = (void*)sel_getUid("makeFirstResponder:");
-    oc.NSWindow.center = (void*)sel_getUid("center");
-    oc.NSWindow.makeKeyAndOrderFront = (void*)sel_getUid("makeKeyAndOrderFront:");
-    oc.NSWindow.setTitle = (void*)sel_getUid("setTitle:");
-    oc.NSWindow.setDelegate = (void*)sel_getUid("setDelegate:");
-    oc.NSWindow.setAcceptsMouseMovedEvents = (void*)sel_getUid("setAcceptsMouseMovedEvents:");
-    oc.NSWindow.acceptsMouseMovedEvents = (void*)sel_getUid("acceptsMouseMovedEvents");
-    oc.NSWindow.setRestorable = (void*)sel_getUid("setRestorable:");
-    oc.NSWindow.isRestorable = (void*)sel_getUid("isRestorable");
-    oc.NSWindowDelegate.cls = (void*)objc_getClass("NSWindowDelegate");
-    oc.MTLCommandEncoder.cls = (void*)objc_getClass("MTLCommandEncoder");
-    oc.MTLCommandEncoder.endEncoding = (void*)sel_getUid("endEncoding");
-    oc.MTLBuffer.cls = (void*)objc_getClass("MTLBuffer");
-    oc.MTLFunction.cls = (void*)objc_getClass("MTLFunction");
-    oc.MTLCompileOptions.cls = (void*)objc_getClass("MTLCompileOptions");
-    oc.MTLLibrary.cls = (void*)objc_getClass("MTLLibrary");
-    oc.MTLLibrary.newFunctionWithName = (void*)sel_getUid("newFunctionWithName:");
-    oc.MTLDevice.cls = (void*)objc_getClass("MTLDevice");
-    oc.MTLDevice.newCommandQueue = (void*)sel_getUid("newCommandQueue");
-    oc.MTLDevice.newBufferWithBytes_length_options = (void*)sel_getUid("newBufferWithBytes:length:options:");
-    oc.MTLDevice.newDepthStencilStateWithDescriptor = (void*)sel_getUid("newDepthStencilStateWithDescriptor:");
-    oc.MTLDevice.newLibraryWithSource_options_error = (void*)sel_getUid("newLibraryWithSource:options:error:");
-    oc.MTLDevice.newRenderPipelineStateWithDescriptor_error = (void*)sel_getUid("newRenderPipelineStateWithDescriptor:error:");
-    oc.MTLRenderPassAttachmentDescriptor.cls = (void*)objc_getClass("MTLRenderPassAttachmentDescriptor");
-    oc.MTLRenderPassAttachmentDescriptor.setLoadAction = (void*)sel_getUid("setLoadAction:");
-    oc.MTLRenderPassAttachmentDescriptor.loadAction = (void*)sel_getUid("loadAction");
-    oc.MTLRenderPassColorAttachmentDescriptor.cls = (void*)objc_getClass("MTLRenderPassColorAttachmentDescriptor");
-    oc.MTLRenderPassColorAttachmentDescriptor.setClearColor = (void*)sel_getUid("setClearColor:");
-    oc.MTLRenderPassColorAttachmentDescriptor.clearColor = (void*)sel_getUid("clearColor");
-    oc.MTLRenderPassDepthAttachmentDescriptor.cls = (void*)objc_getClass("MTLRenderPassDepthAttachmentDescriptor");
-    oc.MTLRenderPassDepthAttachmentDescriptor.setClearDepth = (void*)sel_getUid("setClearDepth:");
-    oc.MTLRenderPassDepthAttachmentDescriptor.clearDepth = (void*)sel_getUid("clearDepth");
-    oc.MTLRenderPassColorAttachmentDescriptorArray.cls = (void*)objc_getClass("MTLRenderPassColorAttachmentDescriptorArray");
-    oc.MTLRenderPassColorAttachmentDescriptorArray.objectAtIndexedSubscript = (void*)sel_getUid("objectAtIndexedSubscript:");
-    oc.MTLRenderPassColorAttachmentDescriptorArray.setObject_atIndexedSubscript = (void*)sel_getUid("setObject:atIndexedSubscript:");
-    oc.MTLRenderPassDescriptor.cls = (void*)objc_getClass("MTLRenderPassDescriptor");
-    oc.MTLRenderPassDescriptor.colorAttachments = (void*)sel_getUid("colorAttachments");
-    oc.MTLRenderPassDescriptor.setDepthAttachment = (void*)sel_getUid("setDepthAttachment:");
-    oc.MTLRenderPassDescriptor.depthAttachment = (void*)sel_getUid("depthAttachment");
-    oc.MTLCommandBuffer.cls = (void*)objc_getClass("MTLCommandBuffer");
-    oc.MTLCommandBuffer.commit = (void*)sel_getUid("commit");
-    oc.MTLCommandBuffer.presentDrawable = (void*)sel_getUid("presentDrawable:");
-    oc.MTLCommandBuffer.addCompletedHandler = (void*)sel_getUid("addCompletedHandler:");
-    oc.MTLCommandBuffer.renderCommandEncoderWithDescriptor = (void*)sel_getUid("renderCommandEncoderWithDescriptor:");
-    oc.MTLCommandQueue.cls = (void*)objc_getClass("MTLCommandQueue");
-    oc.MTLCommandQueue.commandBuffer = (void*)sel_getUid("commandBuffer");
-    oc.MTLDepthStencilDescriptor.cls = (void*)objc_getClass("MTLDepthStencilDescriptor");
-    oc.MTLDepthStencilDescriptor.setDepthCompareFunction = (void*)sel_getUid("setDepthCompareFunction:");
-    oc.MTLDepthStencilDescriptor.depthCompareFunction = (void*)sel_getUid("depthCompareFunction");
-    oc.MTLDepthStencilDescriptor.setDepthWriteEnabled = (void*)sel_getUid("setDepthWriteEnabled:");
-    oc.MTLDepthStencilDescriptor.isDepthWriteEnabled = (void*)sel_getUid("isDepthWriteEnabled");
-    oc.MTLDepthStencilState.cls = (void*)objc_getClass("MTLDepthStencilState");
-    oc.MTLDrawable.cls = (void*)objc_getClass("MTLDrawable");
-    oc.MTLRenderCommandEncoder.cls = (void*)objc_getClass("MTLRenderCommandEncoder");
-    oc.MTLRenderCommandEncoder.setRenderPipelineState = (void*)sel_getUid("setRenderPipelineState:");
-    oc.MTLRenderCommandEncoder.setVertexBuffer_offset_atIndex = (void*)sel_getUid("setVertexBuffer:offset:atIndex:");
-    oc.MTLRenderCommandEncoder.setCullMode = (void*)sel_getUid("setCullMode:");
-    oc.MTLRenderCommandEncoder.setDepthStencilState = (void*)sel_getUid("setDepthStencilState:");
-    oc.MTLRenderCommandEncoder.drawPrimitives_vertexStart_vertexCount = (void*)sel_getUid("drawPrimitives:vertexStart:vertexCount:");
-    oc.MTLRenderPipelineColorAttachmentDescriptor.cls = (void*)objc_getClass("MTLRenderPipelineColorAttachmentDescriptor");
-    oc.MTLRenderPipelineColorAttachmentDescriptor.setPixelFormat = (void*)sel_getUid("setPixelFormat:");
-    oc.MTLRenderPipelineColorAttachmentDescriptor.pixelFormat = (void*)sel_getUid("pixelFormat");
-    oc.MTLRenderPipelineColorAttachmentDescriptor.setBlendingEnabled = (void*)sel_getUid("setBlendingEnabled:");
-    oc.MTLRenderPipelineColorAttachmentDescriptor.isBlendingEnabled = (void*)sel_getUid("isBlendingEnabled");
-    oc.MTLRenderPipelineColorAttachmentDescriptor.setWriteMask = (void*)sel_getUid("setWriteMask:");
-    oc.MTLRenderPipelineColorAttachmentDescriptor.writeMask = (void*)sel_getUid("writeMask");
-    oc.MTLRenderPipelineDescriptor.cls = (void*)objc_getClass("MTLRenderPipelineDescriptor");
-    oc.MTLRenderPipelineDescriptor.setVertexFunction = (void*)sel_getUid("setVertexFunction:");
-    oc.MTLRenderPipelineDescriptor.vertexFunction = (void*)sel_getUid("vertexFunction");
-    oc.MTLRenderPipelineDescriptor.setFragmentFunction = (void*)sel_getUid("setFragmentFunction:");
-    oc.MTLRenderPipelineDescriptor.fragmentFunction = (void*)sel_getUid("fragmentFunction");
-    oc.MTLRenderPipelineDescriptor.setVertexDescriptor = (void*)sel_getUid("setVertexDescriptor:");
-    oc.MTLRenderPipelineDescriptor.vertexDescriptor = (void*)sel_getUid("vertexDescriptor");
-    oc.MTLRenderPipelineDescriptor.setSampleCount = (void*)sel_getUid("setSampleCount:");
-    oc.MTLRenderPipelineDescriptor.sampleCount = (void*)sel_getUid("sampleCount");
-    oc.MTLRenderPipelineDescriptor.setAlphaToCoverageEnabled = (void*)sel_getUid("setAlphaToCoverageEnabled:");
-    oc.MTLRenderPipelineDescriptor.isAlphaToCoverageEnabled = (void*)sel_getUid("isAlphaToCoverageEnabled");
-    oc.MTLRenderPipelineDescriptor.setAlphaToOneEnabled = (void*)sel_getUid("setAlphaToOneEnabled:");
-    oc.MTLRenderPipelineDescriptor.isAlphaToOneEnabled = (void*)sel_getUid("isAlphaToOneEnabled");
-    oc.MTLRenderPipelineDescriptor.setRasterizationEnabled = (void*)sel_getUid("setRasterizationEnabled:");
-    oc.MTLRenderPipelineDescriptor.isRasterizationEnabled = (void*)sel_getUid("isRasterizationEnabled");
-    oc.MTLRenderPipelineDescriptor.colorAttachments = (void*)sel_getUid("colorAttachments");
-    oc.MTLRenderPipelineDescriptor.setDepthAttachmentPixelFormat = (void*)sel_getUid("setDepthAttachmentPixelFormat:");
-    oc.MTLRenderPipelineDescriptor.depthAttachmentPixelFormat = (void*)sel_getUid("depthAttachmentPixelFormat");
-    oc.MTLRenderPipelineState.cls = (void*)objc_getClass("MTLRenderPipelineState");
-    oc.MTLRenderPipelineColorAttachmentDescriptorArray.cls = (void*)objc_getClass("MTLRenderPipelineColorAttachmentDescriptorArray");
-    oc.MTLRenderPipelineColorAttachmentDescriptorArray.objectAtIndexedSubscript = (void*)sel_getUid("objectAtIndexedSubscript:");
-    oc.MTLRenderPipelineColorAttachmentDescriptorArray.setObject_atIndexedSubscript = (void*)sel_getUid("setObject:atIndexedSubscript:");
-    oc.MTLVertexBufferLayoutDescriptor.cls = (void*)objc_getClass("MTLVertexBufferLayoutDescriptor");
-    oc.MTLVertexBufferLayoutDescriptor.setStride = (void*)sel_getUid("setStride:");
-    oc.MTLVertexBufferLayoutDescriptor.stride = (void*)sel_getUid("stride");
-    oc.MTLVertexBufferLayoutDescriptor.setStepFunction = (void*)sel_getUid("setStepFunction:");
-    oc.MTLVertexBufferLayoutDescriptor.stepFunction = (void*)sel_getUid("stepFunction");
-    oc.MTLVertexBufferLayoutDescriptor.setStepRate = (void*)sel_getUid("setStepRate:");
-    oc.MTLVertexBufferLayoutDescriptor.stepRate = (void*)sel_getUid("stepRate");
-    oc.MTLVertexBufferLayoutDescriptorArray.cls = (void*)objc_getClass("MTLVertexBufferLayoutDescriptorArray");
-    oc.MTLVertexBufferLayoutDescriptorArray.objectAtIndexedSubscript = (void*)sel_getUid("objectAtIndexedSubscript:");
-    oc.MTLVertexBufferLayoutDescriptorArray.setObject_atIndexedSubscript = (void*)sel_getUid("setObject:atIndexedSubscript:");
-    oc.MTLVertexAttributeDescriptor.cls = (void*)objc_getClass("MTLVertexAttributeDescriptor");
-    oc.MTLVertexAttributeDescriptor.setFormat = (void*)sel_getUid("setFormat:");
-    oc.MTLVertexAttributeDescriptor.format = (void*)sel_getUid("format");
-    oc.MTLVertexAttributeDescriptor.setOffset = (void*)sel_getUid("setOffset:");
-    oc.MTLVertexAttributeDescriptor.offset = (void*)sel_getUid("offset");
-    oc.MTLVertexAttributeDescriptor.setBufferIndex = (void*)sel_getUid("setBufferIndex:");
-    oc.MTLVertexAttributeDescriptor.bufferIndex = (void*)sel_getUid("bufferIndex");
-    oc.MTLVertexAttributeDescriptorArray.cls = (void*)objc_getClass("MTLVertexAttributeDescriptorArray");
-    oc.MTLVertexAttributeDescriptorArray.objectAtIndexedSubscript = (void*)sel_getUid("objectAtIndexedSubscript:");
-    oc.MTLVertexAttributeDescriptorArray.setObject_atIndexedSubscript = (void*)sel_getUid("setObject:atIndexedSubscript:");
-    oc.MTLVertexDescriptor.cls = (void*)objc_getClass("MTLVertexDescriptor");
-    oc.MTLVertexDescriptor.vertexDescriptor = (void*)sel_getUid("vertexDescriptor");
-    oc.MTLVertexDescriptor.layouts = (void*)sel_getUid("layouts");
-    oc.MTLVertexDescriptor.attributes = (void*)sel_getUid("attributes");
-    oc.CAMetalDrawable.cls = (void*)objc_getClass("CAMetalDrawable");
-    oc.MTKView.cls = (void*)objc_getClass("MTKView");
-    oc.MTKView.setDevice = (void*)sel_getUid("setDevice:");
-    oc.MTKView.device = (void*)sel_getUid("device");
-    oc.MTKView.currentDrawable = (void*)sel_getUid("currentDrawable");
-    oc.MTKView.setColorPixelFormat = (void*)sel_getUid("setColorPixelFormat:");
-    oc.MTKView.colorPixelFormat = (void*)sel_getUid("colorPixelFormat");
-    oc.MTKView.setDepthStencilPixelFormat = (void*)sel_getUid("setDepthStencilPixelFormat:");
-    oc.MTKView.depthStencilPixelFormat = (void*)sel_getUid("depthStencilPixelFormat");
-    oc.MTKView.setSampleCount = (void*)sel_getUid("setSampleCount:");
-    oc.MTKView.sampleCount = (void*)sel_getUid("sampleCount");
-    oc.MTKView.currentRenderPassDescriptor = (void*)sel_getUid("currentRenderPassDescriptor");
-    oc.MTKView.setPreferredFramesPerSecond = (void*)sel_getUid("setPreferredFramesPerSecond:");
-    oc.MTKView.preferredFramesPerSecond = (void*)sel_getUid("preferredFramesPerSecond");
-    oc.MTKView.setAutoResizeDrawable = (void*)sel_getUid("setAutoResizeDrawable:");
-    oc.MTKView.autoResizeDrawable = (void*)sel_getUid("autoResizeDrawable");
-}
+#include <stdbool.h>
 
 typedef struct NSObject { } NSObject;
 typedef unsigned long long dispatch_time_t;
@@ -750,10 +370,398 @@ typedef struct MTLClearColor {
     double alpha;
 } MTLClearColor;
 
+extern void* sel_getUid(const char * str);
 extern dispatch_semaphore_t dispatch_semaphore_create(intptr_t value);
 extern intptr_t dispatch_semaphore_wait(dispatch_semaphore_t dsema, dispatch_time_t timeout);
 extern intptr_t dispatch_semaphore_signal(dispatch_semaphore_t dsema);
 extern MTLDevice* MTLCreateSystemDefaultDevice(void);
+extern void* objc_getClass(const char * name);
+extern bool class_addMethod(void* cls, void* name, void* imp, const char * types);
+extern void* objc_allocateClassPair(void* superclass, const char * name, size_t extraBytes);
+extern void objc_registerClassPair(void* cls);
+extern void objc_msgSend(void);
+extern void objc_msgSend_stret(void);
+extern void objc_msgSend_fpret(void);
+static struct {
+    struct {
+        void* cls;
+        void* release;
+        void* init;
+        void* alloc;
+    } NSObject;
+    struct {
+        void* cls;
+        void* stringWithUTF8String;
+    } NSString;
+    struct {
+        void* cls;
+    } NSNotification;
+    struct {
+        void* cls;
+    } NSError;
+    struct {
+        void* cls;
+    } NSResponder;
+    struct {
+        void* cls;
+    } NSView;
+    struct {
+        void* cls;
+        void* sharedApplication;
+        void* activateIgnoringOtherApps;
+        void* run;
+        void* setActivationPolicy;
+        void* setDelegate;
+    } NSApplication;
+    struct {
+        void* cls;
+    } NSApplicationDelegate;
+    struct {
+        void* cls;
+        void* initWithContentRect_styleMask_backing_defer;
+        void* setContentView;
+        void* contentView;
+        void* makeFirstResponder;
+        void* center;
+        void* makeKeyAndOrderFront;
+        void* setTitle;
+        void* setDelegate;
+        void* setAcceptsMouseMovedEvents;
+        void* acceptsMouseMovedEvents;
+        void* setRestorable;
+        void* isRestorable;
+    } NSWindow;
+    struct {
+        void* cls;
+    } NSWindowDelegate;
+    struct {
+        void* cls;
+        void* endEncoding;
+    } MTLCommandEncoder;
+    struct {
+        void* cls;
+    } MTLBuffer;
+    struct {
+        void* cls;
+    } MTLFunction;
+    struct {
+        void* cls;
+    } MTLCompileOptions;
+    struct {
+        void* cls;
+        void* newFunctionWithName;
+    } MTLLibrary;
+    struct {
+        void* cls;
+        void* newCommandQueue;
+        void* newBufferWithBytes_length_options;
+        void* newDepthStencilStateWithDescriptor;
+        void* newLibraryWithSource_options_error;
+        void* newRenderPipelineStateWithDescriptor_error;
+    } MTLDevice;
+    struct {
+        void* cls;
+        void* setLoadAction;
+        void* loadAction;
+    } MTLRenderPassAttachmentDescriptor;
+    struct {
+        void* cls;
+        void* setClearColor;
+        void* clearColor;
+    } MTLRenderPassColorAttachmentDescriptor;
+    struct {
+        void* cls;
+        void* setClearDepth;
+        void* clearDepth;
+    } MTLRenderPassDepthAttachmentDescriptor;
+    struct {
+        void* cls;
+        void* objectAtIndexedSubscript;
+        void* setObject_atIndexedSubscript;
+    } MTLRenderPassColorAttachmentDescriptorArray;
+    struct {
+        void* cls;
+        void* colorAttachments;
+        void* setDepthAttachment;
+        void* depthAttachment;
+    } MTLRenderPassDescriptor;
+    struct {
+        void* cls;
+        void* commit;
+        void* presentDrawable;
+        void* addCompletedHandler;
+        void* renderCommandEncoderWithDescriptor;
+    } MTLCommandBuffer;
+    struct {
+        void* cls;
+        void* commandBuffer;
+    } MTLCommandQueue;
+    struct {
+        void* cls;
+        void* setDepthCompareFunction;
+        void* depthCompareFunction;
+        void* setDepthWriteEnabled;
+        void* isDepthWriteEnabled;
+    } MTLDepthStencilDescriptor;
+    struct {
+        void* cls;
+    } MTLDepthStencilState;
+    struct {
+        void* cls;
+    } MTLDrawable;
+    struct {
+        void* cls;
+        void* setRenderPipelineState;
+        void* setVertexBuffer_offset_atIndex;
+        void* setCullMode;
+        void* setDepthStencilState;
+        void* drawPrimitives_vertexStart_vertexCount;
+    } MTLRenderCommandEncoder;
+    struct {
+        void* cls;
+        void* setPixelFormat;
+        void* pixelFormat;
+        void* setBlendingEnabled;
+        void* isBlendingEnabled;
+        void* setWriteMask;
+        void* writeMask;
+    } MTLRenderPipelineColorAttachmentDescriptor;
+    struct {
+        void* cls;
+        void* setVertexFunction;
+        void* vertexFunction;
+        void* setFragmentFunction;
+        void* fragmentFunction;
+        void* setVertexDescriptor;
+        void* vertexDescriptor;
+        void* setSampleCount;
+        void* sampleCount;
+        void* setAlphaToCoverageEnabled;
+        void* isAlphaToCoverageEnabled;
+        void* setAlphaToOneEnabled;
+        void* isAlphaToOneEnabled;
+        void* setRasterizationEnabled;
+        void* isRasterizationEnabled;
+        void* colorAttachments;
+        void* setDepthAttachmentPixelFormat;
+        void* depthAttachmentPixelFormat;
+    } MTLRenderPipelineDescriptor;
+    struct {
+        void* cls;
+    } MTLRenderPipelineState;
+    struct {
+        void* cls;
+        void* objectAtIndexedSubscript;
+        void* setObject_atIndexedSubscript;
+    } MTLRenderPipelineColorAttachmentDescriptorArray;
+    struct {
+        void* cls;
+        void* setStride;
+        void* stride;
+        void* setStepFunction;
+        void* stepFunction;
+        void* setStepRate;
+        void* stepRate;
+    } MTLVertexBufferLayoutDescriptor;
+    struct {
+        void* cls;
+        void* objectAtIndexedSubscript;
+        void* setObject_atIndexedSubscript;
+    } MTLVertexBufferLayoutDescriptorArray;
+    struct {
+        void* cls;
+        void* setFormat;
+        void* format;
+        void* setOffset;
+        void* offset;
+        void* setBufferIndex;
+        void* bufferIndex;
+    } MTLVertexAttributeDescriptor;
+    struct {
+        void* cls;
+        void* objectAtIndexedSubscript;
+        void* setObject_atIndexedSubscript;
+    } MTLVertexAttributeDescriptorArray;
+    struct {
+        void* cls;
+        void* vertexDescriptor;
+        void* layouts;
+        void* attributes;
+    } MTLVertexDescriptor;
+    struct {
+        void* cls;
+    } CAMetalDrawable;
+    struct {
+        void* cls;
+        void* setDevice;
+        void* device;
+        void* currentDrawable;
+        void* setColorPixelFormat;
+        void* colorPixelFormat;
+        void* setDepthStencilPixelFormat;
+        void* depthStencilPixelFormat;
+        void* setSampleCount;
+        void* sampleCount;
+        void* currentRenderPassDescriptor;
+        void* setPreferredFramesPerSecond;
+        void* preferredFramesPerSecond;
+        void* setAutoResizeDrawable;
+        void* autoResizeDrawable;
+    } MTKView;
+} oc;
+
+static void oc_initialize(void) {
+    oc.NSObject.cls = objc_getClass("NSObject");
+    oc.NSObject.release = sel_getUid("release");
+    oc.NSObject.init = sel_getUid("init");
+    oc.NSObject.alloc = sel_getUid("alloc");
+    oc.NSString.cls = objc_getClass("NSString");
+    oc.NSString.stringWithUTF8String = sel_getUid("stringWithUTF8String:");
+    oc.NSNotification.cls = objc_getClass("NSNotification");
+    oc.NSError.cls = objc_getClass("NSError");
+    oc.NSResponder.cls = objc_getClass("NSResponder");
+    oc.NSView.cls = objc_getClass("NSView");
+    oc.NSApplication.cls = objc_getClass("NSApplication");
+    oc.NSApplication.sharedApplication = sel_getUid("sharedApplication");
+    oc.NSApplication.activateIgnoringOtherApps = sel_getUid("activateIgnoringOtherApps:");
+    oc.NSApplication.run = sel_getUid("run");
+    oc.NSApplication.setActivationPolicy = sel_getUid("setActivationPolicy:");
+    oc.NSApplication.setDelegate = sel_getUid("setDelegate:");
+    oc.NSApplicationDelegate.cls = objc_getClass("NSApplicationDelegate");
+    oc.NSWindow.cls = objc_getClass("NSWindow");
+    oc.NSWindow.initWithContentRect_styleMask_backing_defer = sel_getUid("initWithContentRect:styleMask:backing:defer:");
+    oc.NSWindow.setContentView = sel_getUid("setContentView:");
+    oc.NSWindow.contentView = sel_getUid("contentView");
+    oc.NSWindow.makeFirstResponder = sel_getUid("makeFirstResponder:");
+    oc.NSWindow.center = sel_getUid("center");
+    oc.NSWindow.makeKeyAndOrderFront = sel_getUid("makeKeyAndOrderFront:");
+    oc.NSWindow.setTitle = sel_getUid("setTitle:");
+    oc.NSWindow.setDelegate = sel_getUid("setDelegate:");
+    oc.NSWindow.setAcceptsMouseMovedEvents = sel_getUid("setAcceptsMouseMovedEvents:");
+    oc.NSWindow.acceptsMouseMovedEvents = sel_getUid("acceptsMouseMovedEvents");
+    oc.NSWindow.setRestorable = sel_getUid("setRestorable:");
+    oc.NSWindow.isRestorable = sel_getUid("isRestorable");
+    oc.NSWindowDelegate.cls = objc_getClass("NSWindowDelegate");
+    oc.MTLCommandEncoder.cls = objc_getClass("MTLCommandEncoder");
+    oc.MTLCommandEncoder.endEncoding = sel_getUid("endEncoding");
+    oc.MTLBuffer.cls = objc_getClass("MTLBuffer");
+    oc.MTLFunction.cls = objc_getClass("MTLFunction");
+    oc.MTLCompileOptions.cls = objc_getClass("MTLCompileOptions");
+    oc.MTLLibrary.cls = objc_getClass("MTLLibrary");
+    oc.MTLLibrary.newFunctionWithName = sel_getUid("newFunctionWithName:");
+    oc.MTLDevice.cls = objc_getClass("MTLDevice");
+    oc.MTLDevice.newCommandQueue = sel_getUid("newCommandQueue");
+    oc.MTLDevice.newBufferWithBytes_length_options = sel_getUid("newBufferWithBytes:length:options:");
+    oc.MTLDevice.newDepthStencilStateWithDescriptor = sel_getUid("newDepthStencilStateWithDescriptor:");
+    oc.MTLDevice.newLibraryWithSource_options_error = sel_getUid("newLibraryWithSource:options:error:");
+    oc.MTLDevice.newRenderPipelineStateWithDescriptor_error = sel_getUid("newRenderPipelineStateWithDescriptor:error:");
+    oc.MTLRenderPassAttachmentDescriptor.cls = objc_getClass("MTLRenderPassAttachmentDescriptor");
+    oc.MTLRenderPassAttachmentDescriptor.setLoadAction = sel_getUid("setLoadAction:");
+    oc.MTLRenderPassAttachmentDescriptor.loadAction = sel_getUid("loadAction");
+    oc.MTLRenderPassColorAttachmentDescriptor.cls = objc_getClass("MTLRenderPassColorAttachmentDescriptor");
+    oc.MTLRenderPassColorAttachmentDescriptor.setClearColor = sel_getUid("setClearColor:");
+    oc.MTLRenderPassColorAttachmentDescriptor.clearColor = sel_getUid("clearColor");
+    oc.MTLRenderPassDepthAttachmentDescriptor.cls = objc_getClass("MTLRenderPassDepthAttachmentDescriptor");
+    oc.MTLRenderPassDepthAttachmentDescriptor.setClearDepth = sel_getUid("setClearDepth:");
+    oc.MTLRenderPassDepthAttachmentDescriptor.clearDepth = sel_getUid("clearDepth");
+    oc.MTLRenderPassColorAttachmentDescriptorArray.cls = objc_getClass("MTLRenderPassColorAttachmentDescriptorArray");
+    oc.MTLRenderPassColorAttachmentDescriptorArray.objectAtIndexedSubscript = sel_getUid("objectAtIndexedSubscript:");
+    oc.MTLRenderPassColorAttachmentDescriptorArray.setObject_atIndexedSubscript = sel_getUid("setObject:atIndexedSubscript:");
+    oc.MTLRenderPassDescriptor.cls = objc_getClass("MTLRenderPassDescriptor");
+    oc.MTLRenderPassDescriptor.colorAttachments = sel_getUid("colorAttachments");
+    oc.MTLRenderPassDescriptor.setDepthAttachment = sel_getUid("setDepthAttachment:");
+    oc.MTLRenderPassDescriptor.depthAttachment = sel_getUid("depthAttachment");
+    oc.MTLCommandBuffer.cls = objc_getClass("MTLCommandBuffer");
+    oc.MTLCommandBuffer.commit = sel_getUid("commit");
+    oc.MTLCommandBuffer.presentDrawable = sel_getUid("presentDrawable:");
+    oc.MTLCommandBuffer.addCompletedHandler = sel_getUid("addCompletedHandler:");
+    oc.MTLCommandBuffer.renderCommandEncoderWithDescriptor = sel_getUid("renderCommandEncoderWithDescriptor:");
+    oc.MTLCommandQueue.cls = objc_getClass("MTLCommandQueue");
+    oc.MTLCommandQueue.commandBuffer = sel_getUid("commandBuffer");
+    oc.MTLDepthStencilDescriptor.cls = objc_getClass("MTLDepthStencilDescriptor");
+    oc.MTLDepthStencilDescriptor.setDepthCompareFunction = sel_getUid("setDepthCompareFunction:");
+    oc.MTLDepthStencilDescriptor.depthCompareFunction = sel_getUid("depthCompareFunction");
+    oc.MTLDepthStencilDescriptor.setDepthWriteEnabled = sel_getUid("setDepthWriteEnabled:");
+    oc.MTLDepthStencilDescriptor.isDepthWriteEnabled = sel_getUid("isDepthWriteEnabled");
+    oc.MTLDepthStencilState.cls = objc_getClass("MTLDepthStencilState");
+    oc.MTLDrawable.cls = objc_getClass("MTLDrawable");
+    oc.MTLRenderCommandEncoder.cls = objc_getClass("MTLRenderCommandEncoder");
+    oc.MTLRenderCommandEncoder.setRenderPipelineState = sel_getUid("setRenderPipelineState:");
+    oc.MTLRenderCommandEncoder.setVertexBuffer_offset_atIndex = sel_getUid("setVertexBuffer:offset:atIndex:");
+    oc.MTLRenderCommandEncoder.setCullMode = sel_getUid("setCullMode:");
+    oc.MTLRenderCommandEncoder.setDepthStencilState = sel_getUid("setDepthStencilState:");
+    oc.MTLRenderCommandEncoder.drawPrimitives_vertexStart_vertexCount = sel_getUid("drawPrimitives:vertexStart:vertexCount:");
+    oc.MTLRenderPipelineColorAttachmentDescriptor.cls = objc_getClass("MTLRenderPipelineColorAttachmentDescriptor");
+    oc.MTLRenderPipelineColorAttachmentDescriptor.setPixelFormat = sel_getUid("setPixelFormat:");
+    oc.MTLRenderPipelineColorAttachmentDescriptor.pixelFormat = sel_getUid("pixelFormat");
+    oc.MTLRenderPipelineColorAttachmentDescriptor.setBlendingEnabled = sel_getUid("setBlendingEnabled:");
+    oc.MTLRenderPipelineColorAttachmentDescriptor.isBlendingEnabled = sel_getUid("isBlendingEnabled");
+    oc.MTLRenderPipelineColorAttachmentDescriptor.setWriteMask = sel_getUid("setWriteMask:");
+    oc.MTLRenderPipelineColorAttachmentDescriptor.writeMask = sel_getUid("writeMask");
+    oc.MTLRenderPipelineDescriptor.cls = objc_getClass("MTLRenderPipelineDescriptor");
+    oc.MTLRenderPipelineDescriptor.setVertexFunction = sel_getUid("setVertexFunction:");
+    oc.MTLRenderPipelineDescriptor.vertexFunction = sel_getUid("vertexFunction");
+    oc.MTLRenderPipelineDescriptor.setFragmentFunction = sel_getUid("setFragmentFunction:");
+    oc.MTLRenderPipelineDescriptor.fragmentFunction = sel_getUid("fragmentFunction");
+    oc.MTLRenderPipelineDescriptor.setVertexDescriptor = sel_getUid("setVertexDescriptor:");
+    oc.MTLRenderPipelineDescriptor.vertexDescriptor = sel_getUid("vertexDescriptor");
+    oc.MTLRenderPipelineDescriptor.setSampleCount = sel_getUid("setSampleCount:");
+    oc.MTLRenderPipelineDescriptor.sampleCount = sel_getUid("sampleCount");
+    oc.MTLRenderPipelineDescriptor.setAlphaToCoverageEnabled = sel_getUid("setAlphaToCoverageEnabled:");
+    oc.MTLRenderPipelineDescriptor.isAlphaToCoverageEnabled = sel_getUid("isAlphaToCoverageEnabled");
+    oc.MTLRenderPipelineDescriptor.setAlphaToOneEnabled = sel_getUid("setAlphaToOneEnabled:");
+    oc.MTLRenderPipelineDescriptor.isAlphaToOneEnabled = sel_getUid("isAlphaToOneEnabled");
+    oc.MTLRenderPipelineDescriptor.setRasterizationEnabled = sel_getUid("setRasterizationEnabled:");
+    oc.MTLRenderPipelineDescriptor.isRasterizationEnabled = sel_getUid("isRasterizationEnabled");
+    oc.MTLRenderPipelineDescriptor.colorAttachments = sel_getUid("colorAttachments");
+    oc.MTLRenderPipelineDescriptor.setDepthAttachmentPixelFormat = sel_getUid("setDepthAttachmentPixelFormat:");
+    oc.MTLRenderPipelineDescriptor.depthAttachmentPixelFormat = sel_getUid("depthAttachmentPixelFormat");
+    oc.MTLRenderPipelineState.cls = objc_getClass("MTLRenderPipelineState");
+    oc.MTLRenderPipelineColorAttachmentDescriptorArray.cls = objc_getClass("MTLRenderPipelineColorAttachmentDescriptorArray");
+    oc.MTLRenderPipelineColorAttachmentDescriptorArray.objectAtIndexedSubscript = sel_getUid("objectAtIndexedSubscript:");
+    oc.MTLRenderPipelineColorAttachmentDescriptorArray.setObject_atIndexedSubscript = sel_getUid("setObject:atIndexedSubscript:");
+    oc.MTLVertexBufferLayoutDescriptor.cls = objc_getClass("MTLVertexBufferLayoutDescriptor");
+    oc.MTLVertexBufferLayoutDescriptor.setStride = sel_getUid("setStride:");
+    oc.MTLVertexBufferLayoutDescriptor.stride = sel_getUid("stride");
+    oc.MTLVertexBufferLayoutDescriptor.setStepFunction = sel_getUid("setStepFunction:");
+    oc.MTLVertexBufferLayoutDescriptor.stepFunction = sel_getUid("stepFunction");
+    oc.MTLVertexBufferLayoutDescriptor.setStepRate = sel_getUid("setStepRate:");
+    oc.MTLVertexBufferLayoutDescriptor.stepRate = sel_getUid("stepRate");
+    oc.MTLVertexBufferLayoutDescriptorArray.cls = objc_getClass("MTLVertexBufferLayoutDescriptorArray");
+    oc.MTLVertexBufferLayoutDescriptorArray.objectAtIndexedSubscript = sel_getUid("objectAtIndexedSubscript:");
+    oc.MTLVertexBufferLayoutDescriptorArray.setObject_atIndexedSubscript = sel_getUid("setObject:atIndexedSubscript:");
+    oc.MTLVertexAttributeDescriptor.cls = objc_getClass("MTLVertexAttributeDescriptor");
+    oc.MTLVertexAttributeDescriptor.setFormat = sel_getUid("setFormat:");
+    oc.MTLVertexAttributeDescriptor.format = sel_getUid("format");
+    oc.MTLVertexAttributeDescriptor.setOffset = sel_getUid("setOffset:");
+    oc.MTLVertexAttributeDescriptor.offset = sel_getUid("offset");
+    oc.MTLVertexAttributeDescriptor.setBufferIndex = sel_getUid("setBufferIndex:");
+    oc.MTLVertexAttributeDescriptor.bufferIndex = sel_getUid("bufferIndex");
+    oc.MTLVertexAttributeDescriptorArray.cls = objc_getClass("MTLVertexAttributeDescriptorArray");
+    oc.MTLVertexAttributeDescriptorArray.objectAtIndexedSubscript = sel_getUid("objectAtIndexedSubscript:");
+    oc.MTLVertexAttributeDescriptorArray.setObject_atIndexedSubscript = sel_getUid("setObject:atIndexedSubscript:");
+    oc.MTLVertexDescriptor.cls = objc_getClass("MTLVertexDescriptor");
+    oc.MTLVertexDescriptor.vertexDescriptor = sel_getUid("vertexDescriptor");
+    oc.MTLVertexDescriptor.layouts = sel_getUid("layouts");
+    oc.MTLVertexDescriptor.attributes = sel_getUid("attributes");
+    oc.CAMetalDrawable.cls = objc_getClass("CAMetalDrawable");
+    oc.MTKView.cls = objc_getClass("MTKView");
+    oc.MTKView.setDevice = sel_getUid("setDevice:");
+    oc.MTKView.device = sel_getUid("device");
+    oc.MTKView.currentDrawable = sel_getUid("currentDrawable");
+    oc.MTKView.setColorPixelFormat = sel_getUid("setColorPixelFormat:");
+    oc.MTKView.colorPixelFormat = sel_getUid("colorPixelFormat");
+    oc.MTKView.setDepthStencilPixelFormat = sel_getUid("setDepthStencilPixelFormat:");
+    oc.MTKView.depthStencilPixelFormat = sel_getUid("depthStencilPixelFormat");
+    oc.MTKView.setSampleCount = sel_getUid("setSampleCount:");
+    oc.MTKView.sampleCount = sel_getUid("sampleCount");
+    oc.MTKView.currentRenderPassDescriptor = sel_getUid("currentRenderPassDescriptor");
+    oc.MTKView.setPreferredFramesPerSecond = sel_getUid("setPreferredFramesPerSecond:");
+    oc.MTKView.preferredFramesPerSecond = sel_getUid("preferredFramesPerSecond");
+    oc.MTKView.setAutoResizeDrawable = sel_getUid("setAutoResizeDrawable:");
+    oc.MTKView.autoResizeDrawable = sel_getUid("autoResizeDrawable");
+}
+
 static void NSObject_release(NSObject * self) {
     return ((void(*)(void*,void*))objc_msgSend)((void*)self, oc.NSObject.release);
 }
@@ -796,8 +804,8 @@ static bool NSWindow_makeFirstResponder(NSWindow * self, NSResponder * responder
 static void NSWindow_center(NSWindow * self) {
     return ((void(*)(void*,void*))objc_msgSend)((void*)self, oc.NSWindow.center);
 }
-static void NSWindow_makeKeyAndOrderFront(NSWindow * self, id sender) {
-    return ((void(*)(void*,void*,id))objc_msgSend)((void*)self, oc.NSWindow.makeKeyAndOrderFront, sender);
+static void NSWindow_makeKeyAndOrderFront(NSWindow * self, void* sender) {
+    return ((void(*)(void*,void*,void*))objc_msgSend)((void*)self, oc.NSWindow.makeKeyAndOrderFront, sender);
 }
 static void NSWindow_setTitle(NSWindow * self, NSString * title) {
     return ((void(*)(void*,void*,NSString *))objc_msgSend)((void*)self, oc.NSWindow.setTitle, title);

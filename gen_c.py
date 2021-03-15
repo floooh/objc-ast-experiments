@@ -71,7 +71,7 @@ def classify_return_type(type):
 def write_header():
     l("// code generated, don't edit!")
     l('#include <stdint.h>')
-    l("#include <objc/objc-runtime.h>")
+    l('#include <stdbool.h>')
     l('')
 
 def write_typedefs(ir, c_prefix):
@@ -105,7 +105,6 @@ def expr_as_string(expr):
 def write_enums(ir, c_prefix):
     for decl in ir['decls']:
         if decl['kind'] == 'enum':
-            # FIXME: uses a clang extension to specific enum underlying type
             l(f"typedef enum {c_type(c_prefix, decl['name'])}: {c_type(c_prefix, decl['type']['type'])} {{")
             for item in decl['items']:
                 if 'expr' in item:
@@ -148,11 +147,11 @@ def write_class_metadata(ir, c_prefix):
     for class_decl in ir['decls']:
         if class_decl['kind'] == 'objc_class':
             class_name = class_decl['name']
-            l(f'    {c_prefix}oc.{class_name}.cls = (void*)objc_getClass("{class_name}");')
+            l(f'    {c_prefix}oc.{class_name}.cls = objc_getClass("{class_name}");')
             for method_decl in class_decl['items']:
                 if method_decl['kind'] == 'objc_method':
                     objc_method_name = method_decl['name']
-                    l(f'    {c_prefix}oc.{class_name}.{method_name(method_decl)} = (void*)sel_getUid("{objc_method_name}");')
+                    l(f'    {c_prefix}oc.{class_name}.{method_name(method_decl)} = sel_getUid("{objc_method_name}");')
     l('}\n')
 
 def objcmethod_func_name(c_prefix, objc_class_name, objc_method_name):
@@ -176,9 +175,7 @@ def objcfunc_args_as_string(c_prefix, self_type, class_name, method_name, args_d
     if self_type is not None:
         args.append('(void*)self')
     else:
-        # FIXME: use cached class 
         args.append(f'oc.{class_name}.cls')
-    # FIXME: use a cached selector
     args.append(f"oc.{class_name}.{method_name.replace(':','_').rstrip('_')}")
     for arg_decl in args_decl:
         args.append(arg_decl['name'])
@@ -239,11 +236,11 @@ def gen(ir, output_path):
     type_map = ir['c_typemap']
     extract_api_types(ir)
     write_header()
-    write_class_metadata(ir, c_prefix)
     write_typedefs(ir, c_prefix)
     write_enums(ir, c_prefix)
     write_structs(ir, c_prefix)
     write_extern_cfuncs(ir, c_prefix)
+    write_class_metadata(ir, c_prefix)
     write_objcmethod_funcs(ir, c_prefix)
     with open(output_path, 'w', newline='\n') as f_outp:
         f_outp.write(out_lines)

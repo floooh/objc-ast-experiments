@@ -144,6 +144,10 @@ def parse_function(decl):
     if 'inner' in decl:
         for arg in decl['inner']:
             if arg['kind'] == 'ParmVarDecl':
+                if not 'name' in arg:
+                    # ignore function definitions with unnamed args, these 
+                    # are most likely forward declarations
+                    return None
                 outp_arg = {}
                 outp_arg['name'] = arg['name']
                 outp_arg['type'] = parse_type(arg['type'])

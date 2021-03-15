@@ -1,6 +1,10 @@
 {
     "c_prefix": "",
     "c_typemap": {
+        "id":           "void*",
+        "SEL":          "void*",
+        "Class":        "void*",
+        "IMP":          "void*",
         "CGFloat":      "double",
         "NSUInteger":   "uint64_t",
         "NSInteger":    "int64_t",
@@ -9,9 +13,17 @@
     },
     "headers": {
         "imports": [ "Cocoa/Cocoa.h", "Metal/Metal.h", "MetalKit/MetalKit.h" ],
-        "includes": []
+        "includes": [ "objc/objc-runtime.h" ]
     },
     "exports": {
+        "objc_msgSend": [ ],
+        "objc_msgSend_stret": [ ],
+        "objc_msgSend_fpret": [ ],
+        "objc_allocateClassPair": [ ],
+        "objc_registerClassPair": [ ],
+        "objc_getClass": [ ],
+        "sel_getUid": [ ],
+        "class_addMethod": [ ],
         "dispatch_semaphore_t": [ ],
         "dispatch_time_t": [ ],
         "dispatch_semaphore_create": [ ],
