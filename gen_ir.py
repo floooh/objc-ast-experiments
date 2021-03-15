@@ -344,8 +344,7 @@ with tempfile.NamedTemporaryFile(mode="w", suffix='.m', delete=False) as fp:
     tempfile_name = fp.name
 
 output_json = gen(csrc_path = tempfile_name, filter = exports_json['exports'])
-output_json['c_prefix'] = exports_json['c_prefix']
-output_json['c_typemap'] = exports_json['c_typemap']
+output_json['language_options'] = exports_json['language_options']
 with open(output_path, 'w') as fp:
     json.dump(obj = output_json, fp=fp, indent=4)
 

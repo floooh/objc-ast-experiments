@@ -1,6 +1,8 @@
 *_ir.json
 *.pyc
 __pycache__/
+zig-cache/
 .vscode/
 hello_c
 hello_objc
+hello_zig

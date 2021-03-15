@@ -1,7 +1,7 @@
 #-------------------------------------------------------------------------------
 #   gen_c.py
 #
-#   Take the output of gen_ir.py and generate a C API.
+#   Take the output of gen_ir.py and generate a C API header.
 #-------------------------------------------------------------------------------
 import sys, json
 
@@ -111,8 +111,7 @@ def write_enums(ir, c_prefix):
                     l(f"    {item['name']} = {expr_as_string(item['expr'])},")
                 else:
                     l(f"    {item['name']},")
-            l(f"}} {c_type(c_prefix, decl['name'])};")
-            l('')
+            l(f"}} {c_type(c_prefix, decl['name'])};\n")
 
 def write_structs(ir, c_prefix):
     for decl in ir['decls']:
@@ -121,8 +120,7 @@ def write_structs(ir, c_prefix):
             l(f"typedef struct {struct_type} {{")
             for item in decl['items']:
                 l(f"    {c_type(c_prefix, item['type']['type'])} {item['name']};")
-            l(f"}} {struct_type};")
-            l('')
+            l(f"}} {struct_type};\n")
 
 # write a global variable which holds the class pointers and selector hashes
 def write_class_metadata(ir, c_prefix):
@@ -221,19 +219,18 @@ def write_objcmethod_funcs(ir, c_prefix):
                     l("}")
 
 def write_extern_cfuncs(ir, c_prefix):
-    for func_decl in ir['decls']:
-        if func_decl['kind'] == 'func':
-            func_name = func_decl['name']
-            return_type = c_type(c_prefix, func_decl['return_type']['type'])
-            args_str = cfunc_args_as_string(c_prefix, None, func_decl['args'])
+    for decl in ir['decls']:
+        if decl['kind'] == 'func':
+            func_name = decl['name']
+            return_type = c_type(c_prefix, decl['return_type']['type'])
+            args_str = cfunc_args_as_string(c_prefix, None, decl['args'])
             l(f"extern {return_type} {func_name}({args_str});")
 
 def gen(ir, output_path):
-    global c_prefix
     global type_map
     reset_globals()
-    c_prefix = ir['c_prefix']
-    type_map = ir['c_typemap']
+    c_prefix = ir['language_options']['c']['prefix']
+    type_map = ir['language_options']['c']['typemap']
     extract_api_types(ir)
     write_header()
     write_typedefs(ir, c_prefix)
@@ -247,7 +244,9 @@ def gen(ir, output_path):
 
 #-- main -----------------------------------------------------------------------
 if len(sys.argv) != 3:
-    sys.exit(f"expected args: [ir.json] [output.h], where:\n\n  ir.json: result of gen_ir.py\n  output.h: name of generated C header file\n")
+    sys.exit('''expected args: [ir.json] [output.h], where:\n
+    ir.json: result of gen_ir.py
+    output.h: name of generated C header file''')
 ir_path = sys.argv[1]
 output_path = sys.argv[2]
 if ir_path == output_path:

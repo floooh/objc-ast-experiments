@@ -1,15 +1,40 @@
 {
-    "c_prefix": "",
-    "c_typemap": {
-        "id":           "void*",
-        "SEL":          "void*",
-        "Class":        "void*",
-        "IMP":          "void*",
-        "CGFloat":      "double",
-        "NSUInteger":   "uint64_t",
-        "NSInteger":    "int64_t",
-        "BOOL":         "bool",
-        "MTLCommandBufferHandler": "void*"
+    "language_options": {
+        "c": {
+            "prefix": "",
+            "typemap": {
+                "id":           "void*",
+                "SEL":          "void*",
+                "Class":        "void*",
+                "IMP":          "void*",
+                "CGFloat":      "double",
+                "NSUInteger":   "uint64_t",
+                "NSInteger":    "int64_t",
+                "BOOL":         "bool",
+                "MTLCommandBufferHandler": "void*"
+            }
+        },
+        "zig": {
+            "typemap": {
+                "id":           "*c_void",
+                "SEL":          "*c_void",
+                "Class":        "*c_void",
+                "IMP":          "*c_void",
+                "const char *": "[*c]const u8",
+                "const void *": "*const c_void",
+                "intptr_t":     "isize",
+                "uintptr_t":    "usize",
+                "size_t":       "usize",
+                "CGFloat":      "f64",
+                "double":       "f64",
+                "NSUInteger":   "u64",
+                "NSInteger":    "i64",
+                "BOOL":         "bool",
+                "dispatch_semaphore_t": "*c_void",
+                "dispatch_time_t": "u64",
+                "MTLCommandBufferHandler": "*c_void"
+            }
+        }
     },
     "headers": {
         "imports": [ "Cocoa/Cocoa.h", "Metal/Metal.h", "MetalKit/MetalKit.h" ],
