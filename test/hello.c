@@ -82,7 +82,7 @@ static void app_didFinishLaunching(void* obj, void* sel, NSNotification* notific
     MTKView_setPreferredFramesPerSecond(mtk_view, 60);
     MTKView_setDevice(mtk_view, mtl_device);
     MTKView_setColorPixelFormat(mtk_view, MTLPixelFormatBGRA8Unorm);
-    MTKView_setDepthStencilPixelFormat(mtk_view, MTLPixelFormatDepth32Float_Stencil8);
+    MTKView_setDepthStencilPixelFormat(mtk_view, MTLPixelFormatDepth32Float);
     MTKView_setSampleCount(mtk_view, 1);
     MTKView_setAutoResizeDrawable(mtk_view, true);
 
@@ -157,7 +157,7 @@ static void app_didFinishLaunching(void* obj, void* sel, NSNotification* notific
     MTLRenderPipelineDescriptor_setAlphaToCoverageEnabled(rp_desc, false);
     MTLRenderPipelineDescriptor_setAlphaToOneEnabled(rp_desc, false);
     MTLRenderPipelineDescriptor_setRasterizationEnabled(rp_desc, true);
-    MTLRenderPipelineDescriptor_setDepthAttachmentPixelFormat(rp_desc, MTLPixelFormatDepth32Float_Stencil8);
+    MTLRenderPipelineDescriptor_setDepthAttachmentPixelFormat(rp_desc, MTLPixelFormatDepth32Float);
     MTLRenderPipelineColorAttachmentDescriptorArray* catt_arr = MTLRenderPipelineDescriptor_colorAttachments(rp_desc);
     MTLRenderPipelineColorAttachmentDescriptor* catt0 = MTLRenderPipelineColorAttachmentDescriptorArray_objectAtIndexedSubscript(catt_arr, 0);
     MTLRenderPipelineColorAttachmentDescriptor_setPixelFormat(catt0, MTLPixelFormatBGRA8Unorm);

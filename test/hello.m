@@ -45,7 +45,7 @@ dispatch_semaphore_t sem;
     mtk_view.preferredFramesPerSecond = 60;
     mtk_view.device = mtl_device;
     mtk_view.colorPixelFormat = MTLPixelFormatBGRA8Unorm;
-    mtk_view.depthStencilPixelFormat = MTLPixelFormatDepth32Float_Stencil8;
+    mtk_view.depthStencilPixelFormat = MTLPixelFormatDepth32Float;
     mtk_view.sampleCount = 1;
     mtk_view.autoResizeDrawable = true;
     
@@ -117,7 +117,7 @@ dispatch_semaphore_t sem;
     rp_desc.alphaToCoverageEnabled = NO;
     rp_desc.alphaToOneEnabled = NO;
     rp_desc.rasterizationEnabled = YES;
-    rp_desc.depthAttachmentPixelFormat = MTLPixelFormatDepth32Float_Stencil8;
+    rp_desc.depthAttachmentPixelFormat = MTLPixelFormatDepth32Float;
     rp_desc.colorAttachments[0].pixelFormat = MTLPixelFormatBGRA8Unorm;
     rp_desc.colorAttachments[0].writeMask = MTLColorWriteMaskAll;
     rp_desc.colorAttachments[0].blendingEnabled = NO;
