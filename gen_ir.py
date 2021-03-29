@@ -268,6 +268,7 @@ def parse_objc_interface_or_protocol_or_category(decl, item_filter):
     else:
         return None
 
+# FIXME: this can't parse anonymous enums currently (which are used in AudioToolbox.h)
 def parse_decl(decl, filter, all_decls):
     if 'name' not in decl:
         return None 
