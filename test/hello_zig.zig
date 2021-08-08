@@ -24,6 +24,10 @@ fn oc_release(obj:*NSObject) void {
 }
 
 export fn applicationDidFinishLaunching(obj:*c_void, sel:*c_void, notification:*NSNotification) void {
+    _ = obj;
+    _ = sel;
+    _ = notification;
+
     print("applicationDidFinishLaunching called\n", .{});
 
     const style_mask = 
@@ -46,6 +50,9 @@ export fn applicationDidFinishLaunching(obj:*c_void, sel:*c_void, notification:*
 }
 
 export fn applicationShouldTerminateAfterLastWindowClosed(obj:*c_void, sel:*c_void, sender:*NSApplication) bool {
+    _ = obj;
+    _ = sel;
+    _ = sender;
     print("applicationShouldTerminateAfterLastWindowClosed called\n", .{});
     return true;
 }
