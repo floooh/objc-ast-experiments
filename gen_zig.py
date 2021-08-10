@@ -2,6 +2,9 @@
 #   gen_zig.py
 #
 #   Take the output of gen_ir.py and generate a Zig module.
+#
+#   NOTE: Currently the Zig module depends on the C header and source file
+#   because of (ABI?) problems calling the objc_msgSend stubs from Zig.
 #-------------------------------------------------------------------------------
 import sys, json
 
@@ -85,25 +88,26 @@ def zigfunc_args_as_string(self_type, args_decl):
     else:
         return ', '.join(args)
 
-def classify_return_type(type):
-    if type in api_types:
-        api_type = api_types[type]
-        if api_type == 'enum':
-            return 'simple'
-        elif api_type == 'struct':
-            return 'struct'
-    elif type.startswith('*') or type.startswith('[*c]'):
-        return 'simple'
-    elif type in [ 'void', 'bool', 'i8', 'i16', 'i32', 'i64', 'u8', 'u16', 'u32', 'u64']:
-        return 'simple'
-    elif type in [ 'f32', 'f64' ]:
-        return 'float'
-    else:
-        print(f"don't know how to classify result type '{type}'")
-        return None
+# def classify_return_type(type):
+#     if type in api_types:
+#         api_type = api_types[type]
+#         if api_type == 'enum':
+#             return 'simple'
+#         elif api_type == 'struct':
+#             return 'struct'
+#     elif type.startswith('*') or type.startswith('[*c]'):
+#         return 'simple'
+#     elif type in [ 'void', 'bool', 'i8', 'i16', 'i32', 'i64', 'u8', 'u16', 'u32', 'u64']:
+#         return 'simple'
+#     elif type in [ 'f32', 'f64' ]:
+#         return 'float'
+#     else:
+#         print(f"don't know how to classify result type '{type}'")
+#         return None
 
-def write_header():
+def write_head():
     l("// machine generated, don't edit")
+    l('const c = @cImport(@cInclude("macos.h"));')
 
 def write_enums(ir):
     for decl in ir['decls']:
@@ -119,53 +123,42 @@ def write_enums(ir):
 def write_structs(ir):
     for decl in ir['decls']:
         if decl['kind'] == 'struct':
-            l(f"pub const {decl['name']} = extern struct {{")
-            for item in decl['items']:
-                l(f"    {item['name']}: {zig_type(item['type']['type'])},")
-            l("};\n")
+            l(f"pub const {decl['name']} = c.{decl['name']};")
 
 def write_extern_cfuncs(ir):
     for decl in ir['decls']:
         if decl['kind'] == 'func':
             func_name = decl['name']
-            # special case for the objc_msgSend functions
-            if func_name in ['objc_msgSend', 'objc_msgSend_stret', 'objc_msgSend_fpret']:
-                l(f"pub extern const {func_name}: c_void;")
-            else:
-                return_type = zig_type(decl['return_type']['type'])
-                args_str = zigfunc_args_as_string(None, decl['args'])
-                l(f"pub extern fn {func_name}({args_str}) {return_type};")
+            l(f"pub const {func_name} = c.{func_name};")
 
 def objcfunc_args_as_string(self_type, class_name, method_name, args_decl):
     args = []
     if self_type is not None:
         args.append('self')
-    else:
-        args.append(f'objc_getClass("{class_name}")')
-    args.append(f'sel_getUid("{method_name}")')
     for arg_decl in args_decl:
         args.append(zig_arg_name(arg_decl['name']))
     return ', '.join(args)
 
-def objcfunc_prototype_as_string(self_type, args_decl, return_type):
-    if self_type is not None:
-        args = [ f'*{self_type}', '*c_void' ] # id, SEL
-    else:
-        args = [ '*c_void', '*c_void' ]
-    for arg_decl in args_decl:
-        args.append(f"{zig_type(arg_decl['type']['type'])}")
-    args_str = ','.join(args)
-    proto_str = f"fn({args_str}) callconv(.C) {return_type}"
-    return proto_str
+# def objcfunc_prototype_as_string(self_type, args_decl, return_type):
+#     if self_type is not None:
+#         args = [ f'*{self_type}', '*c_void' ] # id, SEL
+#     else:
+#         args = [ '*c_void', '*c_void' ]
+#     for arg_decl in args_decl:
+#         args.append(f"{zig_type(arg_decl['type']['type'])}")
+#     args_str = ','.join(args)
+#     proto_str = f"fn({args_str}) callconv(.C) {return_type}"
+#     return proto_str
 
 def write_objc_classes(ir):
     for class_decl in ir['decls']:
         if class_decl['kind'] == 'objc_class':
             class_name = class_decl['name']
-            l(f"pub const {class_name} = opaque {{}};")
+            l(f"pub const {class_name} = c.{class_name};")
             for method_decl in class_decl['items']:
                 if method_decl['kind'] == 'objc_method':
-                    func_name = f"{class_name}_{method_decl['name'].replace(':','_').rstrip('_')}"
+                    c_func_name = f"{class_name}_{method_decl['name'].replace(':','_').rstrip('_')}"
+                    zig_func_name = c_func_name
                     return_type = zig_type(method_decl['return_type']['type'])
                     # special case 'instancetype'
                     if return_type == 'instancetype':
@@ -174,22 +167,19 @@ def write_objc_classes(ir):
                         self_type = class_name
                     else:
                         self_type = None
-                    return_type_class = classify_return_type(return_type)
-                    if return_type_class == 'simple':
-                        msgsend_func = 'objc_msgSend'
-                    elif return_type_class == 'float':
-                        msgsend_func = 'objc_msgSend_fpret'
-                    elif return_type_class == 'struct':
-                        msgsend_func = 'objc_msgSend_stret'
-                    else:
-                        msgsend_func = 'FIXME'
+                    # return_type_class = classify_return_type(return_type)
+                    # if return_type_class == 'simple':
+                    #     msgsend_func = 'objc_msgSend'
+                    # elif return_type_class == 'float':
+                    #     msgsend_func = 'objc_msgSend_fpret'
+                    # elif return_type_class == 'struct':
+                    #     msgsend_func = 'objc_msgSend_stret'
+                    # else:
+                    #     msgsend_func = 'FIXME'
                     arg_str = zigfunc_args_as_string(self_type, method_decl['args'])
-                    objc_proto_str = objcfunc_prototype_as_string(self_type, method_decl['args'], return_type)
                     objc_args_str = objcfunc_args_as_string(self_type, class_name, method_decl['name'], method_decl['args'])
-                    l(f"pub fn {func_name}({arg_str}) {return_type} {{")
-                    l(f"    const ftype = {objc_proto_str};")
-                    l(f"    const func: ftype = @ptrCast(ftype, &{msgsend_func});")
-                    l(f"    {'' if return_type=='void' else 'return '}func({objc_args_str});")
+                    l(f"pub fn {zig_func_name}({arg_str}) {return_type} {{")
+                    l(f"    {'' if return_type=='void' else 'return '}c.{c_func_name}({objc_args_str});")
                     l("}")
 
 def gen(ir, output_path):
@@ -197,7 +187,7 @@ def gen(ir, output_path):
     reset_globals()
     type_map = ir['language_options']['zig']['typemap']
     extract_api_types(ir)
-    write_header()
+    write_head()
     write_enums(ir)
     write_structs(ir)
     write_extern_cfuncs(ir)

@@ -3,11 +3,12 @@
 #
 #   Take the output of gen_ir.py and generate a C API header.
 #-------------------------------------------------------------------------------
-import sys, json
+import sys, json, os
 
 type_map = { }
 api_types = {}
-out_lines = ''
+out_lines_h = ''
+out_lines_c = ''
 
 def reset_globals():
     global out_lines
@@ -20,9 +21,13 @@ def extract_api_types(ir):
     for decl in ir['decls']:
         api_types[decl['name']] = decl['kind']
 
-def l(s):
-    global out_lines
-    out_lines += s + '\n'
+def lh(s):
+    global out_lines_h
+    out_lines_h += s + '\n'
+    
+def lc(s):
+    global out_lines_c
+    out_lines_c += s + '\n'
 
 def c_type(c_prefix, typename):
     # strip any attributes we encountered
@@ -68,22 +73,25 @@ def classify_return_type(type):
         print(f"don't know how to classify result type '{type}'")
         return None
 
-def write_header():
-    l("// code generated, don't edit!")
-    l('#include <stdint.h>')
-    l('#include <stdbool.h>')
-    l('')
+def write_head(header_filename):
+    lh("// code generated, don't edit!")
+    lh('#include <stdint.h>')
+    lh('#include <stdbool.h>')
+    lh('#include <stddef.h>')
+    lh('')
+    lc("// code generated, don't edit!")
+    lc(f'#include "{header_filename}"') 
 
 def write_typedefs(ir, c_prefix):
     for decl in ir['decls']:
         kind = decl['kind']
         if kind == 'objc_class':
             typename = f"{c_prefix}{decl['name']}"
-            l(f"typedef struct {typename} {{ }} {typename};")
+            lh(f"typedef struct {typename} {{ uint8_t dummy; }} {typename};")
         elif kind == 'typedef':
             typename = f"{c_prefix}{decl['name']}"
-            l(f"typedef {decl['type']['type']} {typename};")
-    l('')
+            lh(f"typedef {decl['type']['type']} {typename};")
+    lh('')
 
 def expr_as_string(expr):
     kind = expr['kind']
@@ -105,22 +113,22 @@ def expr_as_string(expr):
 def write_enums(ir, c_prefix):
     for decl in ir['decls']:
         if decl['kind'] == 'enum':
-            l(f"typedef enum {c_type(c_prefix, decl['name'])}: {c_type(c_prefix, decl['type']['type'])} {{")
+            lh(f"typedef enum {c_type(c_prefix, decl['name'])}: {c_type(c_prefix, decl['type']['type'])} {{")
             for item in decl['items']:
                 if 'expr' in item:
-                    l(f"    {item['name']} = {expr_as_string(item['expr'])},")
+                    lh(f"    {item['name']} = {expr_as_string(item['expr'])},")
                 else:
-                    l(f"    {item['name']},")
-            l(f"}} {c_type(c_prefix, decl['name'])};\n")
+                    lh(f"    {item['name']},")
+            lh(f"}} {c_type(c_prefix, decl['name'])};\n")
 
 def write_structs(ir, c_prefix):
     for decl in ir['decls']:
         if decl['kind'] == 'struct':
             struct_type = c_type(c_prefix, decl['name'])
-            l(f"typedef struct {struct_type} {{")
+            lh(f"typedef struct {struct_type} {{")
             for item in decl['items']:
-                l(f"    {c_type(c_prefix, item['type']['type'])} {item['name']};")
-            l(f"}} {struct_type};\n")
+                lh(f"    {c_type(c_prefix, item['type']['type'])} {item['name']};")
+            lh(f"}} {struct_type};\n")
 
 # write a global variable which holds the class pointers and selector hashes
 def write_class_metadata(ir, c_prefix):
@@ -128,29 +136,46 @@ def write_class_metadata(ir, c_prefix):
     def method_name(decl):
         return decl['name'].replace(':', '_').rstrip('_')
 
-    l('static struct {')
+    lh('typedef struct {')
     for class_decl in ir['decls']:
         if class_decl['kind'] == 'objc_class':
             class_name = class_decl['name']
-            l('    struct {')
-            l('        void* cls;')
+            lh('    struct {')
+            lh('        void* cls;')
             for method_decl in class_decl['items']:
                 if method_decl['kind'] == 'objc_method':
-                    l(f"        void* {method_name(method_decl)};")
-            l(f"    }} {class_name};")
-    l(f"}} {c_prefix}oc;\n")
-    
+                    lh(f"        void* {method_name(method_decl)};")
+            lh(f"    }} {class_name};")
+    lh(f"}} {c_prefix}oc_t;\n")
+    lh(f"extern {c_prefix}oc_t {c_prefix}oc;")
+    lh(f"extern void {c_prefix}oc_initialize(void);")
+
     # ...the init function to setup Class pointers and selector hashes
-    l(f"static void {c_prefix}oc_initialize(void) {{")
+    lc(f"{c_prefix}oc_t {c_prefix}oc;")
+    lc(f"void {c_prefix}oc_initialize(void) {{")
     for class_decl in ir['decls']:
         if class_decl['kind'] == 'objc_class':
             class_name = class_decl['name']
-            l(f'    {c_prefix}oc.{class_name}.cls = objc_getClass("{class_name}");')
+            lc(f'    {c_prefix}oc.{class_name}.cls = objc_getClass("{class_name}");')
             for method_decl in class_decl['items']:
                 if method_decl['kind'] == 'objc_method':
                     objc_method_name = method_decl['name']
-                    l(f'    {c_prefix}oc.{class_name}.{method_name(method_decl)} = sel_getUid("{objc_method_name}");')
-    l('}\n')
+                    lc(f'    {c_prefix}oc.{class_name}.{method_name(method_decl)} = sel_getUid("{objc_method_name}");')
+    lc('}\n')
+    
+def write_helper_funcs(ir, c_prefix):
+    lh("extern void* oc_alloc(void* cls);")
+    lc("void* oc_alloc(void* cls) {")
+    lc("    return ((void*(*)(void*,void*))objc_msgSend)(cls, oc.NSObject.alloc);")
+    lc("}")
+    lh("extern void* oc_alloc_init(void* cls);")
+    lc("void* oc_alloc_init(void* cls) {")
+    lc("    return (void*)NSObject_init((NSObject*)oc_alloc(cls));")
+    lc("}")
+    lh("extern void oc_release(void* obj);")
+    lc("void oc_release(void* obj) {")
+    lc("    NSObject_release((NSObject*)obj);")
+    lc("}")
 
 def objcmethod_func_name(c_prefix, objc_class_name, objc_method_name):
     name = f"{c_prefix}{objc_class_name}_{objc_method_name}"
@@ -214,9 +239,10 @@ def write_objcmethod_funcs(ir, c_prefix):
                     c_args_str = cfunc_args_as_string(c_prefix, self_type, method_decl['args'])
                     objc_proto_str = objcfunc_prototype_as_string(c_prefix, self_type, method_decl['args'], return_type)
                     objc_args_str = objcfunc_args_as_string(c_prefix, self_type, class_name, method_decl['name'], method_decl['args'])
-                    l(f"static {return_type} {func_name}({c_args_str}) {{")
-                    l(f"    return ({objc_proto_str}{msgsend_func})({objc_args_str});")
-                    l("}")
+                    lh(f"extern {return_type} {func_name}({c_args_str});");
+                    lc(f"{return_type} {func_name}({c_args_str}) {{")
+                    lc(f"    return ({objc_proto_str}{msgsend_func})({objc_args_str});")
+                    lc("}")
 
 def write_extern_cfuncs(ir, c_prefix):
     for decl in ir['decls']:
@@ -224,34 +250,38 @@ def write_extern_cfuncs(ir, c_prefix):
             func_name = decl['name']
             return_type = c_type(c_prefix, decl['return_type']['type'])
             args_str = cfunc_args_as_string(c_prefix, None, decl['args'])
-            l(f"extern {return_type} {func_name}({args_str});")
+            lh(f"extern {return_type} {func_name}({args_str});")
 
-def gen(ir, output_path):
+def gen(ir, output_src, output_hdr):
     global type_map
     reset_globals()
     c_prefix = ir['language_options']['c']['prefix']
     type_map = ir['language_options']['c']['typemap']
     extract_api_types(ir)
-    write_header()
+    write_head(os.path.basename(output_hdr))
     write_typedefs(ir, c_prefix)
     write_enums(ir, c_prefix)
     write_structs(ir, c_prefix)
     write_extern_cfuncs(ir, c_prefix)
     write_class_metadata(ir, c_prefix)
     write_objcmethod_funcs(ir, c_prefix)
-    with open(output_path, 'w', newline='\n') as f_outp:
-        f_outp.write(out_lines)
+    write_helper_funcs(ir, c_prefix)
+    with open(output_hdr, 'w', newline='\n') as f_outp:
+        f_outp.write(out_lines_h)
+    with open(output_src, 'w', newline='\n') as f_outp:
+        f_outp.write(out_lines_c)
 
 #-- main -----------------------------------------------------------------------
-if len(sys.argv) != 3:
-    sys.exit('''expected args: [ir.json] [output.h], where:\n
+if len(sys.argv) != 4:
+    sys.exit('''expected args: [ir.json] [output.c] [output.h], where:\n
     ir.json: result of gen_ir.py
     output.h: name of generated C header file''')
 ir_path = sys.argv[1]
-output_path = sys.argv[2]
-if ir_path == output_path:
-    sys.exit("input and output filename are identical")
+output_src = sys.argv[2]
+output_hdr = sys.argv[3]
+if ir_path == output_src or ir_path == output_hdr:
+    sys.exit("input and output filenames are identical")
 
 with open(ir_path, "r") as fp:
     ir_json = json.load(fp)
-gen(ir_json, output_path)
+gen(ir_json, output_src, output_hdr)

@@ -1,1 +1,1 @@
-zig build-exe hello_zig.zig -lobjc -framework Cocoa
+zig build-exe hello_zig.zig macos.c -lobjc -framework Cocoa -I.

@@ -36,7 +36,13 @@ The generated IR JSON file is then fed to a language-specific code-generation
 script. For instance to generate a C header:
 
 ```
-> python gen_c.py hello_ir.json test/hello.h
+> python gen_c.py hello_ir.json test/macos.c test/macos.h
+```
+
+Additionally, to generate the Zig module:
+
+```
+> python gen_zig.py hello_ir.json test/macos.zig
 ```
 
 ## Building the examples
@@ -53,6 +59,8 @@ To build the tests, run:
 > ./build_objc.sh
 # build the C test:
 > ./build_c.sh
+# build the Zig test:
+> ./build_zig.sh
 ```
 
-This results in the executables ```hello_objc``` and ```hello_c```.
+This results in the executables ```hello_objc```, ```hello_c``` and ```hello_zig```.

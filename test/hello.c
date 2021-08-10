@@ -2,8 +2,9 @@
 #include <stdio.h>
 
 // FIXME
+#include "macos.h"
+
 #define DISPATCH_TIME_FOREVER (~0ull)
-#include "hello.h"
 
 static void completed_handler(void* block_literal, void* cmd_buf);
 
@@ -45,18 +46,6 @@ static dispatch_semaphore_t sem;
 static MTLBuffer* mtl_buf;
 static MTLRenderPipelineState* mtl_rps;
 static MTLDepthStencilState* mtl_dss;
-
-static void* oc_alloc(void* cls) {
-    return ((void*(*)(void*,void*))objc_msgSend)(cls, oc.NSObject.alloc);
-}
-
-static void* oc_alloc_init(void* cls) {
-    return (void*)NSObject_init((NSObject*)oc_alloc(cls));
-}
-
-static void oc_release(void* obj) {
-    NSObject_release((NSObject*)obj);
-}
 
 static void app_didFinishLaunching(void* obj, void* sel, NSNotification* notification) {
     uint64_t style_mask = 

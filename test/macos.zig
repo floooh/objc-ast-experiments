@@ -1,4 +1,5 @@
 // machine generated, don't edit
+const c = @cImport(@cInclude("macos.h"));
 pub const NSBackingStoreType = u64;
 pub const NSBackingStoreRetained: u64 = 0;
 pub const NSBackingStoreNonretained: u64 = 1;
@@ -274,630 +275,390 @@ pub const MTLVertexStepFunctionPerVertex: u64 = 1;
 pub const MTLVertexStepFunctionPerInstance: u64 = 2;
 pub const MTLVertexStepFunctionPerPatch: u64 = 3;
 pub const MTLVertexStepFunctionPerPatchControlPoint: u64 = 4;
-pub const CGPoint = extern struct {
-    x: f64,
-    y: f64,
-};
-
-pub const CGSize = extern struct {
-    width: f64,
-    height: f64,
-};
-
-pub const NSRect = extern struct {
-    origin: CGPoint,
-    size: CGSize,
-};
-
-pub const MTLClearColor = extern struct {
-    red: f64,
-    green: f64,
-    blue: f64,
-    alpha: f64,
-};
-
-pub extern fn sel_getUid(str:[*c]const u8) *c_void;
-pub extern fn dispatch_semaphore_create(value:isize) *c_void;
-pub extern fn dispatch_semaphore_wait(dsema:*c_void, timeout:u64) isize;
-pub extern fn dispatch_semaphore_signal(dsema:*c_void) isize;
-pub extern fn MTLCreateSystemDefaultDevice() *MTLDevice;
-pub extern fn objc_getClass(name:[*c]const u8) *c_void;
-pub extern fn class_addMethod(cls:*c_void, name:*c_void, imp:*c_void, types:[*c]const u8) bool;
-pub extern fn objc_allocateClassPair(superclass:*c_void, name:[*c]const u8, extraBytes:usize) *c_void;
-pub extern fn objc_registerClassPair(cls:*c_void) void;
-pub extern const objc_msgSend: c_void;
-pub extern const objc_msgSend_stret: c_void;
-pub extern const objc_msgSend_fpret: c_void;
-pub const NSObject = opaque {};
+pub const CGPoint = c.CGPoint;
+pub const CGSize = c.CGSize;
+pub const NSRect = c.NSRect;
+pub const MTLClearColor = c.MTLClearColor;
+pub const sel_getUid = c.sel_getUid;
+pub const dispatch_semaphore_create = c.dispatch_semaphore_create;
+pub const dispatch_semaphore_wait = c.dispatch_semaphore_wait;
+pub const dispatch_semaphore_signal = c.dispatch_semaphore_signal;
+pub const MTLCreateSystemDefaultDevice = c.MTLCreateSystemDefaultDevice;
+pub const objc_getClass = c.objc_getClass;
+pub const class_addMethod = c.class_addMethod;
+pub const objc_allocateClassPair = c.objc_allocateClassPair;
+pub const objc_registerClassPair = c.objc_registerClassPair;
+pub const objc_msgSend = c.objc_msgSend;
+pub const objc_msgSend_stret = c.objc_msgSend_stret;
+pub const objc_msgSend_fpret = c.objc_msgSend_fpret;
+pub const NSObject = c.NSObject;
 pub fn NSObject_release(self:*NSObject) void {
-    const ftype = fn(*NSObject,*c_void) callconv(.C) void;
-    const func: ftype = @ptrCast(ftype, &objc_msgSend);
-    func(self, sel_getUid("release"));
+    c.NSObject_release(self);
 }
 pub fn NSObject_init(self:*NSObject) *NSObject {
-    const ftype = fn(*NSObject,*c_void) callconv(.C) *NSObject;
-    const func: ftype = @ptrCast(ftype, &objc_msgSend);
-    return func(self, sel_getUid("init"));
+    return c.NSObject_init(self);
 }
 pub fn NSObject_alloc() *NSObject {
-    const ftype = fn(*c_void,*c_void) callconv(.C) *NSObject;
-    const func: ftype = @ptrCast(ftype, &objc_msgSend);
-    return func(objc_getClass("NSObject"), sel_getUid("alloc"));
+    return c.NSObject_alloc();
 }
-pub const NSString = opaque {};
+pub const NSString = c.NSString;
 pub fn NSString_stringWithUTF8String(nullTerminatedCString:[*c]const u8) *NSString {
-    const ftype = fn(*c_void,*c_void,[*c]const u8) callconv(.C) *NSString;
-    const func: ftype = @ptrCast(ftype, &objc_msgSend);
-    return func(objc_getClass("NSString"), sel_getUid("stringWithUTF8String:"), nullTerminatedCString);
+    return c.NSString_stringWithUTF8String(nullTerminatedCString);
 }
-pub const NSNotification = opaque {};
-pub const NSError = opaque {};
-pub const NSResponder = opaque {};
-pub const NSView = opaque {};
-pub const NSApplication = opaque {};
+pub const NSNotification = c.NSNotification;
+pub const NSError = c.NSError;
+pub const NSResponder = c.NSResponder;
+pub const NSView = c.NSView;
+pub const NSApplication = c.NSApplication;
 pub fn NSApplication_sharedApplication() *NSApplication {
-    const ftype = fn(*c_void,*c_void) callconv(.C) *NSApplication;
-    const func: ftype = @ptrCast(ftype, &objc_msgSend);
-    return func(objc_getClass("NSApplication"), sel_getUid("sharedApplication"));
+    return c.NSApplication_sharedApplication();
 }
 pub fn NSApplication_activateIgnoringOtherApps(self:*NSApplication, flag:bool) void {
-    const ftype = fn(*NSApplication,*c_void,bool) callconv(.C) void;
-    const func: ftype = @ptrCast(ftype, &objc_msgSend);
-    func(self, sel_getUid("activateIgnoringOtherApps:"), flag);
+    c.NSApplication_activateIgnoringOtherApps(self, flag);
 }
 pub fn NSApplication_run(self:*NSApplication) void {
-    const ftype = fn(*NSApplication,*c_void) callconv(.C) void;
-    const func: ftype = @ptrCast(ftype, &objc_msgSend);
-    func(self, sel_getUid("run"));
+    c.NSApplication_run(self);
 }
 pub fn NSApplication_setActivationPolicy(self:*NSApplication, activationPolicy:NSApplicationActivationPolicy) bool {
-    const ftype = fn(*NSApplication,*c_void,NSApplicationActivationPolicy) callconv(.C) bool;
-    const func: ftype = @ptrCast(ftype, &objc_msgSend);
-    return func(self, sel_getUid("setActivationPolicy:"), activationPolicy);
+    return c.NSApplication_setActivationPolicy(self, activationPolicy);
 }
 pub fn NSApplication_setDelegate(self:*NSApplication, delegate:*NSApplicationDelegate) void {
-    const ftype = fn(*NSApplication,*c_void,*NSApplicationDelegate) callconv(.C) void;
-    const func: ftype = @ptrCast(ftype, &objc_msgSend);
-    func(self, sel_getUid("setDelegate:"), delegate);
+    c.NSApplication_setDelegate(self, delegate);
 }
-pub const NSApplicationDelegate = opaque {};
-pub const NSWindow = opaque {};
+pub const NSApplicationDelegate = c.NSApplicationDelegate;
+pub const NSWindow = c.NSWindow;
 pub fn NSWindow_initWithContentRect_styleMask_backing_defer(self:*NSWindow, contentRect:NSRect, style:NSWindowStyleMask, backingStoreType:NSBackingStoreType, flag:bool) *NSWindow {
-    const ftype = fn(*NSWindow,*c_void,NSRect,NSWindowStyleMask,NSBackingStoreType,bool) callconv(.C) *NSWindow;
-    const func: ftype = @ptrCast(ftype, &objc_msgSend);
-    return func(self, sel_getUid("initWithContentRect:styleMask:backing:defer:"), contentRect, style, backingStoreType, flag);
+    return c.NSWindow_initWithContentRect_styleMask_backing_defer(self, contentRect, style, backingStoreType, flag);
 }
 pub fn NSWindow_setContentView(self:*NSWindow, val:*NSView) void {
-    const ftype = fn(*NSWindow,*c_void,*NSView) callconv(.C) void;
-    const func: ftype = @ptrCast(ftype, &objc_msgSend);
-    func(self, sel_getUid("setContentView:"), val);
+    c.NSWindow_setContentView(self, val);
 }
 pub fn NSWindow_contentView(self:*NSWindow) *NSView {
-    const ftype = fn(*NSWindow,*c_void) callconv(.C) *NSView;
-    const func: ftype = @ptrCast(ftype, &objc_msgSend);
-    return func(self, sel_getUid("contentView"));
+    return c.NSWindow_contentView(self);
 }
 pub fn NSWindow_makeFirstResponder(self:*NSWindow, responder:*NSResponder) bool {
-    const ftype = fn(*NSWindow,*c_void,*NSResponder) callconv(.C) bool;
-    const func: ftype = @ptrCast(ftype, &objc_msgSend);
-    return func(self, sel_getUid("makeFirstResponder:"), responder);
+    return c.NSWindow_makeFirstResponder(self, responder);
 }
 pub fn NSWindow_center(self:*NSWindow) void {
-    const ftype = fn(*NSWindow,*c_void) callconv(.C) void;
-    const func: ftype = @ptrCast(ftype, &objc_msgSend);
-    func(self, sel_getUid("center"));
+    c.NSWindow_center(self);
 }
 pub fn NSWindow_makeKeyAndOrderFront(self:*NSWindow, sender:*c_void) void {
-    const ftype = fn(*NSWindow,*c_void,*c_void) callconv(.C) void;
-    const func: ftype = @ptrCast(ftype, &objc_msgSend);
-    func(self, sel_getUid("makeKeyAndOrderFront:"), sender);
+    c.NSWindow_makeKeyAndOrderFront(self, sender);
 }
 pub fn NSWindow_setTitle(self:*NSWindow, title:*NSString) void {
-    const ftype = fn(*NSWindow,*c_void,*NSString) callconv(.C) void;
-    const func: ftype = @ptrCast(ftype, &objc_msgSend);
-    func(self, sel_getUid("setTitle:"), title);
+    c.NSWindow_setTitle(self, title);
 }
 pub fn NSWindow_setDelegate(self:*NSWindow, delegate:*NSWindowDelegate) void {
-    const ftype = fn(*NSWindow,*c_void,*NSWindowDelegate) callconv(.C) void;
-    const func: ftype = @ptrCast(ftype, &objc_msgSend);
-    func(self, sel_getUid("setDelegate:"), delegate);
+    c.NSWindow_setDelegate(self, delegate);
 }
 pub fn NSWindow_setAcceptsMouseMovedEvents(self:*NSWindow, val:bool) void {
-    const ftype = fn(*NSWindow,*c_void,bool) callconv(.C) void;
-    const func: ftype = @ptrCast(ftype, &objc_msgSend);
-    func(self, sel_getUid("setAcceptsMouseMovedEvents:"), val);
+    c.NSWindow_setAcceptsMouseMovedEvents(self, val);
 }
 pub fn NSWindow_acceptsMouseMovedEvents(self:*NSWindow) bool {
-    const ftype = fn(*NSWindow,*c_void) callconv(.C) bool;
-    const func: ftype = @ptrCast(ftype, &objc_msgSend);
-    return func(self, sel_getUid("acceptsMouseMovedEvents"));
+    return c.NSWindow_acceptsMouseMovedEvents(self);
 }
 pub fn NSWindow_setRestorable(self:*NSWindow, val:bool) void {
-    const ftype = fn(*NSWindow,*c_void,bool) callconv(.C) void;
-    const func: ftype = @ptrCast(ftype, &objc_msgSend);
-    func(self, sel_getUid("setRestorable:"), val);
+    c.NSWindow_setRestorable(self, val);
 }
 pub fn NSWindow_isRestorable(self:*NSWindow) bool {
-    const ftype = fn(*NSWindow,*c_void) callconv(.C) bool;
-    const func: ftype = @ptrCast(ftype, &objc_msgSend);
-    return func(self, sel_getUid("isRestorable"));
+    return c.NSWindow_isRestorable(self);
 }
-pub const NSWindowDelegate = opaque {};
-pub const MTLCommandEncoder = opaque {};
+pub const NSWindowDelegate = c.NSWindowDelegate;
+pub const MTLCommandEncoder = c.MTLCommandEncoder;
 pub fn MTLCommandEncoder_endEncoding(self:*MTLCommandEncoder) void {
-    const ftype = fn(*MTLCommandEncoder,*c_void) callconv(.C) void;
-    const func: ftype = @ptrCast(ftype, &objc_msgSend);
-    func(self, sel_getUid("endEncoding"));
+    c.MTLCommandEncoder_endEncoding(self);
 }
-pub const MTLBuffer = opaque {};
-pub const MTLFunction = opaque {};
-pub const MTLCompileOptions = opaque {};
-pub const MTLLibrary = opaque {};
+pub const MTLBuffer = c.MTLBuffer;
+pub const MTLFunction = c.MTLFunction;
+pub const MTLCompileOptions = c.MTLCompileOptions;
+pub const MTLLibrary = c.MTLLibrary;
 pub fn MTLLibrary_newFunctionWithName(self:*MTLLibrary, functionName:*NSString) *MTLFunction {
-    const ftype = fn(*MTLLibrary,*c_void,*NSString) callconv(.C) *MTLFunction;
-    const func: ftype = @ptrCast(ftype, &objc_msgSend);
-    return func(self, sel_getUid("newFunctionWithName:"), functionName);
+    return c.MTLLibrary_newFunctionWithName(self, functionName);
 }
-pub const MTLDevice = opaque {};
+pub const MTLDevice = c.MTLDevice;
 pub fn MTLDevice_newCommandQueue(self:*MTLDevice) *MTLCommandQueue {
-    const ftype = fn(*MTLDevice,*c_void) callconv(.C) *MTLCommandQueue;
-    const func: ftype = @ptrCast(ftype, &objc_msgSend);
-    return func(self, sel_getUid("newCommandQueue"));
+    return c.MTLDevice_newCommandQueue(self);
 }
 pub fn MTLDevice_newBufferWithBytes_length_options(self:*MTLDevice, pointer:*const c_void, length:u64, options:MTLResourceOptions) *MTLBuffer {
-    const ftype = fn(*MTLDevice,*c_void,*const c_void,u64,MTLResourceOptions) callconv(.C) *MTLBuffer;
-    const func: ftype = @ptrCast(ftype, &objc_msgSend);
-    return func(self, sel_getUid("newBufferWithBytes:length:options:"), pointer, length, options);
+    return c.MTLDevice_newBufferWithBytes_length_options(self, pointer, length, options);
 }
 pub fn MTLDevice_newDepthStencilStateWithDescriptor(self:*MTLDevice, descriptor:*MTLDepthStencilDescriptor) *MTLDepthStencilState {
-    const ftype = fn(*MTLDevice,*c_void,*MTLDepthStencilDescriptor) callconv(.C) *MTLDepthStencilState;
-    const func: ftype = @ptrCast(ftype, &objc_msgSend);
-    return func(self, sel_getUid("newDepthStencilStateWithDescriptor:"), descriptor);
+    return c.MTLDevice_newDepthStencilStateWithDescriptor(self, descriptor);
 }
 pub fn MTLDevice_newLibraryWithSource_options_error(self:*MTLDevice, source:*NSString, options:*MTLCompileOptions, err:*NSError) *MTLLibrary {
-    const ftype = fn(*MTLDevice,*c_void,*NSString,*MTLCompileOptions,*NSError) callconv(.C) *MTLLibrary;
-    const func: ftype = @ptrCast(ftype, &objc_msgSend);
-    return func(self, sel_getUid("newLibraryWithSource:options:error:"), source, options, err);
+    return c.MTLDevice_newLibraryWithSource_options_error(self, source, options, err);
 }
 pub fn MTLDevice_newRenderPipelineStateWithDescriptor_error(self:*MTLDevice, descriptor:*MTLRenderPipelineDescriptor, err:*NSError) *MTLRenderPipelineState {
-    const ftype = fn(*MTLDevice,*c_void,*MTLRenderPipelineDescriptor,*NSError) callconv(.C) *MTLRenderPipelineState;
-    const func: ftype = @ptrCast(ftype, &objc_msgSend);
-    return func(self, sel_getUid("newRenderPipelineStateWithDescriptor:error:"), descriptor, err);
+    return c.MTLDevice_newRenderPipelineStateWithDescriptor_error(self, descriptor, err);
 }
-pub const MTLRenderPassAttachmentDescriptor = opaque {};
+pub const MTLRenderPassAttachmentDescriptor = c.MTLRenderPassAttachmentDescriptor;
 pub fn MTLRenderPassAttachmentDescriptor_setLoadAction(self:*MTLRenderPassAttachmentDescriptor, val:MTLLoadAction) void {
-    const ftype = fn(*MTLRenderPassAttachmentDescriptor,*c_void,MTLLoadAction) callconv(.C) void;
-    const func: ftype = @ptrCast(ftype, &objc_msgSend);
-    func(self, sel_getUid("setLoadAction:"), val);
+    c.MTLRenderPassAttachmentDescriptor_setLoadAction(self, val);
 }
 pub fn MTLRenderPassAttachmentDescriptor_loadAction(self:*MTLRenderPassAttachmentDescriptor) MTLLoadAction {
-    const ftype = fn(*MTLRenderPassAttachmentDescriptor,*c_void) callconv(.C) MTLLoadAction;
-    const func: ftype = @ptrCast(ftype, &objc_msgSend);
-    return func(self, sel_getUid("loadAction"));
+    return c.MTLRenderPassAttachmentDescriptor_loadAction(self);
 }
-pub const MTLRenderPassColorAttachmentDescriptor = opaque {};
+pub const MTLRenderPassColorAttachmentDescriptor = c.MTLRenderPassColorAttachmentDescriptor;
 pub fn MTLRenderPassColorAttachmentDescriptor_setClearColor(self:*MTLRenderPassColorAttachmentDescriptor, val:MTLClearColor) void {
-    const ftype = fn(*MTLRenderPassColorAttachmentDescriptor,*c_void,MTLClearColor) callconv(.C) void;
-    const func: ftype = @ptrCast(ftype, &objc_msgSend);
-    func(self, sel_getUid("setClearColor:"), val);
+    c.MTLRenderPassColorAttachmentDescriptor_setClearColor(self, val);
 }
 pub fn MTLRenderPassColorAttachmentDescriptor_clearColor(self:*MTLRenderPassColorAttachmentDescriptor) MTLClearColor {
-    const ftype = fn(*MTLRenderPassColorAttachmentDescriptor,*c_void) callconv(.C) MTLClearColor;
-    const func: ftype = @ptrCast(ftype, &objc_msgSend_stret);
-    return func(self, sel_getUid("clearColor"));
+    return c.MTLRenderPassColorAttachmentDescriptor_clearColor(self);
 }
-pub const MTLRenderPassDepthAttachmentDescriptor = opaque {};
+pub const MTLRenderPassDepthAttachmentDescriptor = c.MTLRenderPassDepthAttachmentDescriptor;
 pub fn MTLRenderPassDepthAttachmentDescriptor_setClearDepth(self:*MTLRenderPassDepthAttachmentDescriptor, val:f64) void {
-    const ftype = fn(*MTLRenderPassDepthAttachmentDescriptor,*c_void,f64) callconv(.C) void;
-    const func: ftype = @ptrCast(ftype, &objc_msgSend);
-    func(self, sel_getUid("setClearDepth:"), val);
+    c.MTLRenderPassDepthAttachmentDescriptor_setClearDepth(self, val);
 }
 pub fn MTLRenderPassDepthAttachmentDescriptor_clearDepth(self:*MTLRenderPassDepthAttachmentDescriptor) f64 {
-    const ftype = fn(*MTLRenderPassDepthAttachmentDescriptor,*c_void) callconv(.C) f64;
-    const func: ftype = @ptrCast(ftype, &objc_msgSend_fpret);
-    return func(self, sel_getUid("clearDepth"));
+    return c.MTLRenderPassDepthAttachmentDescriptor_clearDepth(self);
 }
-pub const MTLRenderPassColorAttachmentDescriptorArray = opaque {};
+pub const MTLRenderPassColorAttachmentDescriptorArray = c.MTLRenderPassColorAttachmentDescriptorArray;
 pub fn MTLRenderPassColorAttachmentDescriptorArray_objectAtIndexedSubscript(self:*MTLRenderPassColorAttachmentDescriptorArray, attachmentIndex:u64) *MTLRenderPassColorAttachmentDescriptor {
-    const ftype = fn(*MTLRenderPassColorAttachmentDescriptorArray,*c_void,u64) callconv(.C) *MTLRenderPassColorAttachmentDescriptor;
-    const func: ftype = @ptrCast(ftype, &objc_msgSend);
-    return func(self, sel_getUid("objectAtIndexedSubscript:"), attachmentIndex);
+    return c.MTLRenderPassColorAttachmentDescriptorArray_objectAtIndexedSubscript(self, attachmentIndex);
 }
 pub fn MTLRenderPassColorAttachmentDescriptorArray_setObject_atIndexedSubscript(self:*MTLRenderPassColorAttachmentDescriptorArray, attachment:*MTLRenderPassColorAttachmentDescriptor, attachmentIndex:u64) void {
-    const ftype = fn(*MTLRenderPassColorAttachmentDescriptorArray,*c_void,*MTLRenderPassColorAttachmentDescriptor,u64) callconv(.C) void;
-    const func: ftype = @ptrCast(ftype, &objc_msgSend);
-    func(self, sel_getUid("setObject:atIndexedSubscript:"), attachment, attachmentIndex);
+    c.MTLRenderPassColorAttachmentDescriptorArray_setObject_atIndexedSubscript(self, attachment, attachmentIndex);
 }
-pub const MTLRenderPassDescriptor = opaque {};
+pub const MTLRenderPassDescriptor = c.MTLRenderPassDescriptor;
 pub fn MTLRenderPassDescriptor_colorAttachments(self:*MTLRenderPassDescriptor) *MTLRenderPassColorAttachmentDescriptorArray {
-    const ftype = fn(*MTLRenderPassDescriptor,*c_void) callconv(.C) *MTLRenderPassColorAttachmentDescriptorArray;
-    const func: ftype = @ptrCast(ftype, &objc_msgSend);
-    return func(self, sel_getUid("colorAttachments"));
+    return c.MTLRenderPassDescriptor_colorAttachments(self);
 }
 pub fn MTLRenderPassDescriptor_setDepthAttachment(self:*MTLRenderPassDescriptor, val:*MTLRenderPassDepthAttachmentDescriptor) void {
-    const ftype = fn(*MTLRenderPassDescriptor,*c_void,*MTLRenderPassDepthAttachmentDescriptor) callconv(.C) void;
-    const func: ftype = @ptrCast(ftype, &objc_msgSend);
-    func(self, sel_getUid("setDepthAttachment:"), val);
+    c.MTLRenderPassDescriptor_setDepthAttachment(self, val);
 }
 pub fn MTLRenderPassDescriptor_depthAttachment(self:*MTLRenderPassDescriptor) *MTLRenderPassDepthAttachmentDescriptor {
-    const ftype = fn(*MTLRenderPassDescriptor,*c_void) callconv(.C) *MTLRenderPassDepthAttachmentDescriptor;
-    const func: ftype = @ptrCast(ftype, &objc_msgSend);
-    return func(self, sel_getUid("depthAttachment"));
+    return c.MTLRenderPassDescriptor_depthAttachment(self);
 }
-pub const MTLCommandBuffer = opaque {};
+pub const MTLCommandBuffer = c.MTLCommandBuffer;
 pub fn MTLCommandBuffer_commit(self:*MTLCommandBuffer) void {
-    const ftype = fn(*MTLCommandBuffer,*c_void) callconv(.C) void;
-    const func: ftype = @ptrCast(ftype, &objc_msgSend);
-    func(self, sel_getUid("commit"));
+    c.MTLCommandBuffer_commit(self);
 }
 pub fn MTLCommandBuffer_presentDrawable(self:*MTLCommandBuffer, drawable:*MTLDrawable) void {
-    const ftype = fn(*MTLCommandBuffer,*c_void,*MTLDrawable) callconv(.C) void;
-    const func: ftype = @ptrCast(ftype, &objc_msgSend);
-    func(self, sel_getUid("presentDrawable:"), drawable);
+    c.MTLCommandBuffer_presentDrawable(self, drawable);
 }
 pub fn MTLCommandBuffer_addCompletedHandler(self:*MTLCommandBuffer, block:*c_void) void {
-    const ftype = fn(*MTLCommandBuffer,*c_void,*c_void) callconv(.C) void;
-    const func: ftype = @ptrCast(ftype, &objc_msgSend);
-    func(self, sel_getUid("addCompletedHandler:"), block);
+    c.MTLCommandBuffer_addCompletedHandler(self, block);
 }
 pub fn MTLCommandBuffer_renderCommandEncoderWithDescriptor(self:*MTLCommandBuffer, renderPassDescriptor:*MTLRenderPassDescriptor) *MTLRenderCommandEncoder {
-    const ftype = fn(*MTLCommandBuffer,*c_void,*MTLRenderPassDescriptor) callconv(.C) *MTLRenderCommandEncoder;
-    const func: ftype = @ptrCast(ftype, &objc_msgSend);
-    return func(self, sel_getUid("renderCommandEncoderWithDescriptor:"), renderPassDescriptor);
+    return c.MTLCommandBuffer_renderCommandEncoderWithDescriptor(self, renderPassDescriptor);
 }
-pub const MTLCommandQueue = opaque {};
+pub const MTLCommandQueue = c.MTLCommandQueue;
 pub fn MTLCommandQueue_commandBuffer(self:*MTLCommandQueue) *MTLCommandBuffer {
-    const ftype = fn(*MTLCommandQueue,*c_void) callconv(.C) *MTLCommandBuffer;
-    const func: ftype = @ptrCast(ftype, &objc_msgSend);
-    return func(self, sel_getUid("commandBuffer"));
+    return c.MTLCommandQueue_commandBuffer(self);
 }
-pub const MTLDepthStencilDescriptor = opaque {};
+pub const MTLDepthStencilDescriptor = c.MTLDepthStencilDescriptor;
 pub fn MTLDepthStencilDescriptor_setDepthCompareFunction(self:*MTLDepthStencilDescriptor, val:MTLCompareFunction) void {
-    const ftype = fn(*MTLDepthStencilDescriptor,*c_void,MTLCompareFunction) callconv(.C) void;
-    const func: ftype = @ptrCast(ftype, &objc_msgSend);
-    func(self, sel_getUid("setDepthCompareFunction:"), val);
+    c.MTLDepthStencilDescriptor_setDepthCompareFunction(self, val);
 }
 pub fn MTLDepthStencilDescriptor_depthCompareFunction(self:*MTLDepthStencilDescriptor) MTLCompareFunction {
-    const ftype = fn(*MTLDepthStencilDescriptor,*c_void) callconv(.C) MTLCompareFunction;
-    const func: ftype = @ptrCast(ftype, &objc_msgSend);
-    return func(self, sel_getUid("depthCompareFunction"));
+    return c.MTLDepthStencilDescriptor_depthCompareFunction(self);
 }
 pub fn MTLDepthStencilDescriptor_setDepthWriteEnabled(self:*MTLDepthStencilDescriptor, val:bool) void {
-    const ftype = fn(*MTLDepthStencilDescriptor,*c_void,bool) callconv(.C) void;
-    const func: ftype = @ptrCast(ftype, &objc_msgSend);
-    func(self, sel_getUid("setDepthWriteEnabled:"), val);
+    c.MTLDepthStencilDescriptor_setDepthWriteEnabled(self, val);
 }
 pub fn MTLDepthStencilDescriptor_isDepthWriteEnabled(self:*MTLDepthStencilDescriptor) bool {
-    const ftype = fn(*MTLDepthStencilDescriptor,*c_void) callconv(.C) bool;
-    const func: ftype = @ptrCast(ftype, &objc_msgSend);
-    return func(self, sel_getUid("isDepthWriteEnabled"));
+    return c.MTLDepthStencilDescriptor_isDepthWriteEnabled(self);
 }
-pub const MTLDepthStencilState = opaque {};
-pub const MTLDrawable = opaque {};
-pub const MTLRenderCommandEncoder = opaque {};
+pub const MTLDepthStencilState = c.MTLDepthStencilState;
+pub const MTLDrawable = c.MTLDrawable;
+pub const MTLRenderCommandEncoder = c.MTLRenderCommandEncoder;
 pub fn MTLRenderCommandEncoder_setRenderPipelineState(self:*MTLRenderCommandEncoder, pipelineState:*MTLRenderPipelineState) void {
-    const ftype = fn(*MTLRenderCommandEncoder,*c_void,*MTLRenderPipelineState) callconv(.C) void;
-    const func: ftype = @ptrCast(ftype, &objc_msgSend);
-    func(self, sel_getUid("setRenderPipelineState:"), pipelineState);
+    c.MTLRenderCommandEncoder_setRenderPipelineState(self, pipelineState);
 }
 pub fn MTLRenderCommandEncoder_setVertexBuffer_offset_atIndex(self:*MTLRenderCommandEncoder, buffer:*MTLBuffer, offset:u64, index:u64) void {
-    const ftype = fn(*MTLRenderCommandEncoder,*c_void,*MTLBuffer,u64,u64) callconv(.C) void;
-    const func: ftype = @ptrCast(ftype, &objc_msgSend);
-    func(self, sel_getUid("setVertexBuffer:offset:atIndex:"), buffer, offset, index);
+    c.MTLRenderCommandEncoder_setVertexBuffer_offset_atIndex(self, buffer, offset, index);
 }
 pub fn MTLRenderCommandEncoder_setCullMode(self:*MTLRenderCommandEncoder, cullMode:MTLCullMode) void {
-    const ftype = fn(*MTLRenderCommandEncoder,*c_void,MTLCullMode) callconv(.C) void;
-    const func: ftype = @ptrCast(ftype, &objc_msgSend);
-    func(self, sel_getUid("setCullMode:"), cullMode);
+    c.MTLRenderCommandEncoder_setCullMode(self, cullMode);
 }
 pub fn MTLRenderCommandEncoder_setDepthStencilState(self:*MTLRenderCommandEncoder, depthStencilState:*MTLDepthStencilState) void {
-    const ftype = fn(*MTLRenderCommandEncoder,*c_void,*MTLDepthStencilState) callconv(.C) void;
-    const func: ftype = @ptrCast(ftype, &objc_msgSend);
-    func(self, sel_getUid("setDepthStencilState:"), depthStencilState);
+    c.MTLRenderCommandEncoder_setDepthStencilState(self, depthStencilState);
 }
 pub fn MTLRenderCommandEncoder_drawPrimitives_vertexStart_vertexCount(self:*MTLRenderCommandEncoder, primitiveType:MTLPrimitiveType, vertexStart:u64, vertexCount:u64) void {
-    const ftype = fn(*MTLRenderCommandEncoder,*c_void,MTLPrimitiveType,u64,u64) callconv(.C) void;
-    const func: ftype = @ptrCast(ftype, &objc_msgSend);
-    func(self, sel_getUid("drawPrimitives:vertexStart:vertexCount:"), primitiveType, vertexStart, vertexCount);
+    c.MTLRenderCommandEncoder_drawPrimitives_vertexStart_vertexCount(self, primitiveType, vertexStart, vertexCount);
 }
-pub const MTLRenderPipelineColorAttachmentDescriptor = opaque {};
+pub const MTLRenderPipelineColorAttachmentDescriptor = c.MTLRenderPipelineColorAttachmentDescriptor;
 pub fn MTLRenderPipelineColorAttachmentDescriptor_setPixelFormat(self:*MTLRenderPipelineColorAttachmentDescriptor, val:MTLPixelFormat) void {
-    const ftype = fn(*MTLRenderPipelineColorAttachmentDescriptor,*c_void,MTLPixelFormat) callconv(.C) void;
-    const func: ftype = @ptrCast(ftype, &objc_msgSend);
-    func(self, sel_getUid("setPixelFormat:"), val);
+    c.MTLRenderPipelineColorAttachmentDescriptor_setPixelFormat(self, val);
 }
 pub fn MTLRenderPipelineColorAttachmentDescriptor_pixelFormat(self:*MTLRenderPipelineColorAttachmentDescriptor) MTLPixelFormat {
-    const ftype = fn(*MTLRenderPipelineColorAttachmentDescriptor,*c_void) callconv(.C) MTLPixelFormat;
-    const func: ftype = @ptrCast(ftype, &objc_msgSend);
-    return func(self, sel_getUid("pixelFormat"));
+    return c.MTLRenderPipelineColorAttachmentDescriptor_pixelFormat(self);
 }
 pub fn MTLRenderPipelineColorAttachmentDescriptor_setBlendingEnabled(self:*MTLRenderPipelineColorAttachmentDescriptor, val:bool) void {
-    const ftype = fn(*MTLRenderPipelineColorAttachmentDescriptor,*c_void,bool) callconv(.C) void;
-    const func: ftype = @ptrCast(ftype, &objc_msgSend);
-    func(self, sel_getUid("setBlendingEnabled:"), val);
+    c.MTLRenderPipelineColorAttachmentDescriptor_setBlendingEnabled(self, val);
 }
 pub fn MTLRenderPipelineColorAttachmentDescriptor_isBlendingEnabled(self:*MTLRenderPipelineColorAttachmentDescriptor) bool {
-    const ftype = fn(*MTLRenderPipelineColorAttachmentDescriptor,*c_void) callconv(.C) bool;
-    const func: ftype = @ptrCast(ftype, &objc_msgSend);
-    return func(self, sel_getUid("isBlendingEnabled"));
+    return c.MTLRenderPipelineColorAttachmentDescriptor_isBlendingEnabled(self);
 }
 pub fn MTLRenderPipelineColorAttachmentDescriptor_setWriteMask(self:*MTLRenderPipelineColorAttachmentDescriptor, val:MTLColorWriteMask) void {
-    const ftype = fn(*MTLRenderPipelineColorAttachmentDescriptor,*c_void,MTLColorWriteMask) callconv(.C) void;
-    const func: ftype = @ptrCast(ftype, &objc_msgSend);
-    func(self, sel_getUid("setWriteMask:"), val);
+    c.MTLRenderPipelineColorAttachmentDescriptor_setWriteMask(self, val);
 }
 pub fn MTLRenderPipelineColorAttachmentDescriptor_writeMask(self:*MTLRenderPipelineColorAttachmentDescriptor) MTLColorWriteMask {
-    const ftype = fn(*MTLRenderPipelineColorAttachmentDescriptor,*c_void) callconv(.C) MTLColorWriteMask;
-    const func: ftype = @ptrCast(ftype, &objc_msgSend);
-    return func(self, sel_getUid("writeMask"));
+    return c.MTLRenderPipelineColorAttachmentDescriptor_writeMask(self);
 }
-pub const MTLRenderPipelineDescriptor = opaque {};
+pub const MTLRenderPipelineDescriptor = c.MTLRenderPipelineDescriptor;
 pub fn MTLRenderPipelineDescriptor_setVertexFunction(self:*MTLRenderPipelineDescriptor, val:*MTLFunction) void {
-    const ftype = fn(*MTLRenderPipelineDescriptor,*c_void,*MTLFunction) callconv(.C) void;
-    const func: ftype = @ptrCast(ftype, &objc_msgSend);
-    func(self, sel_getUid("setVertexFunction:"), val);
+    c.MTLRenderPipelineDescriptor_setVertexFunction(self, val);
 }
 pub fn MTLRenderPipelineDescriptor_vertexFunction(self:*MTLRenderPipelineDescriptor) *MTLFunction {
-    const ftype = fn(*MTLRenderPipelineDescriptor,*c_void) callconv(.C) *MTLFunction;
-    const func: ftype = @ptrCast(ftype, &objc_msgSend);
-    return func(self, sel_getUid("vertexFunction"));
+    return c.MTLRenderPipelineDescriptor_vertexFunction(self);
 }
 pub fn MTLRenderPipelineDescriptor_setFragmentFunction(self:*MTLRenderPipelineDescriptor, val:*MTLFunction) void {
-    const ftype = fn(*MTLRenderPipelineDescriptor,*c_void,*MTLFunction) callconv(.C) void;
-    const func: ftype = @ptrCast(ftype, &objc_msgSend);
-    func(self, sel_getUid("setFragmentFunction:"), val);
+    c.MTLRenderPipelineDescriptor_setFragmentFunction(self, val);
 }
 pub fn MTLRenderPipelineDescriptor_fragmentFunction(self:*MTLRenderPipelineDescriptor) *MTLFunction {
-    const ftype = fn(*MTLRenderPipelineDescriptor,*c_void) callconv(.C) *MTLFunction;
-    const func: ftype = @ptrCast(ftype, &objc_msgSend);
-    return func(self, sel_getUid("fragmentFunction"));
+    return c.MTLRenderPipelineDescriptor_fragmentFunction(self);
 }
 pub fn MTLRenderPipelineDescriptor_setVertexDescriptor(self:*MTLRenderPipelineDescriptor, val:*MTLVertexDescriptor) void {
-    const ftype = fn(*MTLRenderPipelineDescriptor,*c_void,*MTLVertexDescriptor) callconv(.C) void;
-    const func: ftype = @ptrCast(ftype, &objc_msgSend);
-    func(self, sel_getUid("setVertexDescriptor:"), val);
+    c.MTLRenderPipelineDescriptor_setVertexDescriptor(self, val);
 }
 pub fn MTLRenderPipelineDescriptor_vertexDescriptor(self:*MTLRenderPipelineDescriptor) *MTLVertexDescriptor {
-    const ftype = fn(*MTLRenderPipelineDescriptor,*c_void) callconv(.C) *MTLVertexDescriptor;
-    const func: ftype = @ptrCast(ftype, &objc_msgSend);
-    return func(self, sel_getUid("vertexDescriptor"));
+    return c.MTLRenderPipelineDescriptor_vertexDescriptor(self);
 }
 pub fn MTLRenderPipelineDescriptor_setSampleCount(self:*MTLRenderPipelineDescriptor, val:u64) void {
-    const ftype = fn(*MTLRenderPipelineDescriptor,*c_void,u64) callconv(.C) void;
-    const func: ftype = @ptrCast(ftype, &objc_msgSend);
-    func(self, sel_getUid("setSampleCount:"), val);
+    c.MTLRenderPipelineDescriptor_setSampleCount(self, val);
 }
 pub fn MTLRenderPipelineDescriptor_sampleCount(self:*MTLRenderPipelineDescriptor) u64 {
-    const ftype = fn(*MTLRenderPipelineDescriptor,*c_void) callconv(.C) u64;
-    const func: ftype = @ptrCast(ftype, &objc_msgSend);
-    return func(self, sel_getUid("sampleCount"));
+    return c.MTLRenderPipelineDescriptor_sampleCount(self);
 }
 pub fn MTLRenderPipelineDescriptor_setAlphaToCoverageEnabled(self:*MTLRenderPipelineDescriptor, val:bool) void {
-    const ftype = fn(*MTLRenderPipelineDescriptor,*c_void,bool) callconv(.C) void;
-    const func: ftype = @ptrCast(ftype, &objc_msgSend);
-    func(self, sel_getUid("setAlphaToCoverageEnabled:"), val);
+    c.MTLRenderPipelineDescriptor_setAlphaToCoverageEnabled(self, val);
 }
 pub fn MTLRenderPipelineDescriptor_isAlphaToCoverageEnabled(self:*MTLRenderPipelineDescriptor) bool {
-    const ftype = fn(*MTLRenderPipelineDescriptor,*c_void) callconv(.C) bool;
-    const func: ftype = @ptrCast(ftype, &objc_msgSend);
-    return func(self, sel_getUid("isAlphaToCoverageEnabled"));
+    return c.MTLRenderPipelineDescriptor_isAlphaToCoverageEnabled(self);
 }
 pub fn MTLRenderPipelineDescriptor_setAlphaToOneEnabled(self:*MTLRenderPipelineDescriptor, val:bool) void {
-    const ftype = fn(*MTLRenderPipelineDescriptor,*c_void,bool) callconv(.C) void;
-    const func: ftype = @ptrCast(ftype, &objc_msgSend);
-    func(self, sel_getUid("setAlphaToOneEnabled:"), val);
+    c.MTLRenderPipelineDescriptor_setAlphaToOneEnabled(self, val);
 }
 pub fn MTLRenderPipelineDescriptor_isAlphaToOneEnabled(self:*MTLRenderPipelineDescriptor) bool {
-    const ftype = fn(*MTLRenderPipelineDescriptor,*c_void) callconv(.C) bool;
-    const func: ftype = @ptrCast(ftype, &objc_msgSend);
-    return func(self, sel_getUid("isAlphaToOneEnabled"));
+    return c.MTLRenderPipelineDescriptor_isAlphaToOneEnabled(self);
 }
 pub fn MTLRenderPipelineDescriptor_setRasterizationEnabled(self:*MTLRenderPipelineDescriptor, val:bool) void {
-    const ftype = fn(*MTLRenderPipelineDescriptor,*c_void,bool) callconv(.C) void;
-    const func: ftype = @ptrCast(ftype, &objc_msgSend);
-    func(self, sel_getUid("setRasterizationEnabled:"), val);
+    c.MTLRenderPipelineDescriptor_setRasterizationEnabled(self, val);
 }
 pub fn MTLRenderPipelineDescriptor_isRasterizationEnabled(self:*MTLRenderPipelineDescriptor) bool {
-    const ftype = fn(*MTLRenderPipelineDescriptor,*c_void) callconv(.C) bool;
-    const func: ftype = @ptrCast(ftype, &objc_msgSend);
-    return func(self, sel_getUid("isRasterizationEnabled"));
+    return c.MTLRenderPipelineDescriptor_isRasterizationEnabled(self);
 }
 pub fn MTLRenderPipelineDescriptor_colorAttachments(self:*MTLRenderPipelineDescriptor) *MTLRenderPipelineColorAttachmentDescriptorArray {
-    const ftype = fn(*MTLRenderPipelineDescriptor,*c_void) callconv(.C) *MTLRenderPipelineColorAttachmentDescriptorArray;
-    const func: ftype = @ptrCast(ftype, &objc_msgSend);
-    return func(self, sel_getUid("colorAttachments"));
+    return c.MTLRenderPipelineDescriptor_colorAttachments(self);
 }
 pub fn MTLRenderPipelineDescriptor_setDepthAttachmentPixelFormat(self:*MTLRenderPipelineDescriptor, val:MTLPixelFormat) void {
-    const ftype = fn(*MTLRenderPipelineDescriptor,*c_void,MTLPixelFormat) callconv(.C) void;
-    const func: ftype = @ptrCast(ftype, &objc_msgSend);
-    func(self, sel_getUid("setDepthAttachmentPixelFormat:"), val);
+    c.MTLRenderPipelineDescriptor_setDepthAttachmentPixelFormat(self, val);
 }
 pub fn MTLRenderPipelineDescriptor_depthAttachmentPixelFormat(self:*MTLRenderPipelineDescriptor) MTLPixelFormat {
-    const ftype = fn(*MTLRenderPipelineDescriptor,*c_void) callconv(.C) MTLPixelFormat;
-    const func: ftype = @ptrCast(ftype, &objc_msgSend);
-    return func(self, sel_getUid("depthAttachmentPixelFormat"));
+    return c.MTLRenderPipelineDescriptor_depthAttachmentPixelFormat(self);
 }
-pub const MTLRenderPipelineState = opaque {};
-pub const MTLRenderPipelineColorAttachmentDescriptorArray = opaque {};
+pub const MTLRenderPipelineState = c.MTLRenderPipelineState;
+pub const MTLRenderPipelineColorAttachmentDescriptorArray = c.MTLRenderPipelineColorAttachmentDescriptorArray;
 pub fn MTLRenderPipelineColorAttachmentDescriptorArray_objectAtIndexedSubscript(self:*MTLRenderPipelineColorAttachmentDescriptorArray, attachmentIndex:u64) *MTLRenderPipelineColorAttachmentDescriptor {
-    const ftype = fn(*MTLRenderPipelineColorAttachmentDescriptorArray,*c_void,u64) callconv(.C) *MTLRenderPipelineColorAttachmentDescriptor;
-    const func: ftype = @ptrCast(ftype, &objc_msgSend);
-    return func(self, sel_getUid("objectAtIndexedSubscript:"), attachmentIndex);
+    return c.MTLRenderPipelineColorAttachmentDescriptorArray_objectAtIndexedSubscript(self, attachmentIndex);
 }
 pub fn MTLRenderPipelineColorAttachmentDescriptorArray_setObject_atIndexedSubscript(self:*MTLRenderPipelineColorAttachmentDescriptorArray, attachment:*MTLRenderPipelineColorAttachmentDescriptor, attachmentIndex:u64) void {
-    const ftype = fn(*MTLRenderPipelineColorAttachmentDescriptorArray,*c_void,*MTLRenderPipelineColorAttachmentDescriptor,u64) callconv(.C) void;
-    const func: ftype = @ptrCast(ftype, &objc_msgSend);
-    func(self, sel_getUid("setObject:atIndexedSubscript:"), attachment, attachmentIndex);
+    c.MTLRenderPipelineColorAttachmentDescriptorArray_setObject_atIndexedSubscript(self, attachment, attachmentIndex);
 }
-pub const MTLVertexBufferLayoutDescriptor = opaque {};
+pub const MTLVertexBufferLayoutDescriptor = c.MTLVertexBufferLayoutDescriptor;
 pub fn MTLVertexBufferLayoutDescriptor_setStride(self:*MTLVertexBufferLayoutDescriptor, val:u64) void {
-    const ftype = fn(*MTLVertexBufferLayoutDescriptor,*c_void,u64) callconv(.C) void;
-    const func: ftype = @ptrCast(ftype, &objc_msgSend);
-    func(self, sel_getUid("setStride:"), val);
+    c.MTLVertexBufferLayoutDescriptor_setStride(self, val);
 }
 pub fn MTLVertexBufferLayoutDescriptor_stride(self:*MTLVertexBufferLayoutDescriptor) u64 {
-    const ftype = fn(*MTLVertexBufferLayoutDescriptor,*c_void) callconv(.C) u64;
-    const func: ftype = @ptrCast(ftype, &objc_msgSend);
-    return func(self, sel_getUid("stride"));
+    return c.MTLVertexBufferLayoutDescriptor_stride(self);
 }
 pub fn MTLVertexBufferLayoutDescriptor_setStepFunction(self:*MTLVertexBufferLayoutDescriptor, val:MTLVertexStepFunction) void {
-    const ftype = fn(*MTLVertexBufferLayoutDescriptor,*c_void,MTLVertexStepFunction) callconv(.C) void;
-    const func: ftype = @ptrCast(ftype, &objc_msgSend);
-    func(self, sel_getUid("setStepFunction:"), val);
+    c.MTLVertexBufferLayoutDescriptor_setStepFunction(self, val);
 }
 pub fn MTLVertexBufferLayoutDescriptor_stepFunction(self:*MTLVertexBufferLayoutDescriptor) MTLVertexStepFunction {
-    const ftype = fn(*MTLVertexBufferLayoutDescriptor,*c_void) callconv(.C) MTLVertexStepFunction;
-    const func: ftype = @ptrCast(ftype, &objc_msgSend);
-    return func(self, sel_getUid("stepFunction"));
+    return c.MTLVertexBufferLayoutDescriptor_stepFunction(self);
 }
 pub fn MTLVertexBufferLayoutDescriptor_setStepRate(self:*MTLVertexBufferLayoutDescriptor, val:u64) void {
-    const ftype = fn(*MTLVertexBufferLayoutDescriptor,*c_void,u64) callconv(.C) void;
-    const func: ftype = @ptrCast(ftype, &objc_msgSend);
-    func(self, sel_getUid("setStepRate:"), val);
+    c.MTLVertexBufferLayoutDescriptor_setStepRate(self, val);
 }
 pub fn MTLVertexBufferLayoutDescriptor_stepRate(self:*MTLVertexBufferLayoutDescriptor) u64 {
-    const ftype = fn(*MTLVertexBufferLayoutDescriptor,*c_void) callconv(.C) u64;
-    const func: ftype = @ptrCast(ftype, &objc_msgSend);
-    return func(self, sel_getUid("stepRate"));
+    return c.MTLVertexBufferLayoutDescriptor_stepRate(self);
 }
-pub const MTLVertexBufferLayoutDescriptorArray = opaque {};
+pub const MTLVertexBufferLayoutDescriptorArray = c.MTLVertexBufferLayoutDescriptorArray;
 pub fn MTLVertexBufferLayoutDescriptorArray_objectAtIndexedSubscript(self:*MTLVertexBufferLayoutDescriptorArray, index:u64) *MTLVertexBufferLayoutDescriptor {
-    const ftype = fn(*MTLVertexBufferLayoutDescriptorArray,*c_void,u64) callconv(.C) *MTLVertexBufferLayoutDescriptor;
-    const func: ftype = @ptrCast(ftype, &objc_msgSend);
-    return func(self, sel_getUid("objectAtIndexedSubscript:"), index);
+    return c.MTLVertexBufferLayoutDescriptorArray_objectAtIndexedSubscript(self, index);
 }
 pub fn MTLVertexBufferLayoutDescriptorArray_setObject_atIndexedSubscript(self:*MTLVertexBufferLayoutDescriptorArray, bufferDesc:*MTLVertexBufferLayoutDescriptor, index:u64) void {
-    const ftype = fn(*MTLVertexBufferLayoutDescriptorArray,*c_void,*MTLVertexBufferLayoutDescriptor,u64) callconv(.C) void;
-    const func: ftype = @ptrCast(ftype, &objc_msgSend);
-    func(self, sel_getUid("setObject:atIndexedSubscript:"), bufferDesc, index);
+    c.MTLVertexBufferLayoutDescriptorArray_setObject_atIndexedSubscript(self, bufferDesc, index);
 }
-pub const MTLVertexAttributeDescriptor = opaque {};
+pub const MTLVertexAttributeDescriptor = c.MTLVertexAttributeDescriptor;
 pub fn MTLVertexAttributeDescriptor_setFormat(self:*MTLVertexAttributeDescriptor, val:MTLVertexFormat) void {
-    const ftype = fn(*MTLVertexAttributeDescriptor,*c_void,MTLVertexFormat) callconv(.C) void;
-    const func: ftype = @ptrCast(ftype, &objc_msgSend);
-    func(self, sel_getUid("setFormat:"), val);
+    c.MTLVertexAttributeDescriptor_setFormat(self, val);
 }
 pub fn MTLVertexAttributeDescriptor_format(self:*MTLVertexAttributeDescriptor) MTLVertexFormat {
-    const ftype = fn(*MTLVertexAttributeDescriptor,*c_void) callconv(.C) MTLVertexFormat;
-    const func: ftype = @ptrCast(ftype, &objc_msgSend);
-    return func(self, sel_getUid("format"));
+    return c.MTLVertexAttributeDescriptor_format(self);
 }
 pub fn MTLVertexAttributeDescriptor_setOffset(self:*MTLVertexAttributeDescriptor, val:u64) void {
-    const ftype = fn(*MTLVertexAttributeDescriptor,*c_void,u64) callconv(.C) void;
-    const func: ftype = @ptrCast(ftype, &objc_msgSend);
-    func(self, sel_getUid("setOffset:"), val);
+    c.MTLVertexAttributeDescriptor_setOffset(self, val);
 }
 pub fn MTLVertexAttributeDescriptor_offset(self:*MTLVertexAttributeDescriptor) u64 {
-    const ftype = fn(*MTLVertexAttributeDescriptor,*c_void) callconv(.C) u64;
-    const func: ftype = @ptrCast(ftype, &objc_msgSend);
-    return func(self, sel_getUid("offset"));
+    return c.MTLVertexAttributeDescriptor_offset(self);
 }
 pub fn MTLVertexAttributeDescriptor_setBufferIndex(self:*MTLVertexAttributeDescriptor, val:u64) void {
-    const ftype = fn(*MTLVertexAttributeDescriptor,*c_void,u64) callconv(.C) void;
-    const func: ftype = @ptrCast(ftype, &objc_msgSend);
-    func(self, sel_getUid("setBufferIndex:"), val);
+    c.MTLVertexAttributeDescriptor_setBufferIndex(self, val);
 }
 pub fn MTLVertexAttributeDescriptor_bufferIndex(self:*MTLVertexAttributeDescriptor) u64 {
-    const ftype = fn(*MTLVertexAttributeDescriptor,*c_void) callconv(.C) u64;
-    const func: ftype = @ptrCast(ftype, &objc_msgSend);
-    return func(self, sel_getUid("bufferIndex"));
+    return c.MTLVertexAttributeDescriptor_bufferIndex(self);
 }
-pub const MTLVertexAttributeDescriptorArray = opaque {};
+pub const MTLVertexAttributeDescriptorArray = c.MTLVertexAttributeDescriptorArray;
 pub fn MTLVertexAttributeDescriptorArray_objectAtIndexedSubscript(self:*MTLVertexAttributeDescriptorArray, index:u64) *MTLVertexAttributeDescriptor {
-    const ftype = fn(*MTLVertexAttributeDescriptorArray,*c_void,u64) callconv(.C) *MTLVertexAttributeDescriptor;
-    const func: ftype = @ptrCast(ftype, &objc_msgSend);
-    return func(self, sel_getUid("objectAtIndexedSubscript:"), index);
+    return c.MTLVertexAttributeDescriptorArray_objectAtIndexedSubscript(self, index);
 }
 pub fn MTLVertexAttributeDescriptorArray_setObject_atIndexedSubscript(self:*MTLVertexAttributeDescriptorArray, attributeDesc:*MTLVertexAttributeDescriptor, index:u64) void {
-    const ftype = fn(*MTLVertexAttributeDescriptorArray,*c_void,*MTLVertexAttributeDescriptor,u64) callconv(.C) void;
-    const func: ftype = @ptrCast(ftype, &objc_msgSend);
-    func(self, sel_getUid("setObject:atIndexedSubscript:"), attributeDesc, index);
+    c.MTLVertexAttributeDescriptorArray_setObject_atIndexedSubscript(self, attributeDesc, index);
 }
-pub const MTLVertexDescriptor = opaque {};
+pub const MTLVertexDescriptor = c.MTLVertexDescriptor;
 pub fn MTLVertexDescriptor_vertexDescriptor() *MTLVertexDescriptor {
-    const ftype = fn(*c_void,*c_void) callconv(.C) *MTLVertexDescriptor;
-    const func: ftype = @ptrCast(ftype, &objc_msgSend);
-    return func(objc_getClass("MTLVertexDescriptor"), sel_getUid("vertexDescriptor"));
+    return c.MTLVertexDescriptor_vertexDescriptor();
 }
 pub fn MTLVertexDescriptor_layouts(self:*MTLVertexDescriptor) *MTLVertexBufferLayoutDescriptorArray {
-    const ftype = fn(*MTLVertexDescriptor,*c_void) callconv(.C) *MTLVertexBufferLayoutDescriptorArray;
-    const func: ftype = @ptrCast(ftype, &objc_msgSend);
-    return func(self, sel_getUid("layouts"));
+    return c.MTLVertexDescriptor_layouts(self);
 }
 pub fn MTLVertexDescriptor_attributes(self:*MTLVertexDescriptor) *MTLVertexAttributeDescriptorArray {
-    const ftype = fn(*MTLVertexDescriptor,*c_void) callconv(.C) *MTLVertexAttributeDescriptorArray;
-    const func: ftype = @ptrCast(ftype, &objc_msgSend);
-    return func(self, sel_getUid("attributes"));
+    return c.MTLVertexDescriptor_attributes(self);
 }
-pub const CAMetalDrawable = opaque {};
-pub const MTKView = opaque {};
+pub const CAMetalDrawable = c.CAMetalDrawable;
+pub const MTKView = c.MTKView;
 pub fn MTKView_setDevice(self:*MTKView, val:*MTLDevice) void {
-    const ftype = fn(*MTKView,*c_void,*MTLDevice) callconv(.C) void;
-    const func: ftype = @ptrCast(ftype, &objc_msgSend);
-    func(self, sel_getUid("setDevice:"), val);
+    c.MTKView_setDevice(self, val);
 }
 pub fn MTKView_device(self:*MTKView) *MTLDevice {
-    const ftype = fn(*MTKView,*c_void) callconv(.C) *MTLDevice;
-    const func: ftype = @ptrCast(ftype, &objc_msgSend);
-    return func(self, sel_getUid("device"));
+    return c.MTKView_device(self);
 }
 pub fn MTKView_currentDrawable(self:*MTKView) *CAMetalDrawable {
-    const ftype = fn(*MTKView,*c_void) callconv(.C) *CAMetalDrawable;
-    const func: ftype = @ptrCast(ftype, &objc_msgSend);
-    return func(self, sel_getUid("currentDrawable"));
+    return c.MTKView_currentDrawable(self);
 }
 pub fn MTKView_setColorPixelFormat(self:*MTKView, val:MTLPixelFormat) void {
-    const ftype = fn(*MTKView,*c_void,MTLPixelFormat) callconv(.C) void;
-    const func: ftype = @ptrCast(ftype, &objc_msgSend);
-    func(self, sel_getUid("setColorPixelFormat:"), val);
+    c.MTKView_setColorPixelFormat(self, val);
 }
 pub fn MTKView_colorPixelFormat(self:*MTKView) MTLPixelFormat {
-    const ftype = fn(*MTKView,*c_void) callconv(.C) MTLPixelFormat;
-    const func: ftype = @ptrCast(ftype, &objc_msgSend);
-    return func(self, sel_getUid("colorPixelFormat"));
+    return c.MTKView_colorPixelFormat(self);
 }
 pub fn MTKView_setDepthStencilPixelFormat(self:*MTKView, val:MTLPixelFormat) void {
-    const ftype = fn(*MTKView,*c_void,MTLPixelFormat) callconv(.C) void;
-    const func: ftype = @ptrCast(ftype, &objc_msgSend);
-    func(self, sel_getUid("setDepthStencilPixelFormat:"), val);
+    c.MTKView_setDepthStencilPixelFormat(self, val);
 }
 pub fn MTKView_depthStencilPixelFormat(self:*MTKView) MTLPixelFormat {
-    const ftype = fn(*MTKView,*c_void) callconv(.C) MTLPixelFormat;
-    const func: ftype = @ptrCast(ftype, &objc_msgSend);
-    return func(self, sel_getUid("depthStencilPixelFormat"));
+    return c.MTKView_depthStencilPixelFormat(self);
 }
 pub fn MTKView_setSampleCount(self:*MTKView, val:u64) void {
-    const ftype = fn(*MTKView,*c_void,u64) callconv(.C) void;
-    const func: ftype = @ptrCast(ftype, &objc_msgSend);
-    func(self, sel_getUid("setSampleCount:"), val);
+    c.MTKView_setSampleCount(self, val);
 }
 pub fn MTKView_sampleCount(self:*MTKView) u64 {
-    const ftype = fn(*MTKView,*c_void) callconv(.C) u64;
-    const func: ftype = @ptrCast(ftype, &objc_msgSend);
-    return func(self, sel_getUid("sampleCount"));
+    return c.MTKView_sampleCount(self);
 }
 pub fn MTKView_currentRenderPassDescriptor(self:*MTKView) *MTLRenderPassDescriptor {
-    const ftype = fn(*MTKView,*c_void) callconv(.C) *MTLRenderPassDescriptor;
-    const func: ftype = @ptrCast(ftype, &objc_msgSend);
-    return func(self, sel_getUid("currentRenderPassDescriptor"));
+    return c.MTKView_currentRenderPassDescriptor(self);
 }
 pub fn MTKView_setPreferredFramesPerSecond(self:*MTKView, val:i64) void {
-    const ftype = fn(*MTKView,*c_void,i64) callconv(.C) void;
-    const func: ftype = @ptrCast(ftype, &objc_msgSend);
-    func(self, sel_getUid("setPreferredFramesPerSecond:"), val);
+    c.MTKView_setPreferredFramesPerSecond(self, val);
 }
 pub fn MTKView_preferredFramesPerSecond(self:*MTKView) i64 {
-    const ftype = fn(*MTKView,*c_void) callconv(.C) i64;
-    const func: ftype = @ptrCast(ftype, &objc_msgSend);
-    return func(self, sel_getUid("preferredFramesPerSecond"));
+    return c.MTKView_preferredFramesPerSecond(self);
 }
 pub fn MTKView_setAutoResizeDrawable(self:*MTKView, val:bool) void {
-    const ftype = fn(*MTKView,*c_void,bool) callconv(.C) void;
-    const func: ftype = @ptrCast(ftype, &objc_msgSend);
-    func(self, sel_getUid("setAutoResizeDrawable:"), val);
+    c.MTKView_setAutoResizeDrawable(self, val);
 }
 pub fn MTKView_autoResizeDrawable(self:*MTKView) bool {
-    const ftype = fn(*MTKView,*c_void) callconv(.C) bool;
-    const func: ftype = @ptrCast(ftype, &objc_msgSend);
-    return func(self, sel_getUid("autoResizeDrawable"));
+    return c.MTKView_autoResizeDrawable(self);
 }
